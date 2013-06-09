@@ -95,7 +95,7 @@ Add to your ```pom.xml```
 <repositories>
 <dependencies>
     <dependency>
-        <groupId>com.github.julman99.gson-fire</groupId>
+        <groupId>com.github.julman99</groupId>
         <artifactId>gson-fire</artifactId>
         <version>0.1</version>
     </dependency>
