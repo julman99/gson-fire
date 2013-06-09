@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * @autor: julio
  */
-public class TypeSelectorTypeAdapterTest{
+public class TypeSelectorTest {
 
     @Test
     public void test(){

@@ -78,11 +78,6 @@ GsonFireBuilder fireBuilder = new GsonFireBuilder();
 GsonBuilder gsonBuilder = fireBuilder.getGsonBuilder();
 ```
 
-## Limitations
-
-Since the Post Processors and Type Selectors are just Gson TypeAdapter, there is no way right now to register a
-Type Selector and a Post Processor to the same class.
-
 ## Usage
 Add to your ```pom.xml```
 

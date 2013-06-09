@@ -11,7 +11,8 @@ import org.junit.Test;
 /**
  * @autor: julio
  */
-public class PostProcessorTypeAdapterFactoryTest {
+public class PostProcessorTest {
+
     @Test
     public void test(){
         GsonFireBuilder builder = new GsonFireBuilder()
@@ -25,6 +26,17 @@ public class PostProcessorTypeAdapterFactoryTest {
                     public void postSerialize(JsonElement result, A src) {
                         result.getAsJsonObject().addProperty("tmp", src.a);
                     }
+                })
+                .registerPostProcessor(A.class, new PostProcessor<A>() {
+                    @Override
+                    public void postDeserialize(A result, JsonElement src) {
+                        result.aa += "1";
+                    }
+
+                    @Override
+                    public void postSerialize(JsonElement result, A src) {
+                        result.getAsJsonObject().addProperty("tmp2", src.a);
+                    }
                 });
         Gson gson = builder.createGson();
 
@@ -35,12 +47,14 @@ public class PostProcessorTypeAdapterFactoryTest {
         JsonObject json = gson.toJsonTree(a).getAsJsonObject();
         Assert.assertEquals(json.get("a").getAsString(), a.a);
         Assert.assertEquals(json.get("tmp").getAsString(), a.a);
+        Assert.assertEquals(json.get("tmp2").getAsString(), a.a);
         Assert.assertEquals(json.get("aa").getAsString(), a.aa);
 
         A a2 = gson.fromJson(json, A.class);
         Assert.assertEquals(a2.a, a.a);
-        Assert.assertEquals(a2.aa, a.a + "2");
+        Assert.assertEquals(a2.aa, a.a + "21");
     }
+
 
     private class A{
         public String a;
