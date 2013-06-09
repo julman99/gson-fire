@@ -84,6 +84,8 @@ Since the Post Processors and Type Selectors are just Gson TypeAdapter, there is
 Type Selector and a Post Processor to the same class.
 
 ## Usage
+Add to your ```pom.xml```
+
 ```xml
 <repositories>
     <repository>
