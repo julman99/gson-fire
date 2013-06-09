@@ -25,23 +25,55 @@ public class GsonFireBuilder {
         return result;
     }
 
-    public <T> GsonFireBuilder registerTypeSelector(Class<T> t, TypeSelector<T> factory){
-        ClassConfig config = getClassConfig(t);
+
+    /**
+     * Registers a Type selector for the Class specified. <br />
+     * A type selector is in charge of deciding which sub class to use when converting a json
+     * into an object.<br />
+     * See <a href="http://goo.gl/qKo7z"> docs and example</a>
+     * @param clazz
+     * @param factory
+     * @param <T>
+     * @return
+     */
+    public <T> GsonFireBuilder registerTypeSelector(Class<T> clazz, TypeSelector<T> factory){
+        ClassConfig config = getClassConfig(clazz);
         config.setTypeSelector(factory);
         return this;
     }
 
+    /**
+     * Registers a Post processor for the Class specified. <br />
+     * A post processor is a class that will add new fields to a generated json just after generation, or that
+     * will prepare a class just created from a json.<br />
+     * See <a href="http://goo.gl/5fLLN"> docs and example</a>
+     *
+     * @param clazz
+     * @param postProcessor
+     * @param <T>
+     * @return
+     */
     public <T> GsonFireBuilder registerPostProcessor(Class<T> clazz, PostProcessor<? super T> postProcessor){
         ClassConfig config = getClassConfig(clazz);
         config.getPostProcessors().add(postProcessor);
         return this;
     }
 
+    /**
+     * Configures the resulting Gson to serialize/unserialize Date instances with a policy
+     * @param policy
+     * @param <T>
+     * @return
+     */
     public <T> GsonFireBuilder dateSerializationPolicy(DateSerializationPolicy policy){
         dateSerializationPolicy = policy;
         return this;
     }
 
+    /**
+     * Returns a new instance of the good old {@link GsonBuilder}
+     * @return
+     */
     public GsonBuilder createGsonBuilder(){
         GsonBuilder builder = new GsonBuilder();
 
@@ -56,6 +88,10 @@ public class GsonFireBuilder {
         return builder;
     }
 
+    /**
+     * Returns a new {@link Gson} instance
+     * @return
+     */
     public Gson createGson(){
         return createGsonBuilder().create();
     }

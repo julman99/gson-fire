@@ -28,6 +28,7 @@ public class TypeSelectorTest {
                     }
                 }
             });
+
         Gson gson = builder.createGson();
 
         A a = new A();
