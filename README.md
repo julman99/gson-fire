@@ -8,7 +8,7 @@ The main objective is to extend Gson using TypeAdapter and TypeAdapterFactory in
 ## Features
 
 All of the features can be accessed by the ```GsonFireBuilder```. This class will build internally a ```GsonBuilder```
-with all the desired features from wich a ```Gson``` instance can be obtained.
+with all the desired features from which a ```Gson``` instance can be obtained.
 
 ### Post Processors
 
@@ -93,7 +93,7 @@ If no policy is specified, the default Gson behavior will be used
 
 ## Using the Gson's GsonBuilder
 
-You will be able to access the old good GsonBuilder:
+You can still access the good old GsonBuilder:
 
 ```java
 GsonFireBuilder fireBuilder = new GsonFireBuilder();
