@@ -50,7 +50,29 @@ GsonFireBuilder builder = new GsonFireBuilder()
             }
         }
     });
-    Gson gson = builder.createGson();
+Gson gson = builder.createGson();
+```
+
+### Expose your metods
+
+You can annotate methods now to be automatically evaluated an serialized
+
+```java
+
+public void SomeClass{
+
+    @ExposeMethodResult("name")
+    public String getName(){
+        return "a";
+    }
+
+}
+
+//Then
+GsonFireBuilder builder = new GsonFireBuilder()
+    .enableExposeMethodResult(); //This will make Gson to evaluate and
+                                 //serialize all methods annotated with @ExposeMethodResult
+
 ```
 
 ### Date format
