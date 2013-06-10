@@ -92,7 +92,7 @@ Add to your ```pom.xml```
     <dependency>
         <groupId>com.github.julman99</groupId>
         <artifactId>gson-fire</artifactId>
-        <version>0.2</version>
+        <version>0.3</version>
     </dependency>
 </dependencies>
 ```
