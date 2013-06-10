@@ -1,5 +1,6 @@
 package com.github.julman99.gsonfire;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 /**
@@ -7,7 +8,7 @@ import com.google.gson.JsonElement;
  */
 public interface PostProcessor<T> {
 
-    public void postDeserialize(T result, JsonElement src);
+    public void postDeserialize(T result, JsonElement src, Gson gson);
 
-    public void postSerialize(JsonElement result, T src);
+    public void postSerialize(JsonElement result, T src, Gson gson);
 }

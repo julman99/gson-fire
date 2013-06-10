@@ -18,23 +18,23 @@ public class PostProcessorTest {
         GsonFireBuilder builder = new GsonFireBuilder()
                 .registerPostProcessor(A.class, new PostProcessor<A>() {
                     @Override
-                    public void postDeserialize(A result, JsonElement src) {
+                    public void postDeserialize(A result, JsonElement src, Gson gson) {
                         result.aa = result.a + "2";
                     }
 
                     @Override
-                    public void postSerialize(JsonElement result, A src) {
+                    public void postSerialize(JsonElement result, A src, Gson gson) {
                         result.getAsJsonObject().addProperty("tmp", src.a);
                     }
                 })
                 .registerPostProcessor(A.class, new PostProcessor<A>() {
                     @Override
-                    public void postDeserialize(A result, JsonElement src) {
+                    public void postDeserialize(A result, JsonElement src, Gson gson) {
                         result.aa += "1";
                     }
 
                     @Override
-                    public void postSerialize(JsonElement result, A src) {
+                    public void postSerialize(JsonElement result, A src, Gson gson) {
                         result.getAsJsonObject().addProperty("tmp2", src.a);
                     }
                 });

@@ -52,13 +52,13 @@ public class FireTypeAdapter<T> extends TypeAdapter<T> {
 
     private void runPostSerialize(JsonElement json, T src){
         for(PostProcessor<? super T> postProcessor: classConfig.getPostProcessors()){
-            postProcessor.postSerialize(json, src);
+            postProcessor.postSerialize(json, src, gson);
         }
     }
 
     private void runPostDeserialize(T res, JsonElement src){
         for(PostProcessor<? super T> postProcessor: classConfig.getPostProcessors()){
-            postProcessor.postDeserialize(res, src);
+            postProcessor.postDeserialize(res, src, gson);
         }
     }
 

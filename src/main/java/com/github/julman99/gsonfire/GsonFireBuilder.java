@@ -1,6 +1,7 @@
 package com.github.julman99.gsonfire;
 
 import com.github.julman99.gsonfire.gson.FireTypeAdapterFactory;
+import com.github.julman99.gsonfire.postProcessors.MethodInvokerPostProcessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -67,6 +68,16 @@ public class GsonFireBuilder {
      */
     public <T> GsonFireBuilder dateSerializationPolicy(DateSerializationPolicy policy){
         dateSerializationPolicy = policy;
+        return this;
+    }
+
+    /**
+     * By enabling this, all methods with the annotation {@link com.github.julman99.gsonfire.annotations.ExposeMethodResult} will
+     * be evaluated and it result will be added to the resulting json
+     * @return
+     */
+    public GsonFireBuilder enableExposeMethodResult(){
+        registerPostProcessor(Object.class, new MethodInvokerPostProcessor<Object>());
         return this;
     }
 
