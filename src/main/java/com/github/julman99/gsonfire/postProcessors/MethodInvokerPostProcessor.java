@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,6 +50,11 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
             //public members
             for(Method m: this.getAllMethods(clazz)){
                 if(m.isAnnotationPresent(ExposeMethodResult.class)){
+
+                    if(m.getParameterTypes().length > 0){
+                        throw new InvalidParameterException("The methods annotated with ExposeMethodResult should have no arguments");
+                    }
+
                     m.setAccessible(true);
                     MappedMethod mm = new MappedMethod();
                     mm.method = m;

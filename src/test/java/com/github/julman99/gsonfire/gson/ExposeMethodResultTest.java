@@ -6,7 +6,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.junit.Test;
 
+import java.security.InvalidParameterException;
+
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @autor: julio
@@ -34,6 +38,23 @@ public class ExposeMethodResultTest {
         assertEquals(obj.get("pub2").getAsString(), "b-pub2");
         assertEquals(obj.get("pro2").getAsString(), "b-pro2");
         assertEquals(obj.get("pri2").getAsString(), "b-pri2");
+    }
+
+    @Test
+    public void testError(){
+        GsonFireBuilder builder = new GsonFireBuilder()
+                .enableExposeMethodResult();
+
+        Gson gson = builder.createGson();
+
+        ForError a = new ForError();
+
+        try {
+            JsonObject obj = gson.toJsonTree(a).getAsJsonObject();
+            fail();
+        } catch (InvalidParameterException ex){
+            assertTrue(true);
+        }
     }
 
     private class A{
@@ -72,5 +93,14 @@ public class ExposeMethodResultTest {
         private String pri2(){
             return b + "-pri2";
         }
+    }
+
+    private class ForError{
+
+        @ExposeMethodResult("error")
+        public String error(int a){
+            return "error";
+        }
+
     }
 }
