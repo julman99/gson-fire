@@ -11,6 +11,7 @@ public class ClassConfig<T> {
     private Class<T> clazz;
     private TypeSelector<? super T> typeSelector;
     private Collection<PostProcessor<T>> postProcessors;
+    private boolean hooksEnabled;
 
     public ClassConfig(Class<T> clazz) {
         this.clazz = clazz;
@@ -33,5 +34,13 @@ public class ClassConfig<T> {
             postProcessors = new ArrayList<PostProcessor<T>>();
         }
         return postProcessors;
+    }
+
+    public boolean isHooksEnabled() {
+        return hooksEnabled;
+    }
+
+    public void setHooksEnabled(boolean hooksEnabled) {
+        this.hooksEnabled = hooksEnabled;
     }
 }

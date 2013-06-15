@@ -21,6 +21,7 @@ public class FireTypeAdapter<T> extends TypeAdapter<T> {
     private final ClassConfig<? super T> classConfig;
     private final Gson gson;
     private final TypeAdapter<T> originalTypeAdapter;
+    private final HooksInvoker hooksInvoker = new HooksInvoker();
 
     public FireTypeAdapter(Class<T> classAdapter, ClassConfig<? super T> classConfig, TypeAdapter<T> originalTypeAdapter, Gson gson) {
         this.classConfig = classConfig;
@@ -31,6 +32,10 @@ public class FireTypeAdapter<T> extends TypeAdapter<T> {
 
     @Override
     public void write(JsonWriter out, T value) throws IOException {
+        if(classConfig.isHooksEnabled()){
+            hooksInvoker.preSerialize(value);
+        }
+
         JsonElement res = originalTypeAdapter.toJsonTree(value);
 
         //Run all the post serializers
@@ -45,6 +50,9 @@ public class FireTypeAdapter<T> extends TypeAdapter<T> {
         T result = deserialize(json);
 
         //Run all the post deserializers
+        if(classConfig.isHooksEnabled()){
+            hooksInvoker.postDeserialize(result);
+        }
         runPostDeserialize(result, json);
 
         return result;

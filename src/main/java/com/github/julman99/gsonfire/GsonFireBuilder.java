@@ -82,6 +82,17 @@ public class GsonFireBuilder {
     }
 
     /**
+     * By enabling this, all methods with the annotation {@link com.github.julman99.gsonfire.annotations.ExposeMethodResult} will
+     * be evaluated and it result will be added to the resulting json
+     * @return
+     */
+    public GsonFireBuilder enableHooks(Class clazz){
+        ClassConfig config = getClassConfig(clazz);
+        config.setHooksEnabled(true);
+        return this;
+    }
+
+    /**
      * Returns a new instance of the good old {@link GsonBuilder}
      * @return
      */
