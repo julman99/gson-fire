@@ -91,6 +91,39 @@ builder.dateSerializationPolicy(DateSerializationPolicy.unixTimeSeconds);
 
 If no policy is specified, the default Gson behavior will be used
 
+### Hooks
+
+Some special annotated methods will be invoked in your java object before serializing
+and after deserializing
+
+```java
+
+public void SomeClass{
+
+    @PreSerialize
+    public void preSerializeLogic(){
+        //this method will get invoked just before
+        //the class is serialized to gson
+    }
+
+    @PostDeserialize
+    public void postDeserializeLogic(){
+        //this method will get invoked just after
+        //the class is instantiated from a json
+
+        //NOTE: this gets invoked before the PostProcessors
+    }
+
+}
+
+//Later
+
+Gson builder = new GsonFireBuilder()
+    .enableHooks(SomeClass.class);
+
+Gson gson = builder.createGson();
+```
+
 ## Using the Gson's GsonBuilder
 
 You can still access the good old GsonBuilder:
@@ -114,7 +147,7 @@ Add to your ```pom.xml```
     <dependency>
         <groupId>com.github.julman99</groupId>
         <artifactId>gson-fire</artifactId>
-        <version>0.3</version>
+        <version>0.4</version>
     </dependency>
 </dependencies>
 ```
