@@ -6,7 +6,7 @@
 
     <groupId>com.github.julman99</groupId>
     <artifactId>gson-fire</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
 
     <build>
         <plugins>

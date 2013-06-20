@@ -1,6 +1,7 @@
 package com.github.julman99.gsonfire;
 
 import com.github.julman99.gsonfire.gson.FireTypeAdapterFactory;
+import com.github.julman99.gsonfire.postProcessors.MergeMapPostProcessor;
 import com.github.julman99.gsonfire.postProcessors.MethodInvokerPostProcessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -89,6 +90,17 @@ public class GsonFireBuilder {
     public GsonFireBuilder enableHooks(Class clazz){
         ClassConfig config = getClassConfig(clazz);
         config.setHooksEnabled(true);
+        return this;
+    }
+
+    /**
+     * By enabling this, when a class is being converted to Json and it contains a {@link java.util.Map} class
+     * annotated with {@link com.github.julman99.gsonfire.annotations.MergeMap}, the map will be walked and merged
+     * with the resulting json object
+     * @return
+     */
+    public GsonFireBuilder enableMergeMaps(Class clazz){
+        registerPostProcessor(clazz, new MergeMapPostProcessor());
         return this;
     }
 
