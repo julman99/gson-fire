@@ -175,7 +175,7 @@ Add to your ```pom.xml```
     <dependency>
         <groupId>com.github.julman99</groupId>
         <artifactId>gson-fire</artifactId>
-        <version>0.5</version>
+        <version>0.5.1</version>
     </dependency>
 </dependencies>
 ```
@@ -183,6 +183,6 @@ Add to your ```pom.xml```
 
 Gson on Fire depends on Gson. Make sure you download and have in the class path both jars:
 
-1. Download [Gson on Fire](https://github.com/julman99/mvn-repo/raw/master/com/github/julman99/gson-fire/0.5/gson-fire-0.5.jar)
+1. Download [Gson on Fire](https://github.com/julman99/mvn-repo/raw/master/com/github/julman99/gson-fire/0.5.1/gson-fire-0.5.1.jar)
 
 2. Download [Gson](https://code.google.com/p/google-gson/downloads/list)

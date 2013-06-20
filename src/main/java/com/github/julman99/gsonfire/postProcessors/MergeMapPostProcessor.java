@@ -24,6 +24,9 @@ public class MergeMapPostProcessor implements PostProcessor {
 
     @Override
     public void postSerialize(JsonElement result, Object src, Gson gson) {
+        if(src == null){
+            return;
+        }
         for(Field f: fieldInspector.getAnnotatedFields(src.getClass(), MergeMap.class)){
             try {
                 Map map = (Map)f.get(src);
