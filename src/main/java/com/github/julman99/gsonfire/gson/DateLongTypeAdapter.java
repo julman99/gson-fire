@@ -27,6 +27,7 @@ public class DateLongTypeAdapter extends TypeAdapter<Date> {
             long time = in.nextLong();
             return new Date(time);
         } else {
+            in.nextNull();
             return null;
         }
     }

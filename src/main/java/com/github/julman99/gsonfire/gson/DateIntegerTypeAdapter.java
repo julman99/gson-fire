@@ -27,6 +27,7 @@ public class DateIntegerTypeAdapter extends TypeAdapter<Date> {
             int time = in.nextInt();
             return new Date(time * 1000L);
         } else {
+            in.nextNull();
             return null;
         }
     }
