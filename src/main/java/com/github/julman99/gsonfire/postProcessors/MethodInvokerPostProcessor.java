@@ -65,6 +65,7 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
 
             methods = new MappedMethod[methodList.size()];
             methodList.toArray(methods);
+            methodMap.put(clazz, methods);
         }
         return methods;
     }
