@@ -27,15 +27,13 @@ public @interface ExposeMethodResult {
     }
 
     /**
-     * The name of the field to store the serialized result of the method
-     * @return
+     * @return The name of the field to store the serialized result of the method
      */
     public String value();
 
     /**
-     * Strategy to be used when there is conflict between the name of a field on the Java Object vs the field name
+     * @return Strategy to be used when there is conflict between the name of a field on the Java Object vs the field name
      * where the result of the method will be serialized
-     * @return
      */
     public ConflictResolutionStrategy conflictResolution() default ConflictResolutionStrategy.OVERWRITE;
 }
