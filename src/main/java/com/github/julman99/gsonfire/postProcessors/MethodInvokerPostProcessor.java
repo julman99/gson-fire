@@ -77,14 +77,23 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
     private Collection<Method> getAllMethods(Class clazz){
         HashSet<Method> allMethods = new HashSet<Method>();
 
-        if(clazz == Object.class){
+        if(clazz == null || clazz == Object.class){
             return allMethods;
         }
 
+        //Add methods declared in the class
         for(Method m: clazz.getDeclaredMethods()){
             allMethods.add(m);
         }
+
+        //Add methods from super class
         allMethods.addAll(getAllMethods(clazz.getSuperclass()));
+
+        //Add methods from interfaces
+        for(Class interfaceClass: clazz.getInterfaces()){
+            allMethods.addAll(getAllMethods(interfaceClass));
+        }
+
         return allMethods;
     }
 

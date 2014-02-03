@@ -76,6 +76,22 @@ public class ExposeMethodResultTest {
         assertEquals(c.getD(), obj.get("d").getAsString());
     }
 
+    @Test
+    public void testInterfaceMethodsMapping(){
+        GsonFireBuilder builder = new GsonFireBuilder()
+            .enableExposeMethodResult();
+
+        Gson gson = builder.createGson();
+
+        InterfaceTest.Impl impl = new InterfaceTest.Impl();
+
+
+        JsonObject obj = gson.toJsonTree(impl).getAsJsonObject();
+
+        assertEquals(impl.a(), obj.get("a").getAsString());
+        assertEquals(impl.b(), obj.get("b").getAsString());
+    }
+
 
     private class A{
         public String a;
@@ -146,6 +162,28 @@ public class ExposeMethodResultTest {
         @ExposeMethodResult(value = "d", conflictResolution = ExposeMethodResult.ConflictResolutionStrategy.SKIP)
         public String getD(){
             return "d_method";
+        }
+    }
+
+    private static class InterfaceTest{
+        public interface Interface{
+            @ExposeMethodResult("a")
+            String a();
+
+            String b();
+        }
+        public static class Impl implements Interface{
+
+            @Override
+            public String a() {
+                return "a";
+            }
+
+            @Override
+            @ExposeMethodResult("b")
+            public String b() {
+                return "b";
+            }
         }
     }
 }
