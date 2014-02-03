@@ -57,6 +57,26 @@ public class ExposeMethodResultTest {
         }
     }
 
+    @Test
+    public void testConflictResolution(){
+        GsonFireBuilder builder = new GsonFireBuilder()
+            .enableExposeMethodResult();
+
+        Gson gson = builder.createGson();
+
+        ForConflict c = new ForConflict();
+        c.a = "A";
+        c.b = "B";
+
+        JsonObject obj = gson.toJsonTree(c).getAsJsonObject();
+
+        assertEquals(c.getA(), obj.get("a").getAsString());
+        assertEquals(c.b, obj.get("b").getAsString());
+        assertEquals(c.getC(), obj.get("c").getAsString());
+        assertEquals(c.getD(), obj.get("d").getAsString());
+    }
+
+
     private class A{
         public String a;
 
@@ -102,5 +122,30 @@ public class ExposeMethodResultTest {
             return "error";
         }
 
+    }
+
+    private class ForConflict{
+        public String a;
+        public String b;
+
+        @ExposeMethodResult(value = "a", conflictResolution = ExposeMethodResult.ConflictResolutionStrategy.OVERWRITE)
+        public String getA(){
+            return a + "_method";
+        }
+
+        @ExposeMethodResult(value = "b", conflictResolution = ExposeMethodResult.ConflictResolutionStrategy.SKIP)
+        public String getB(){
+            return b + "_method";
+        }
+
+        @ExposeMethodResult(value = "c", conflictResolution = ExposeMethodResult.ConflictResolutionStrategy.OVERWRITE)
+        public String getC(){
+            return "c_method";
+        }
+
+        @ExposeMethodResult(value = "d", conflictResolution = ExposeMethodResult.ConflictResolutionStrategy.SKIP)
+        public String getD(){
+            return "d_method";
+        }
     }
 }

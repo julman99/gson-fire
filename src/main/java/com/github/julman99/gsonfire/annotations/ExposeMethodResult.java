@@ -11,5 +11,31 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ExposeMethodResult {
+
+    public enum ConflictResolutionStrategy{
+        /**
+         * Will overwrite the existing field on the {@link com.google.gson.JsonObject} that conflicts with the field
+         * name being written
+         */
+        OVERWRITE,
+
+        /**
+         * Will skip writing to the {@link com.google.gson.JsonObject} if it contains a field with the name being used
+         * by this method result
+         */
+        SKIP
+    }
+
+    /**
+     * The name of the field to store the serialized result of the method
+     * @return
+     */
     public String value();
+
+    /**
+     * Strategy to be used when there is conflict between the name of a field on the Java Object vs the field name
+     * where the result of the method will be serialized
+     * @return
+     */
+    public ConflictResolutionStrategy conflictResolution() default ConflictResolutionStrategy.OVERWRITE;
 }

@@ -29,10 +29,11 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
         if(result.isJsonObject()){
             JsonObject jsonObject = result.getAsJsonObject();
             for(MappedMethod m: getMappedMethods((Class<T>) src.getClass())){
-                Object value = null;
                 try {
-                    value = m.method.invoke(src);
-                    jsonObject.add(m.fieldName, gson.toJsonTree(value));
+                    if(m.conflictResolutionStrategy == ExposeMethodResult.ConflictResolutionStrategy.OVERWRITE || (m.conflictResolutionStrategy == ExposeMethodResult.ConflictResolutionStrategy.SKIP && !jsonObject.has(m.fieldName))){
+                        Object value = m.method.invoke(src);
+                        jsonObject.add(m.fieldName, gson.toJsonTree(value));
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {
@@ -55,10 +56,13 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
                         throw new InvalidParameterException("The methods annotated with ExposeMethodResult should have no arguments");
                     }
 
+                    ExposeMethodResult exposeMethodResult = m.getAnnotation(ExposeMethodResult.class);
+
                     m.setAccessible(true);
                     MappedMethod mm = new MappedMethod();
                     mm.method = m;
-                    mm.fieldName = m.getAnnotation(ExposeMethodResult.class).value();
+                    mm.fieldName = exposeMethodResult.value();
+                    mm.conflictResolutionStrategy = exposeMethodResult.conflictResolution();
                     methodList.add(mm);
                 }
             }
@@ -87,5 +91,6 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
     private static class MappedMethod{
         public Method method;
         public String fieldName;
+        public ExposeMethodResult.ConflictResolutionStrategy conflictResolutionStrategy;
     }
 }
