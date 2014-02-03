@@ -175,7 +175,7 @@ Add to your ```pom.xml```
     <dependency>
         <groupId>com.github.julman99</groupId>
         <artifactId>gson-fire</artifactId>
-        <version>0.6.0</version>
+        <version>0.7.0</version>
     </dependency>
 </dependencies>
 ```
