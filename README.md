@@ -183,6 +183,6 @@ Add to your ```pom.xml```
 
 Gson on Fire depends on Gson. Make sure you download and have in the class path both jars:
 
-1. Download [Gson on Fire](https://github.com/julman99/mvn-repo/raw/master/com/github/julman99/gson-fire/0.5.3/gson-fire-0.5.3.jar)
+1. Download [Gson on Fire](https://github.com/julman99/mvn-repo/raw/master/com/github/julman99/gson-fire/0.7.0/gson-fire-0.7.0.jar)
 
 2. Download [Gson](https://code.google.com/p/google-gson/downloads/list)
