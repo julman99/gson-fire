@@ -156,7 +156,7 @@ You can still access the good old GsonBuilder:
 
 ```java
 GsonFireBuilder fireBuilder = new GsonFireBuilder();
-GsonBuilder gsonBuilder = fireBuilder.getGsonBuilder();
+GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 ```
 
 ## Usage
