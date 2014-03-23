@@ -3,19 +3,21 @@ package com.github.julman99.gsonfire.util;
 import java.text.*;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @autor: julio
  */
 public class RFC3339DateFormat extends DateFormat {
 
+    private static final Pattern TIMEZONE_PATTERN = Pattern.compile("(.*)([+-][0-9][0-9])\\:?([0-9][0-9])$");
+
     private final SimpleDateFormat rfc3339Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private final SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     private final String MILLISECONDS_PATTERN_REPLACE = "\\.([0-9]+)";
     private final String MILLISECONDS_PATTERN_MATCH = ".*" + MILLISECONDS_PATTERN_REPLACE + ".*";
-
-    private final String TIMEZONE_PATTERN = ".*([+-][0-9][0-9]\\:?[0-9][0-9])$";
 
     public RFC3339DateFormat(TimeZone serializationTimezone) {
         this.rfc3339Formatter.setTimeZone(serializationTimezone);
@@ -75,11 +77,10 @@ public class RFC3339DateFormat extends DateFormat {
             source = source.substring(0, source.length() -1) + "-0000";
         } else {
             //Check if we have timezone information present
-            if (source.matches(TIMEZONE_PATTERN)) {
+            Matcher matcher = TIMEZONE_PATTERN.matcher(source);
+            if (matcher.matches()) {
                 //Filter colon in timezone
-                if (source.charAt(source.length() - 3) == ':') {
-                    source = source.substring(0, source.length() - 3) + source.substring(source.length() - 2);
-                }
+                source = matcher.replaceAll("$1") + matcher.replaceAll("$2") + matcher.replaceAll("$3");
             } else {
                 //It appears we don't have any timezone info or Z at the end of the date
                 //We will assume it is RFC3999
