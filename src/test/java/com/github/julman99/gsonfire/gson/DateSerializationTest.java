@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @autor: julio
@@ -91,5 +93,29 @@ public class DateSerializationTest {
         assertEquals(expected.getTime(), parsedDate.getTime());
     }
 
+    @Test
+    public void test_nullDeserialize(){
+        for(DateSerializationPolicy policy: DateSerializationPolicy.values()){
+            Gson gson = new GsonFireBuilder()
+                .dateSerializationPolicy(policy)
+                .createGson();
+
+            Date date = gson.fromJson("null", Date.class);
+            assertNull(date);
+        }
+    }
+
+    @Test
+    public void test_nullSerialize(){
+        for(DateSerializationPolicy policy: DateSerializationPolicy.values()){
+            Gson gson = new GsonFireBuilder()
+                .dateSerializationPolicy(policy)
+                .createGson();
+
+            Date date = null;
+            JsonElement jsonElement = gson.toJsonTree(date);
+            assertTrue(jsonElement.isJsonNull());
+        }
+    }
 
 }
