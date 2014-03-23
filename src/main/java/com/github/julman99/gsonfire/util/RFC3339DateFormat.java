@@ -12,12 +12,10 @@ import java.util.regex.Pattern;
 public class RFC3339DateFormat extends DateFormat {
 
     private static final Pattern TIMEZONE_PATTERN = Pattern.compile("(.*)([+-][0-9][0-9])\\:?([0-9][0-9])$");
+    private static final Pattern MILLISECONDS_PATTERN = Pattern.compile("(.*)\\.([0-9]+)(.*)");
 
     private final SimpleDateFormat rfc3339Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private final SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-
-    private final String MILLISECONDS_PATTERN_REPLACE = "\\.([0-9]+)";
-    private final String MILLISECONDS_PATTERN_MATCH = ".*" + MILLISECONDS_PATTERN_REPLACE + ".*";
 
     public RFC3339DateFormat(TimeZone serializationTimezone) {
         this.rfc3339Formatter.setTimeZone(serializationTimezone);
@@ -49,7 +47,7 @@ public class RFC3339DateFormat extends DateFormat {
 
         //Add milliseconds
         long time = date.getTime();
-        if(time % 1000 != 0){
+        if(time % 1000L != 0){
             String fraction = Long.toString((time % 1000L));
             formatted.append("." + fraction);
         }
@@ -67,9 +65,10 @@ public class RFC3339DateFormat extends DateFormat {
         //Filter milliseconds
         long millis = 0;
         if(source.contains(".")){
-            String millisStr = source.replaceAll(MILLISECONDS_PATTERN_MATCH, "$1");
+            Matcher matcher = MILLISECONDS_PATTERN.matcher(source);
+            String millisStr = matcher.replaceAll("$2");
             millis = Long.parseLong(millisStr);
-            source = source.replaceAll(MILLISECONDS_PATTERN_REPLACE,"");
+            source = matcher.replaceAll("$1") + matcher.replaceAll("$3");
         }
 
         //Filter ending in Z
