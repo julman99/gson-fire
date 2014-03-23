@@ -15,6 +15,8 @@ public class RFC3339DateFormat extends DateFormat {
     private final String MILLISECONDS_PATTERN_REPLACE = "\\.([0-9]+)";
     private final String MILLISECONDS_PATTERN_MATCH = ".*" + MILLISECONDS_PATTERN_REPLACE + ".*";
 
+    private final String TIMEZONE_PATTERN = ".*([+-][0-9][0-9]\\:?[0-9][0-9])$";
+
     public RFC3339DateFormat(TimeZone serializationTimezone) {
         this.rfc3339Formatter.setTimeZone(serializationTimezone);
     }
@@ -71,11 +73,18 @@ public class RFC3339DateFormat extends DateFormat {
         //Filter ending in Z
         if(source.endsWith("Z")){
             source = source.substring(0, source.length() -1) + "-0000";
-        }
-
-        //Filter colon in timezone
-        if(source.charAt(source.length() - 3) == ':'){
-            source = source.substring(0, source.length() - 3) + source.substring(source.length() - 2);
+        } else {
+            //Check if we have timezone information present
+            if (source.matches(TIMEZONE_PATTERN)) {
+                //Filter colon in timezone
+                if (source.charAt(source.length() - 3) == ':') {
+                    source = source.substring(0, source.length() - 3) + source.substring(source.length() - 2);
+                }
+            } else {
+                //It appears we don't have any timezone info or Z at the end of the date
+                //We will assume it is RFC3999
+                source += "-0000";
+            }
         }
 
         try {

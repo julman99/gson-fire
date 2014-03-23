@@ -21,6 +21,13 @@ public class RFC3339DateFormatTest {
     }
 
     @Test
+    public void testParseNoTZ() throws Exception {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        Date date = format.parse("2014-01-06T17:45:01");
+        assertEquals(1389030301000L, date.getTime()); //Unix timestamp created with http://www.unixtimestamp.com/index.php
+    }
+
+    @Test
     public void testParseTimezoneShiftDays() throws Exception {
         RFC3339DateFormat format = new RFC3339DateFormat();
         Date date = format.parse("2013-02-06T21:29:08-05:00");
