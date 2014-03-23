@@ -64,10 +64,9 @@ public class GsonFireBuilder {
     /**
      * Configures the resulting Gson to serialize/unserialize Date instances with a policy
      * @param policy
-     * @param <T>
      * @return
      */
-    public <T> GsonFireBuilder dateSerializationPolicy(DateSerializationPolicy policy){
+    public GsonFireBuilder dateSerializationPolicy(DateSerializationPolicy policy){
         dateSerializationPolicy = policy;
         return this;
     }
