@@ -103,7 +103,7 @@ GsonFireBuilder builder = new GsonFireBuilder()
 
 ### Date format
 
-Dates can be serialized either to a unix epoch with or without milliseconds. Also RFC3999 is supported
+Dates can be serialized either to a unix epoch with or without milliseconds. Also RFC3339 is supported
 
 ```java
 GsonFireBuilder builder = new GsonFireBuilder();
@@ -113,7 +113,7 @@ builder.dateSerializationPolicy(DateSerializationPolicy.unixTimeMillis);
 //or
 builder.dateSerializationPolicy(DateSerializationPolicy.unixTimeSeconds);
 //or
-builder.dateSerializationPolicy(DateSerializationPolicy.rfc3999);
+builder.dateSerializationPolicy(DateSerializationPolicy.rfc3339);
 
 ```
 

@@ -26,7 +26,7 @@ public enum DateSerializationPolicy {
         }
     },
 
-    rfc3999 {
+    rfc3339 {
         @Override
         public TypeAdapter<Date> createTypeAdapter() {
             return new DateRFC3339TypeAdapter(TimeZone.getDefault());

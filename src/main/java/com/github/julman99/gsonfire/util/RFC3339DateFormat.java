@@ -82,7 +82,7 @@ public class RFC3339DateFormat extends DateFormat {
                 source = matcher.replaceAll("$1") + matcher.replaceAll("$2") + matcher.replaceAll("$3");
             } else {
                 //It appears we don't have any timezone info or Z at the end of the date
-                //We will assume it is RFC3999
+                //We will assume it is RFC3339
                 source += "-0000";
             }
         }

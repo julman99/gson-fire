@@ -67,9 +67,9 @@ public class DateSerializationTest {
     }
 
     @Test
-    public void testRFC3999_serialize(){
+    public void testRFC3339_serialize(){
         Gson gson = new GsonFireBuilder()
-            .dateSerializationPolicy(DateSerializationPolicy.rfc3999)
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
             .createGson();
 
         final Date date = new Date(1360204148123L);
@@ -79,9 +79,9 @@ public class DateSerializationTest {
     }
 
     @Test
-    public void testRFC3999_deserialize(){
+    public void testRFC3339_deserialize(){
         Gson gson = new GsonFireBuilder()
-            .dateSerializationPolicy(DateSerializationPolicy.rfc3999)
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
             .createGson();
 
         JsonElement element = new JsonPrimitive("2013-02-06T21:29:08.123-05:00");
