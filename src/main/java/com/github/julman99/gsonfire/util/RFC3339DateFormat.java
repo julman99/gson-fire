@@ -2,23 +2,59 @@ package com.github.julman99.gsonfire.util;
 
 import java.text.*;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @autor: julio
  */
 public class RFC3339DateFormat extends DateFormat {
 
-    private final SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private final SimpleDateFormat rfc3339Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private final SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
     private final String MILLISECONDS_PATTERN_REPLACE = "\\.([0-9]+)";
     private final String MILLISECONDS_PATTERN_MATCH = ".*" + MILLISECONDS_PATTERN_REPLACE + ".*";
 
+    public RFC3339DateFormat(TimeZone serializationTimezone) {
+        this.rfc3339Formatter.setTimeZone(serializationTimezone);
+    }
+
+    public RFC3339DateFormat() {
+        this(TimeZone.getTimeZone("UTC"));
+    }
+
+    private String generateTimezone(long time, TimeZone serializationTimezone){
+        if(serializationTimezone.getOffset(time) == 0){
+            return "Z";
+        }
+
+        int offset = (int) (serializationTimezone.getOffset(time) / 1000L);
+        int hours = offset / 3600;
+        int minutes = Math.abs((offset - hours * 3600) / 60);
+        String sign = hours >= 0 ? "+" : "-";
+
+        return sign + String.format("%02d", Math.abs(hours)) + ":" + String.format("%02d", minutes);
+    }
 
     @Override
     public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
-        String formatted = rfc3339.format(date).toString();
-        String formattedWithColon = formatted.substring(0, formatted.length() -2) + ":" + formatted.substring(formatted.length() -2 );
-        toAppendTo.append(formattedWithColon);
-        return toAppendTo;
+
+        StringBuffer formatted = new StringBuffer();
+
+        formatted.append(rfc3339Formatter.format(date).toString());
+
+        //Add milliseconds
+        long time = date.getTime();
+        if(time % 1000 != 0){
+            String fraction = Long.toString((time % 1000L));
+            formatted.append("." + fraction);
+        }
+
+        //Timezone
+        String timezoneStr = generateTimezone(time, this.rfc3339Formatter.getTimeZone());
+        formatted.append(timezoneStr);
+
+        return formatted;
     }
 
     @Override
@@ -43,7 +79,7 @@ public class RFC3339DateFormat extends DateFormat {
         }
 
         try {
-            Date res = rfc3339.parse(source);
+            Date res = rfc3339Parser.parse(source);
             if(millis > 0){
                 res = new Date(res.getTime() + millis);
             }

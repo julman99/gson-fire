@@ -9,13 +9,28 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @autor: julio
  */
 public class DateRFC3339TypeAdapter extends TypeAdapter<Date> {
 
-    private final RFC3339DateFormat dateFormat = new RFC3339DateFormat();
+    private final RFC3339DateFormat dateFormat;
+
+    /**
+     * Creates a RFC3339 type adapter that will serialize dates in UTC
+     */
+    public DateRFC3339TypeAdapter() {
+        this.dateFormat = new RFC3339DateFormat();
+    }
+
+    /**
+     * Creates a RFC3339 type adapter that will serialize dates using the provided timezone
+     */
+    public DateRFC3339TypeAdapter(TimeZone serializationTimezone) {
+        this.dateFormat = new RFC3339DateFormat(serializationTimezone);
+    }
 
     @Override
     public void write(JsonWriter out, Date value) throws IOException {
