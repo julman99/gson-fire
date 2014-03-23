@@ -66,5 +66,30 @@ public class DateSerializationTest {
         assertEquals(time, parsedDate.getTime());
     }
 
+    @Test
+    public void testRFC3999_serialize(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3999)
+            .createGson();
+
+        final Date date = new Date(1360204148123L);
+        JsonElement element = gson.toJsonTree(date);
+
+        assertEquals("2013-02-06T21:29:08.123-05:00", element.getAsString());
+    }
+
+    @Test
+    public void testRFC3999_deserialize(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3999)
+            .createGson();
+
+        JsonElement element = new JsonPrimitive("2013-02-06T21:29:08.123-05:00");
+        Date parsedDate = gson.fromJson(element, Date.class);
+
+        final Date expected = new Date(1360204148123L);
+        assertEquals(expected.getTime(), parsedDate.getTime());
+    }
+
 
 }
