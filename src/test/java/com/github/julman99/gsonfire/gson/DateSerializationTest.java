@@ -44,6 +44,30 @@ public class DateSerializationTest {
     }
 
     @Test
+    public void testUnixTimestampSeconds_serialize_negative(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.unixTimeSeconds)
+            .createGson();
+
+        final Date date = new Date(-1);
+        JsonElement element = gson.toJsonTree(date);
+
+        assertEquals(date.getTime() / 1000L, element.getAsLong());
+    }
+
+    @Test
+    public void testUnixTimestampSeconds_serialize_no_negative(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.unixTimePositiveSeconds)
+            .createGson();
+
+        final Date date = new Date(-1);
+        JsonElement element = gson.toJsonTree(date);
+
+        assertTrue(element.isJsonNull());
+    }
+
+    @Test
     public void testUnixTimestampMillis_serialize(){
         Gson gson = new GsonFireBuilder()
             .dateSerializationPolicy(DateSerializationPolicy.unixTimeMillis)
@@ -66,6 +90,30 @@ public class DateSerializationTest {
         Date parsedDate = gson.fromJson(element, Date.class);
 
         assertEquals(time, parsedDate.getTime());
+    }
+
+    @Test
+    public void testUnixTimestampMillis_serialize_negative(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.unixTimeMillis)
+            .createGson();
+
+        final Date date = new Date(-1);
+        JsonElement element = gson.toJsonTree(date);
+
+        assertEquals(date.getTime(), element.getAsLong());
+    }
+
+    @Test
+    public void testUnixTimestampMillis_serialize_no_negative(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.unixTimePositiveMillis)
+            .createGson();
+
+        final Date date = new Date(-1);
+        JsonElement element = gson.toJsonTree(date);
+
+        assertTrue(element.isJsonNull());
     }
 
     @Test
