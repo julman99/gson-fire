@@ -10,6 +10,21 @@ The main objective is to extend Gson using TypeAdapter and TypeAdapterFactory in
 All of the features can be accessed by the ```GsonFireBuilder```. This class will build internally a ```GsonBuilder```
 with all the desired features from which a ```Gson``` instance can be obtained.
 
+### Pre Processors
+
+Ability to alter a JsonElement before it is converted into an object.
+
+```java
+ GsonFireBuilder builder = new GsonFireBuilder()
+    .registerPreProcessor(SomeClass.class, new PreProcessor<A>() {
+        @Override
+        public void preDeserialize(Class<? extends A> clazz, JsonElement src, Gson gson) {
+            //Here you can add logic to change the src object before it gets converted into the Class clazz
+        }
+    });
+Gson gson = builder.createGson();
+```
+
 ### Post Processors
 
 Ability to alter a JsonElement after it has been generated from an object.

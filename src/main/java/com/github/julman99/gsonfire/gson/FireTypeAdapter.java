@@ -2,6 +2,7 @@ package com.github.julman99.gsonfire.gson;
 
 import com.github.julman99.gsonfire.ClassConfig;
 import com.github.julman99.gsonfire.PostProcessor;
+import com.github.julman99.gsonfire.PreProcessor;
 import com.github.julman99.gsonfire.TypeSelector;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -47,6 +48,7 @@ public class FireTypeAdapter<T> extends TypeAdapter<T> {
     @Override
     public T read(JsonReader in) throws IOException {
         JsonElement json = new JsonParser().parse(in);
+        runPreDeserialize(json);
         T result = deserialize(json);
 
         //Run all the post deserializers
@@ -67,6 +69,12 @@ public class FireTypeAdapter<T> extends TypeAdapter<T> {
     private void runPostDeserialize(T res, JsonElement src){
         for(PostProcessor<? super T> postProcessor: classConfig.getPostProcessors()){
             postProcessor.postDeserialize(res, src, gson);
+        }
+    }
+
+    private void runPreDeserialize(JsonElement json){
+        for(PreProcessor<? super T> preProcessor: classConfig.getPreProcessors()){
+            preProcessor.preDeserialize(clazz, json, gson);
         }
     }
 

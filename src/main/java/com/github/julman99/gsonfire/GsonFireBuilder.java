@@ -62,6 +62,23 @@ public class GsonFireBuilder {
     }
 
     /**
+     * Registers a pre processor for the Class specified. <br />
+     * A pre processor is a class that will be given the gson to be deserialized in case it wants to change it before
+     * it actually gets deserialized into a class
+     * See <a href="http://goo.gl/5fLLN"> docs and example</a>
+     *
+     * @param clazz
+     * @param preProcessor
+     * @param <T>
+     * @return
+     */
+    public <T> GsonFireBuilder registerPreProcessor(Class<T> clazz, PreProcessor<? super T> preProcessor){
+        ClassConfig config = getClassConfig(clazz);
+        config.getPreProcessors().add(preProcessor);
+        return this;
+    }
+
+    /**
      * Configures the resulting Gson to serialize/unserialize Date instances with a policy
      * @param policy
      * @return
