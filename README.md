@@ -176,6 +176,12 @@ GsonFireBuilder fireBuilder = new GsonFireBuilder();
 GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 ```
 
+## Release notes
+
+### 0.10.0
+
+- Adds Pre Processors! 
+
 ## Usage
 
 ### Maven
