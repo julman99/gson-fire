@@ -16,7 +16,7 @@ Ability to alter a JsonElement before it is converted into an object.
 
 ```java
  GsonFireBuilder builder = new GsonFireBuilder()
-    .registerPreProcessor(SomeClass.class, new PreProcessor<A>() {
+    .registerPreProcessor(SomeClass.class, new PreProcessor<SomeClass>() {
         @Override
         public void preDeserialize(Class<? extends A> clazz, JsonElement src, Gson gson) {
             //Here you can add logic to change the src object before it gets converted into the Class clazz
@@ -31,7 +31,7 @@ Ability to alter a JsonElement after it has been generated from an object.
 
 ```java
  GsonFireBuilder builder = new GsonFireBuilder()
-    .registerPostProcessor(SomeClass.class, new PostProcessor<A>() {
+    .registerPostProcessor(SomeClass.class, new PostProcessor<SomeClass>() {
         @Override
         public void postDeserialize(SomeClass result, JsonElement src) {
             //Here you can add logic to change the SomeClass instance
