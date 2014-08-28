@@ -65,7 +65,7 @@ public class GsonFireBuilder {
      * Registers a pre processor for the Class specified. <br />
      * A pre processor is a class that will be given the gson to be deserialized in case it wants to change it before
      * it actually gets deserialized into a class
-     * See <a href="http://goo.gl/5fLLN"> docs and example</a>
+     * See <a href="http://goo.gl/b8V1AA"> docs and example</a>
      *
      * @param clazz
      * @param preProcessor
