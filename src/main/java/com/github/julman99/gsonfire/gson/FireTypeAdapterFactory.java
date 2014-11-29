@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
  */
 public class FireTypeAdapterFactory<T> implements TypeAdapterFactory {
 
-    private ClassConfig<T> classConfig;
+    private final ClassConfig<T> classConfig;
 
     public FireTypeAdapterFactory(ClassConfig<T> classConfig) {
         this.classConfig = classConfig;
