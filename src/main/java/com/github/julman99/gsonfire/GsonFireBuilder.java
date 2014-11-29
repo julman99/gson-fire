@@ -6,16 +6,16 @@ import com.github.julman99.gsonfire.postProcessors.MethodInvokerPostProcessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @autor: julio
  */
 public class GsonFireBuilder {
 
-    private Map<Class, ClassConfig> classConfigMap = new HashMap<Class, ClassConfig>();
+    private final Map<Class, ClassConfig> classConfigMap = new HashMap<Class, ClassConfig>();
+    private final List<Class> orderedClasses = new ArrayList<Class>();
+
     private DateSerializationPolicy dateSerializationPolicy;
 
     private ClassConfig getClassConfig(Class clazz){
@@ -23,10 +23,21 @@ public class GsonFireBuilder {
         if(result == null){
             result = new ClassConfig(clazz);
             classConfigMap.put(clazz, result);
+            insertOrdered(orderedClasses, clazz);
         }
         return result;
     }
 
+    private static void insertOrdered(List<Class> classes, Class clazz) {
+        for(int i = classes.size() - 1; i >= 0; i--) {
+            Class current = classes.get(i);
+            if(current.isAssignableFrom(clazz)) {
+                classes.add(i + 1, clazz);
+                return;
+            }
+        }
+        classes.add(0, clazz);
+    }
 
     /**
      * Registers a Type selector for the Class specified. <br />
@@ -127,7 +138,8 @@ public class GsonFireBuilder {
     public GsonBuilder createGsonBuilder(){
         GsonBuilder builder = new GsonBuilder();
 
-        for(ClassConfig config: classConfigMap.values()){
+        for(Class clazz: orderedClasses){
+            ClassConfig config = classConfigMap.get(clazz);
             builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
         }
 
