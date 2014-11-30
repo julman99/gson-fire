@@ -20,6 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class DateSerializationTest {
 
     private static final TimeZone NY_TIMEZONE = TimeZone.getTimeZone("America/New_York");
+    private static final TimeZone CCS_TIMEZONE = TimeZone.getTimeZone("America/Caracas");
 
     @Test
     public void testUnixTimestampSeconds_serialize(){
@@ -120,10 +121,11 @@ public class DateSerializationTest {
     }
 
     @Test
-    public void testRFC3339_serialize(){
+    public void testRFC3339_serialize_NY(){
         TimeZone.setDefault(NY_TIMEZONE);
         Gson gson = new GsonFireBuilder()
             .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(NY_TIMEZONE)
             .createGson();
 
         final Date date = new Date(1360204148123L);
@@ -133,13 +135,41 @@ public class DateSerializationTest {
     }
 
     @Test
-    public void testRFC3339_deserialize(){
-        TimeZone.setDefault(NY_TIMEZONE);
+    public void testRFC3339_deserialize_NY(){
         Gson gson = new GsonFireBuilder()
             .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(NY_TIMEZONE)
             .createGson();
 
         JsonElement element = new JsonPrimitive("2013-02-06T21:29:08.123-05:00");
+        Date parsedDate = gson.fromJson(element, Date.class);
+
+        final Date expected = new Date(1360204148123L);
+        assertEquals(expected.getTime(), parsedDate.getTime());
+    }
+
+    @Test
+    public void testRFC3339_serialize_CCS(){
+        TimeZone.setDefault(NY_TIMEZONE);
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(CCS_TIMEZONE)
+            .createGson();
+
+        final Date date = new Date(1360204148123L);
+        JsonElement element = gson.toJsonTree(date);
+
+        assertEquals("2013-02-06T21:59:08.123-04:30", element.getAsString());
+    }
+
+    @Test
+    public void testRFC3339_deserialize_CSS(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(CCS_TIMEZONE)
+            .createGson();
+
+        JsonElement element = new JsonPrimitive("2013-02-06T21:59:08.123-04:30");
         Date parsedDate = gson.fromJson(element, Date.class);
 
         final Date expected = new Date(1360204148123L);

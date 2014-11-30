@@ -17,6 +17,7 @@ public class GsonFireBuilder {
     private final List<Class> orderedClasses = new ArrayList<Class>();
 
     private DateSerializationPolicy dateSerializationPolicy;
+    private TimeZone serializeTimeZone = TimeZone.getDefault();
 
     private ClassConfig getClassConfig(Class clazz){
         ClassConfig result = classConfigMap.get(clazz);
@@ -132,6 +133,17 @@ public class GsonFireBuilder {
     }
 
     /**
+     * Sets the serialization TimeZone. This will affect only values that depend on the TimeZone, for example rfc3339
+     * dates.
+     * @param timeZone
+     * @return
+     */
+    public GsonFireBuilder serializeTimeZone(TimeZone timeZone) {
+        this.serializeTimeZone = timeZone;
+        return this;
+    }
+
+    /**
      * Returns a new instance of the good old {@link GsonBuilder}
      * @return
      */
@@ -144,7 +156,7 @@ public class GsonFireBuilder {
         }
 
         if(dateSerializationPolicy != null){
-            builder.registerTypeAdapter(Date.class, dateSerializationPolicy.createTypeAdapter());
+            builder.registerTypeAdapter(Date.class, dateSerializationPolicy.createTypeAdapter(serializeTimeZone));
         }
 
         return builder;
