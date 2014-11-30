@@ -19,7 +19,7 @@ public enum DateSerializationPolicy {
      */
     unixTimeMillis {
         @Override
-        public TypeAdapter<Date> createTypeAdapter() {
+        TypeAdapter<Date> createTypeAdapter() {
             return new NullableTypeAdapter<Date>(
                 new DateUnixtimeMillisTypeAdapter(true)
             );
@@ -31,7 +31,7 @@ public enum DateSerializationPolicy {
      */
     unixTimeSeconds {
         @Override
-        public TypeAdapter<Date> createTypeAdapter() {
+        TypeAdapter<Date> createTypeAdapter() {
             return new NullableTypeAdapter<Date>(
                 new DateUnixtimeSecondsTypeAdapter(true)
             );
@@ -44,7 +44,7 @@ public enum DateSerializationPolicy {
      */
     unixTimePositiveMillis {
         @Override
-        public TypeAdapter<Date> createTypeAdapter() {
+        TypeAdapter<Date> createTypeAdapter() {
             return new NullableTypeAdapter<Date>(
                 new DateUnixtimeMillisTypeAdapter(false)
             );
@@ -57,7 +57,7 @@ public enum DateSerializationPolicy {
      */
     unixTimePositiveSeconds {
         @Override
-        public TypeAdapter<Date> createTypeAdapter() {
+        TypeAdapter<Date> createTypeAdapter() {
             return new NullableTypeAdapter<Date>(
                 new DateUnixtimeSecondsTypeAdapter(false)
             );
@@ -66,12 +66,12 @@ public enum DateSerializationPolicy {
 
     rfc3339 {
         @Override
-        public TypeAdapter<Date> createTypeAdapter() {
+        TypeAdapter<Date> createTypeAdapter() {
             return new NullableTypeAdapter<Date>(
                 new DateRFC3339TypeAdapter(TimeZone.getDefault())
             );
         }
     };
 
-    public abstract TypeAdapter<Date> createTypeAdapter();
+    abstract TypeAdapter<Date> createTypeAdapter();
 }
