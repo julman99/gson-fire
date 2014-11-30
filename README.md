@@ -1,3 +1,5 @@
+<img src="https://travis-ci.org/julman99/gson-fire.svg?branch=master">
+
 # Gson on Fire
 
 This project implements some useful features missing from the extremely useful [Gson project](https://code.google.com/p/google-gson/)
