@@ -8,6 +8,7 @@ import com.google.gson.JsonPrimitive;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -17,6 +18,8 @@ import static org.junit.Assert.assertTrue;
  * @autor: julio
  */
 public class DateSerializationTest {
+
+    private static final TimeZone NY_TIMEZONE = TimeZone.getTimeZone("America/New_York");
 
     @Test
     public void testUnixTimestampSeconds_serialize(){
@@ -118,6 +121,7 @@ public class DateSerializationTest {
 
     @Test
     public void testRFC3339_serialize(){
+        TimeZone.setDefault(NY_TIMEZONE);
         Gson gson = new GsonFireBuilder()
             .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
             .createGson();
@@ -130,6 +134,7 @@ public class DateSerializationTest {
 
     @Test
     public void testRFC3339_deserialize(){
+        TimeZone.setDefault(NY_TIMEZONE);
         Gson gson = new GsonFireBuilder()
             .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
             .createGson();
