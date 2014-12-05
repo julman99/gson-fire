@@ -182,6 +182,10 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ### 0.11.0
 
+- Fixes a bug in which GsonFire was not running the type adapters in the same order as class hierarchy.
+
+### 0.10.0
+
 - Adds Pre Processors! 
 
 ## Usage
