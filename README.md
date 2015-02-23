@@ -186,9 +186,22 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ### 0.10.0
 
-- Adds Pre Processors! 
+- Adds Pre Processors!
 
 ## Usage
+
+### Gradle
+Add to your ```build.gradle```
+
+```groovy
+repositories {
+    maven { url 'https://raw.github.com/julman99/mvn-repo/master' }
+}
+
+dependencies {
+  compile 'com.github.julman99:gson-fire:0.11.0'
+}
+```
 
 ### Maven
 Add to your ```pom.xml```
