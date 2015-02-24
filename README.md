@@ -190,19 +190,6 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ## Usage
 
-### Gradle
-Add to your ```build.gradle```
-
-```groovy
-repositories {
-    maven { url 'https://raw.github.com/julman99/mvn-repo/master' }
-}
-
-dependencies {
-  compile 'com.github.julman99:gson-fire:0.11.0'
-}
-```
-
 ### Maven
 Add to your ```pom.xml```
 
@@ -221,6 +208,22 @@ Add to your ```pom.xml```
     </dependency>
 </dependencies>
 ```
+
+### Gradle
+Add to your ```build.gradle```
+
+```groovy
+repositories {
+    maven {
+        url 'https://raw.github.com/julman99/mvn-repo/master'
+    }
+}
+
+dependencies {
+    compile 'com.github.julman99:gson-fire:0.11.0'
+}
+```
+
 ### Jar
 
 Gson on Fire depends on Gson. Make sure you download and have in the class path both jars:
