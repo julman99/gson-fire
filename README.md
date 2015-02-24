@@ -180,6 +180,10 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ## Release notes
 
+### 1.0.0
+
+- Renames packages to ```io.gsonfire``
+
 ### 0.11.0
 
 - Fixes a bug in which GsonFire was not running the type adapters in the same order as class hierarchy.
@@ -202,7 +206,7 @@ Add to your ```pom.xml```
 <repositories>
 <dependencies>
     <dependency>
-        <groupId>com.github.julman99</groupId>
+        <groupId>io.gsonfire</groupId>
         <artifactId>gson-fire</artifactId>
         <version>0.11.0</version>
     </dependency>
@@ -220,7 +224,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.julman99:gson-fire:0.11.0'
+    compile 'com.github.julman99:gson-fire:1.0.0'
 }
 ```
 
@@ -228,6 +232,6 @@ dependencies {
 
 Gson on Fire depends on Gson. Make sure you download and have in the class path both jars:
 
-1. Download [Gson on Fire](https://github.com/julman99/mvn-repo/raw/master/com/github/julman99/gson-fire/0.11.0/gson-fire-0.11.0.jar)
+1. Download [Gson on Fire](https://github.com/julman99/mvn-repo/raw/master/com/github/julman99/gson-fire/1.0.0/gson-fire-1.0.0.jar)
 
 2. Download [Gson](https://code.google.com/p/google-gson/downloads/list)
