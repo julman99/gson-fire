@@ -92,32 +92,6 @@ GsonFireBuilder builder = new GsonFireBuilder()
 
 ```
 
-### Merge Maps with your resulting Json objects
-
-You can annotate now a Map inside a class with the ```@MergeMap``` annotation. This will make
-Gson to walk that map and merge it with your resulting Json Object
-
-The map will be converted to a ```JsonObject``` using Gson, then it will be walked and merged with the
-resulting Json object
-
-```java
-
-public void SomeClass{
-
-    @MergeMap
-    private Map someMap = new HashMap();
-
-}
-
-//Then
-GsonFireBuilder builder = new GsonFireBuilder()
-    .enableMergeMaps(SomeClass.class)(); //This will make Gson to walk the map
-                                         //and add to the resulting json each
-                                         //key/value of the map as property/values
-
-
-```
-
 ### Date format
 
 Dates can be serialized either to a unix epoch with or without milliseconds. Also [RFC3339](http://www.ietf.org/rfc/rfc3339.txt) is supported
