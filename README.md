@@ -180,10 +180,11 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ## Release notes
 
-### 1.0.0
+### 1.0.1
 
 - Renames project package to ```io.gsonfire```
 - Gson on Fire is now at [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.gsonfire%22)
+- Deprecates the **Merge Map** functionality in favor of **Post Processors**
 
 ### 0.11.0
 
@@ -205,7 +206,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 </dependencies>
 ```
@@ -215,7 +216,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.0.0'
+    compile 'io.gsonfire:gson-fire:1.0.1'
 }
 ```
 
