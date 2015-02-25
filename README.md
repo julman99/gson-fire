@@ -182,7 +182,8 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ### 1.0.0
 
-- Renames packages to ```io.gsonfire``
+- Renames project package to ```io.gsonfire```
+- Gson on Fire is now at [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.gsonfire%22)
 
 ### 0.11.0
 
@@ -194,21 +195,17 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ## Usage
 
+Gson on Fire is now at [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.gsonfire%22). This means that there is no need to add the [extra maven repository](http://goo.gl/Yctj4r) anymore.
+
 ### Maven
 Add to your ```pom.xml```
 
 ```xml
-<repositories>
-    <repository>
-        <id>julman99-github</id>
-        <url>https://raw.github.com/julman99/mvn-repo/master</url>
-    </repository>
-<repositories>
 <dependencies>
     <dependency>
-        <groupId>io.gsonfire</groupId>
-        <artifactId>gson-fire</artifactId>
-        <version>0.11.0</version>
+      <groupId>io.gsonfire</groupId>
+      <artifactId>gson-fire</artifactId>
+      <version>1.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -217,21 +214,8 @@ Add to your ```pom.xml```
 Add to your ```build.gradle```
 
 ```groovy
-repositories {
-    maven {
-        url 'https://raw.github.com/julman99/mvn-repo/master'
-    }
-}
-
 dependencies {
-    compile 'com.github.julman99:gson-fire:1.0.0'
+    compile 'io.gsonfire:gson-fire:1.0.0'
 }
 ```
 
-### Jar
-
-Gson on Fire depends on Gson. Make sure you download and have in the class path both jars:
-
-1. Download [Gson on Fire](https://github.com/julman99/mvn-repo/raw/master/com/github/julman99/gson-fire/1.0.0/gson-fire-1.0.0.jar)
-
-2. Download [Gson](https://code.google.com/p/google-gson/downloads/list)
