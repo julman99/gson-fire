@@ -124,9 +124,12 @@ public class GsonFireBuilder {
     /**
      * By enabling this, when a class is being converted to Json and it contains a {@link java.util.Map} class
      * annotated with {@link io.gsonfire.annotations.MergeMap}, the map will be walked and merged
-     * with the resulting json object
+     * with the resulting json object.
+     *
+     * This method has been deprecated and a {@link io.gsonfire.PostProcessor} should be used instead
      * @return
      */
+    @Deprecated
     public GsonFireBuilder enableMergeMaps(Class clazz){
         registerPostProcessor(clazz, new MergeMapPostProcessor());
         return this;
