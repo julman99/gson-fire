@@ -70,7 +70,7 @@ GsonFireBuilder builder = new GsonFireBuilder()
 Gson gson = builder.createGson();
 ```
 
-### Expose your metods
+### Expose your methods
 
 You can annotate methods now to be automatically evaluated an serialized
 
