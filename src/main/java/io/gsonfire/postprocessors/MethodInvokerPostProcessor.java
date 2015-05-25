@@ -5,6 +5,8 @@ import io.gsonfire.annotations.ExposeMethodResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.gsonfire.gson.FireExclusionStrategy;
+import io.gsonfire.gson.FireExclusionStrategyComposite;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,6 +21,16 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
 
     private static Map<Class, MappedMethod[]> methodMap = new ConcurrentHashMap<Class, MappedMethod[]>();
 
+    private final FireExclusionStrategy serializationExclusionStrategy;
+
+    public MethodInvokerPostProcessor() {
+        this(new FireExclusionStrategyComposite());
+    }
+
+    public MethodInvokerPostProcessor(FireExclusionStrategy serializationExclusionStrategy) {
+        this.serializationExclusionStrategy = serializationExclusionStrategy;
+    }
+
     @Override
     public void postDeserialize(T result, JsonElement src, Gson gson) {
         //nothing here
@@ -29,15 +41,17 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
         if(result.isJsonObject()){
             JsonObject jsonObject = result.getAsJsonObject();
             for(MappedMethod m: getMappedMethods((Class<T>) src.getClass())){
-                try {
-                    if(m.conflictResolutionStrategy == ExposeMethodResult.ConflictResolutionStrategy.OVERWRITE || (m.conflictResolutionStrategy == ExposeMethodResult.ConflictResolutionStrategy.SKIP && !jsonObject.has(m.fieldName))){
-                        Object value = m.method.invoke(src);
-                        jsonObject.add(m.fieldName, gson.toJsonTree(value));
+                if(!serializationExclusionStrategy.shouldSkipMethod(m)) {
+                    try {
+                        if (m.getConflictResolutionStrategy() == ExposeMethodResult.ConflictResolutionStrategy.OVERWRITE || (m.getConflictResolutionStrategy() == ExposeMethodResult.ConflictResolutionStrategy.SKIP && !jsonObject.has(m.getSerializedName()))) {
+                            Object value = m.getMethod().invoke(src);
+                            jsonObject.add(m.getSerializedName(), gson.toJsonTree(value));
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
                     }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -59,10 +73,7 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
                     ExposeMethodResult exposeMethodResult = m.getAnnotation(ExposeMethodResult.class);
 
                     m.setAccessible(true);
-                    MappedMethod mm = new MappedMethod();
-                    mm.method = m;
-                    mm.fieldName = exposeMethodResult.value();
-                    mm.conflictResolutionStrategy = exposeMethodResult.conflictResolution();
+                    MappedMethod mm = new MappedMethod(m, exposeMethodResult.value(), exposeMethodResult.conflictResolution());
                     methodList.add(mm);
                 }
             }
@@ -97,9 +108,4 @@ public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
         return allMethods;
     }
 
-    private static class MappedMethod{
-        public Method method;
-        public String fieldName;
-        public ExposeMethodResult.ConflictResolutionStrategy conflictResolutionStrategy;
-    }
 }

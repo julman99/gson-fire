@@ -1,10 +1,12 @@
 package io.gsonfire;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import io.gsonfire.gson.FireExclusionStrategy;
+import io.gsonfire.gson.FireExclusionStrategyComposite;
 import io.gsonfire.gson.FireTypeAdapterFactory;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
 import io.gsonfire.postprocessors.MethodInvokerPostProcessor;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.*;
 
@@ -15,9 +17,11 @@ public class GsonFireBuilder {
 
     private final Map<Class, ClassConfig> classConfigMap = new HashMap<Class, ClassConfig>();
     private final List<Class> orderedClasses = new ArrayList<Class>();
+    private final List<FireExclusionStrategy> serializationExclusions = new ArrayList<FireExclusionStrategy>();
 
     private DateSerializationPolicy dateSerializationPolicy;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
+    private boolean enableExposeMethodResults = false;
 
     private ClassConfig getClassConfig(Class clazz){
         ClassConfig result = classConfigMap.get(clazz);
@@ -106,7 +110,7 @@ public class GsonFireBuilder {
      * @return
      */
     public GsonFireBuilder enableExposeMethodResult(){
-        registerPostProcessor(Object.class, new MethodInvokerPostProcessor<Object>());
+        this.enableExposeMethodResults = true;
         return this;
     }
 
@@ -146,6 +150,11 @@ public class GsonFireBuilder {
         return this;
     }
 
+    public GsonFireBuilder addSerializationExclusionStrategy(FireExclusionStrategy exclusionStrategy) {
+        this.serializationExclusions.add(exclusionStrategy);
+        return this;
+    }
+
     /**
      * Returns a new instance of the good old {@link GsonBuilder}
      * @return
@@ -153,9 +162,19 @@ public class GsonFireBuilder {
     public GsonBuilder createGsonBuilder(){
         GsonBuilder builder = new GsonBuilder();
 
+        if(enableExposeMethodResults) {
+            FireExclusionStrategy compositeExclusionStrategy = new FireExclusionStrategyComposite(serializationExclusions);
+            registerPostProcessor(Object.class, new MethodInvokerPostProcessor<Object>(compositeExclusionStrategy));
+        }
+
         for(Class clazz: orderedClasses){
             ClassConfig config = classConfigMap.get(clazz);
             builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
+        }
+
+        //Register the serialization exclusion strategies on GsonFire
+        for(FireExclusionStrategy exclusionStrategy: serializationExclusions) {
+            builder.addSerializationExclusionStrategy(exclusionStrategy);
         }
 
         if(dateSerializationPolicy != null){

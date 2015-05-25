@@ -1,10 +1,10 @@
 package io.gsonfire.gson;
 
-import io.gsonfire.ClassConfig;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
+import io.gsonfire.ClassConfig;
 
 /**
  * @autor: julio
