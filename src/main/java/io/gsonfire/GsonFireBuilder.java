@@ -172,11 +172,6 @@ public class GsonFireBuilder {
             builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
         }
 
-        //Register the serialization exclusion strategies on GsonFire
-        for(FireExclusionStrategy exclusionStrategy: serializationExclusions) {
-            builder.addSerializationExclusionStrategy(exclusionStrategy);
-        }
-
         if(dateSerializationPolicy != null){
             builder.registerTypeAdapter(Date.class, dateSerializationPolicy.createTypeAdapter(serializeTimeZone));
         }

@@ -1,6 +1,5 @@
 package io.gsonfire.gson;
 
-import com.google.gson.FieldAttributes;
 import io.gsonfire.postprocessors.MappedMethod;
 
 import java.util.ArrayList;
@@ -32,23 +31,4 @@ public class FireExclusionStrategyComposite implements FireExclusionStrategy {
         return false;
     }
 
-    @Override
-    public boolean shouldSkipField(FieldAttributes f) {
-        for(FireExclusionStrategy strategy: strategies) {
-            if(strategy.shouldSkipField(f)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean shouldSkipClass(Class<?> clazz) {
-        for(FireExclusionStrategy strategy: strategies) {
-            if(strategy.shouldSkipClass(clazz)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

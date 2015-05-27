@@ -1,9 +1,7 @@
 package io.gsonfire.gson;
 
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.annotations.Expose;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.annotations.ExposeMethodResult;
 import io.gsonfire.postprocessors.MappedMethod;
@@ -22,57 +20,18 @@ public class FireExclusionStrategyTest {
         GsonFireBuilder builder = new GsonFireBuilder()
             .enableExposeMethodResult()
             .addSerializationExclusionStrategy(new FireExclusionStrategy() {
+
                 @Override
                 public boolean shouldSkipMethod(MappedMethod method) {
                     return method.getSerializedName().equals("excluded");
                 }
 
-                @Override
-                public boolean shouldSkipField(FieldAttributes f) {
-                    return false;
-                }
-
-                @Override
-                public boolean shouldSkipClass(Class<?> clazz) {
-                    return false;
-                }
             });
 
         Gson gson = builder.createGson();
 
         A a = new A();
         JsonObject obj = gson.toJsonTree(a).getAsJsonObject();
-
-        assertEquals(1, obj.entrySet().size());
-        assertFalse(obj.has("excluded"));
-        assertEquals("included", obj.get("included").getAsString());
-    }
-
-    @Test
-    public void testGsonFireExclusionStrategy(){
-        GsonFireBuilder builder = new GsonFireBuilder()
-            .enableExposeMethodResult()
-            .addSerializationExclusionStrategy(new FireExclusionStrategy() {
-                @Override
-                public boolean shouldSkipMethod(MappedMethod method) {
-                    return false;
-                }
-
-                @Override
-                public boolean shouldSkipField(FieldAttributes f) {
-                    return f.getName().equals("excluded");
-                }
-
-                @Override
-                public boolean shouldSkipClass(Class<?> clazz) {
-                    return false;
-                }
-            });
-
-        Gson gson = builder.createGson();
-
-        B b = new B();
-        JsonObject obj = gson.toJsonTree(b).getAsJsonObject();
 
         assertEquals(1, obj.entrySet().size());
         assertFalse(obj.has("excluded"));
@@ -90,16 +49,6 @@ public class FireExclusionStrategyTest {
         public String excluded(){
             return "excluded";
         }
-
-    }
-
-    private class B {
-
-        @Expose
-        public String included = "included";
-
-        @Expose
-        public String excluded = "excluded";
 
     }
 
