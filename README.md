@@ -154,6 +154,10 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ## Release notes
 
+### 1.1.0
+
+- Adds GsonFireBuilder.addSerializationExclusionStrategy (thanks @lalpert)
+
 ### 1.0.1
 
 - Renames project package to ```io.gsonfire```
@@ -180,7 +184,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.0.1</version>
+      <version>1.1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -190,7 +194,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.0.1'
+    compile 'io.gsonfire:gson-fire:1.1.0'
 }
 ```
 
