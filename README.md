@@ -92,6 +92,9 @@ GsonFireBuilder builder = new GsonFireBuilder()
 
 ```
 
+You can use ```GsonFireBuilder.addSerializationExclusionStrategy``` if you want to add custom exclusion strategies for
+some methods.
+
 ### Date format
 
 Dates can be serialized either to a unix epoch with or without milliseconds. Also [RFC3339](http://www.ietf.org/rfc/rfc3339.txt) is supported
