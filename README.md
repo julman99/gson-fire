@@ -156,7 +156,7 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 
 ### 1.1.0
 
-- Adds GsonFireBuilder.addSerializationExclusionStrategy (thanks @lalpert)
+- Adds ```GsonFireBuilder.addSerializationExclusionStrategy``` (thanks [@lalpert](https://github.com/lalpert))
 
 ### 1.0.1
 
