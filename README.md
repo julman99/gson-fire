@@ -148,11 +148,24 @@ Gson gson = builder.createGson();
 
 ## Using the Gson's GsonBuilder
 
-You can still access the good old GsonBuilder:
+To access the good old GsonBuilder:
 
 ```java
 GsonFireBuilder fireBuilder = new GsonFireBuilder();
+
+// Here you can configure the fireBuilder however you want
+// and then request a GsonBuilder. The GsonBuilder will be pre-configured
+// with all the GsonFire features.
+
 GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
+
+// Here you can customize the gsonBuilder using the Gson features and 
+// then create a Gson object
+
+Gson gson = gsonBuilder.create()
+
+//The resulting Gson object will have all the GsonFire and Gson features
+
 ```
 
 ## Release notes
