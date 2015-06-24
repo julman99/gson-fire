@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @autor: julio
  */
-public class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
+public final class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
 
     private static Map<Class, MappedMethod[]> methodMap = new ConcurrentHashMap<Class, MappedMethod[]>();
 

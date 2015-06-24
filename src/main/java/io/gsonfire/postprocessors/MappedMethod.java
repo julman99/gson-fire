@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 /**
  * Created by julio on 5/25/15.
  */
-public class MappedMethod {
+public final class MappedMethod {
 
     private final  Method method;
     private final String serializedName;

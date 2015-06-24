@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * @autor: julio
  */
-public class GsonFireBuilder {
+public final class GsonFireBuilder {
 
     private final Map<Class, ClassConfig> classConfigMap = new HashMap<Class, ClassConfig>();
     private final List<Class> orderedClasses = new ArrayList<Class>();

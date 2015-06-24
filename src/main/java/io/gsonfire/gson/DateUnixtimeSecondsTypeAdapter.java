@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @autor: julio
  */
-public class DateUnixtimeSecondsTypeAdapter extends DateUnixtimeMillisTypeAdapter {
+public final class DateUnixtimeSecondsTypeAdapter extends DateUnixtimeMillisTypeAdapter {
 
     public DateUnixtimeSecondsTypeAdapter(boolean allowNegativeTimestamp) {
         super(allowNegativeTimestamp);

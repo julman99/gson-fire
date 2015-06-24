@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * Created by julio on 5/25/15.
  */
-public class FireExclusionStrategyComposite implements FireExclusionStrategy {
+public final class FireExclusionStrategyComposite implements FireExclusionStrategy {
 
     private final Collection<FireExclusionStrategy> strategies;
 

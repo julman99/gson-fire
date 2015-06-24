@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @autor: julio
  */
-public class FieldInspector {
+public final class FieldInspector {
     private static final Map<Class, Map<Class<? extends Annotation>, Field[]>> cache = new ConcurrentHashMap<Class, Map<Class<? extends Annotation>, Field[]>>();
 
     public Field[] getAnnotatedFields(Class clazz, Class<? extends Annotation> annotation){

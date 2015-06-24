@@ -9,7 +9,7 @@ import io.gsonfire.ClassConfig;
 /**
  * @autor: julio
  */
-public class FireTypeAdapterFactory<T> implements TypeAdapterFactory {
+public final class FireTypeAdapterFactory<T> implements TypeAdapterFactory {
 
     private final ClassConfig<T> classConfig;
 

@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 /**
  * @autor: julio
  */
-public class HooksInvoker {
+public final class HooksInvoker {
 
     private MethodInspector inspector = new MethodInspector();
 

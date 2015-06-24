@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Class reponsible for returning an array of methods that are annotated with a particular class
  * @autor: julio
  */
-public class MethodInspector {
+public final class MethodInspector {
 
     private static final Map<Class, Map<Class<? extends Annotation>, Method[]>> cache = new ConcurrentHashMap<Class, Map<Class<? extends Annotation>, Method[]>>();
 

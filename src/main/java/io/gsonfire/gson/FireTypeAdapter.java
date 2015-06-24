@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * @autor: julio
  */
-public class FireTypeAdapter<T> extends TypeAdapter<T> {
+public final class FireTypeAdapter<T> extends TypeAdapter<T> {
 
     private final Class<T> clazz;
     private final ClassConfig<? super T> classConfig;

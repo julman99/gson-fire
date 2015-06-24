@@ -14,7 +14,7 @@ import java.util.Map;
  * @autor: julio
  */
 @Deprecated
-public class MergeMapPostProcessor implements PostProcessor {
+public final class MergeMapPostProcessor implements PostProcessor {
 
     private FieldInspector fieldInspector = new FieldInspector();
 

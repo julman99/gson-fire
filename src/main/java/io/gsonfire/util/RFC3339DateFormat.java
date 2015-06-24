@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * @autor: julio
  */
-public class RFC3339DateFormat extends DateFormat {
+public final class RFC3339DateFormat extends DateFormat {
 
     private static final Pattern TIMEZONE_PATTERN = Pattern.compile("(.*)([+-][0-9][0-9])\\:?([0-9][0-9])$");
     private static final Pattern MILLISECONDS_PATTERN = Pattern.compile("(.*)\\.([0-9]+)(.*)");

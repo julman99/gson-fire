@@ -13,7 +13,7 @@ import java.util.Collection;
 /**
 * @autor: julio
 */
-class CollectionOperationTypeAdapter extends TypeAdapter<Collection> {
+final class CollectionOperationTypeAdapter extends TypeAdapter<Collection> {
 
     private static final JsonElement EMPTY_ARRAY = new JsonArray();
     private final TypeAdapter<Collection> collectionTypeAdapter;

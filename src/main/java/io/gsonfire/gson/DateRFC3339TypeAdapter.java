@@ -13,7 +13,7 @@ import java.util.TimeZone;
 /**
  * @autor: julio
  */
-public class DateRFC3339TypeAdapter extends TypeAdapter<Date> {
+public final class DateRFC3339TypeAdapter extends TypeAdapter<Date> {
 
     private final RFC3339DateFormat dateFormat;
 

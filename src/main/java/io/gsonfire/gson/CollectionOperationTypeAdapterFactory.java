@@ -10,7 +10,7 @@ import java.util.Collection;
 /**
  * @autor: julio
  */
-public class CollectionOperationTypeAdapterFactory implements TypeAdapterFactory {
+public final class CollectionOperationTypeAdapterFactory implements TypeAdapterFactory {
 
     private Class<? extends Collection> clazz;
 

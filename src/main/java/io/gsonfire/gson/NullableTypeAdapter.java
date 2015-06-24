@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * @autor: julio
  */
-public class NullableTypeAdapter<T> extends TypeAdapter<T> {
+public final class NullableTypeAdapter<T> extends TypeAdapter<T> {
 
     private final TypeAdapter<T> nullable;
 

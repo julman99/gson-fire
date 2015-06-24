@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * @autor: julio
  */
-public class ClassConfig<T> {
+public final class ClassConfig<T> {
 
     private Class<T> clazz;
     private TypeSelector<? super T> typeSelector;
