@@ -8,6 +8,6 @@ import com.google.gson.JsonElement;
  */
 public interface PreProcessor<T> {
 
-    public void preDeserialize(Class<? extends T> clazz, JsonElement src, Gson gson);
+    void preDeserialize(Class<? extends T> clazz, JsonElement src, Gson gson);
 
 }

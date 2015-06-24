@@ -30,7 +30,7 @@ public class ClassHierarchyTest {
     }
 
 
-    static interface A {
+    interface A {
 
         String value();
 

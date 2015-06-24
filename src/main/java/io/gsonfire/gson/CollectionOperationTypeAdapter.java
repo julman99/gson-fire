@@ -50,7 +50,7 @@ class CollectionOperationTypeAdapter extends TypeAdapter<Collection> {
         }
     }
 
-    private static enum Operator {
+    private enum Operator {
         $add {
             @Override
             public void apply(Collection to, Collection from) {

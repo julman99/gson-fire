@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
  */
 public interface PostProcessor<T> {
 
-    public void postDeserialize(T result, JsonElement src, Gson gson);
+    void postDeserialize(T result, JsonElement src, Gson gson);
 
-    public void postSerialize(JsonElement result, T src, Gson gson);
+    void postSerialize(JsonElement result, T src, Gson gson);
 }

@@ -7,6 +7,6 @@ import com.google.gson.JsonElement;
  */
 public interface TypeSelector<T> {
 
-    public Class<? extends T> getClassForElement(JsonElement readElement);
+    Class<? extends T> getClassForElement(JsonElement readElement);
 
 }

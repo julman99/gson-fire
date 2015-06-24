@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ExposeMethodResult {
 
-    public enum ConflictResolutionStrategy{
+    enum ConflictResolutionStrategy{
         /**
          * Will overwrite the existing field on the {@link com.google.gson.JsonObject} that conflicts with the field
          * name being written
@@ -29,11 +29,11 @@ public @interface ExposeMethodResult {
     /**
      * @return The name of the field to store the serialized result of the method
      */
-    public String value();
+    String value();
 
     /**
      * @return Strategy to be used when there is conflict between the name of a field on the Java Object vs the field name
      * where the result of the method will be serialized
      */
-    public ConflictResolutionStrategy conflictResolution() default ConflictResolutionStrategy.OVERWRITE;
+    ConflictResolutionStrategy conflictResolution() default ConflictResolutionStrategy.OVERWRITE;
 }
