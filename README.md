@@ -146,6 +146,31 @@ Gson builder = new GsonFireBuilder()
 Gson gson = builder.createGson();
 ```
 
+### Iterable Serialization
+
+By default Gson does not serializes ```Iterable``` implementations. Gson on Fire provides a wrapper class called 
+```SimpleIterable``` that allows full serialization an deserialization of Iterables.
+
+<b>Serialization</b>
+```java
+Gson gson = new GsonFireBuilder().createGson();
+SimpleIterable<Integer> simpleIterable = SimpleIterable.of(anotherIterable);
+String json = gson.toJson(simpleIterable) //this will serialize the contents of "anotherIterable" as a json array
+
+```
+
+<b>De-serialization</b>
+```java
+Gson gson = new GsonFireBuilder().createGson();
+SimpleIterable<Integer> simpleIterable = gson.fromJson("[1,2,3]", new TypeToken<SimpleIterable<Integer>>(){}.getType());
+
+//Now simpleIterable allows to iterate on the three integer values
+for(Integer i: simpleIterable) {
+    ///...
+}
+
+```
+
 ## Using the Gson's GsonBuilder
 
 To access the good old GsonBuilder:
