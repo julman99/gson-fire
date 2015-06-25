@@ -3,7 +3,7 @@ package io.gsonfire.gson;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.gsonfire.GsonFireBuilder;
-import io.gsonfire.util.BasicIterable;
+import io.gsonfire.util.SimpleIterable;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,18 +11,18 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by julio on 6/23/15.
  */
-public class BasicIterableTest {
+public class SimpleIterableTest {
 
     @Test
     public void testSimpleIterated() {
         Gson gson = new GsonFireBuilder()
             .createGson();
 
-        BasicIterable<Integer> originalIterable = BasicIterable.of(1, 2, 3);
+        SimpleIterable<Integer> originalIterable = SimpleIterable.of(1, 2, 3);
         String json = gson.toJson(originalIterable);
         assertEquals("[1,2,3]", json);
 
-        BasicIterable<Integer> deserializedIterable = gson.fromJson(json, new TypeToken<BasicIterable<Integer>>(){}.getType());
+        SimpleIterable<Integer> deserializedIterable = gson.fromJson(json, new TypeToken<SimpleIterable<Integer>>(){}.getType());
         assertEquals(originalIterable, deserializedIterable);
     }
 
@@ -31,14 +31,14 @@ public class BasicIterableTest {
         Gson gson = new GsonFireBuilder()
             .createGson();
 
-        BasicIterable<GenericContainer<String>> originalIterable = BasicIterable.of(
+        SimpleIterable<GenericContainer<String>> originalIterable = SimpleIterable.of(
             new GenericContainer<String>("a"),
             new GenericContainer<String>("b")
         );
         String json = gson.toJson(originalIterable);
         assertEquals("[{\"value\":\"a\"},{\"value\":\"b\"}]", json);
 
-        BasicIterable<Integer> deserializedIterable = gson.fromJson(json, new TypeToken<BasicIterable<GenericContainer<String>>>(){}.getType());
+        SimpleIterable<Integer> deserializedIterable = gson.fromJson(json, new TypeToken<SimpleIterable<GenericContainer<String>>>(){}.getType());
         assertEquals(originalIterable, deserializedIterable);
     }
 
@@ -47,29 +47,29 @@ public class BasicIterableTest {
         Gson gson = new GsonFireBuilder()
             .createGson();
 
-        BasicIterable<GenericContainer<GenericContainer<Integer>>> originalIterable = BasicIterable.of(
+        SimpleIterable<GenericContainer<GenericContainer<Integer>>> originalIterable = SimpleIterable.of(
             new GenericContainer<GenericContainer<Integer>>(new GenericContainer<Integer>(1)),
             new GenericContainer<GenericContainer<Integer>>(new GenericContainer<Integer>(2))
         );
         String json = gson.toJson(originalIterable);
         assertEquals("[{\"value\":{\"value\":1}},{\"value\":{\"value\":2}}]", json);
 
-        BasicIterable<Integer> deserializedIterable = gson.fromJson(json, new TypeToken<BasicIterable<GenericContainer<GenericContainer<Integer>>>>(){}.getType());
+        SimpleIterable<Integer> deserializedIterable = gson.fromJson(json, new TypeToken<SimpleIterable<GenericContainer<GenericContainer<Integer>>>>(){}.getType());
         assertEquals(originalIterable, deserializedIterable);
     }
 
     @Test
-    public void testBasicIterableContainer() {
+    public void testSimpleIterableContainer() {
         Gson gson = new GsonFireBuilder()
             .createGson();
 
-        BasicIterableContainer container = new BasicIterableContainer(
-            BasicIterable.of(1, 2, 3)
+        SimpleIterableContainer container = new SimpleIterableContainer(
+            SimpleIterable.of(1, 2, 3)
         );
         String json = gson.toJson(container);
         assertEquals("{\"value\":[1,2,3]}", json);
 
-        BasicIterableContainer deserializedContainer = gson.fromJson(json, BasicIterableContainer.class);
+        SimpleIterableContainer deserializedContainer = gson.fromJson(json, SimpleIterableContainer.class);
         assertEquals(container, deserializedContainer);
     }
 
@@ -97,9 +97,9 @@ public class BasicIterableTest {
         }
     }
 
-    public static class BasicIterableContainer extends GenericContainer<BasicIterable<Integer>> {
+    public static class SimpleIterableContainer extends GenericContainer<SimpleIterable<Integer>> {
 
-        public BasicIterableContainer(BasicIterable<Integer> value) {
+        public SimpleIterableContainer(SimpleIterable<Integer> value) {
             super(value);
         }
     }

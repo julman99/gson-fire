@@ -2,7 +2,7 @@ package io.gsonfire;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.gsonfire.gson.BasicIterableTypeAdapterFactory;
+import io.gsonfire.gson.SimpleIterableTypeAdapterFactory;
 import io.gsonfire.gson.FireExclusionStrategy;
 import io.gsonfire.gson.FireExclusionStrategyComposite;
 import io.gsonfire.gson.FireTypeAdapterFactory;
@@ -177,7 +177,7 @@ public final class GsonFireBuilder {
             builder.registerTypeAdapter(Date.class, dateSerializationPolicy.createTypeAdapter(serializeTimeZone));
         }
 
-        builder.registerTypeAdapterFactory(new BasicIterableTypeAdapterFactory());
+        builder.registerTypeAdapterFactory(new SimpleIterableTypeAdapterFactory());
 
         return builder;
     }

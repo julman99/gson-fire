@@ -6,11 +6,11 @@ import java.util.Iterator;
 /**
  * Created by julio on 6/23/15.
  */
-public final class BasicIterable<T> implements Iterable<T>{
+public final class SimpleIterable<T> implements Iterable<T>{
 
     private final Iterable<T> iterable;
 
-    private BasicIterable(Iterable<T> iterable) {
+    private SimpleIterable(Iterable<T> iterable) {
         this.iterable = iterable;
     }
 
@@ -19,11 +19,11 @@ public final class BasicIterable<T> implements Iterable<T>{
         return iterable.iterator();
     }
 
-    public static <T> BasicIterable<T> of(Iterable<T> iterable) {
+    public static <T> SimpleIterable<T> of(Iterable<T> iterable) {
         if(iterable == null) {
             throw new NullPointerException("The iterable parameter cannot be null");
         } else {
-            return new BasicIterable<T>(iterable);
+            return new SimpleIterable<T>(iterable);
         }
     }
 
@@ -32,7 +32,7 @@ public final class BasicIterable<T> implements Iterable<T>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BasicIterable<?> that = (BasicIterable<?>) o;
+        SimpleIterable<?> that = (SimpleIterable<?>) o;
 
         return !(iterable != null ? !iterable.equals(that.iterable) : that.iterable != null);
 
@@ -48,7 +48,7 @@ public final class BasicIterable<T> implements Iterable<T>{
         return iterable.toString();
     }
 
-    public static <T> BasicIterable<T> of(T... array) {
+    public static <T> SimpleIterable<T> of(T... array) {
         return of(Arrays.asList(array));
     }
 

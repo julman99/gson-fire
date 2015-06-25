@@ -5,7 +5,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import io.gsonfire.util.BasicIterable;
+import io.gsonfire.util.SimpleIterable;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -15,18 +15,18 @@ import java.util.Collection;
 /**
  * Created by julio on 6/23/15.
  */
-public final class BasicIterableTypeAdapter extends TypeAdapter<BasicIterable<?>> {
+public final class SimpleIterableTypeAdapter extends TypeAdapter<SimpleIterable<?>> {
 
     private final Gson gson;
     private final Type type;
 
-    public BasicIterableTypeAdapter(Gson gson, Type type) {
+    public SimpleIterableTypeAdapter(Gson gson, Type type) {
         this.gson = gson;
         this.type = type;
     }
 
     @Override
-    public void write(JsonWriter out, BasicIterable<?> iterable) throws IOException {
+    public void write(JsonWriter out, SimpleIterable<?> iterable) throws IOException {
         if(iterable != null) {
             out.beginArray();
             for(Object v: iterable) {
@@ -39,7 +39,7 @@ public final class BasicIterableTypeAdapter extends TypeAdapter<BasicIterable<?>
     }
 
     @Override
-    public BasicIterable<?> read(JsonReader in) throws IOException {
+    public SimpleIterable<?> read(JsonReader in) throws IOException {
         if(in.peek() == JsonToken.NULL) {
             return null;
         } else {
@@ -50,7 +50,7 @@ public final class BasicIterableTypeAdapter extends TypeAdapter<BasicIterable<?>
                 result.add(obj);
             }
             in.endArray();
-            return BasicIterable.of(result);
+            return SimpleIterable.of(result);
         }
     }
 }
