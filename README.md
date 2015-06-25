@@ -170,6 +170,10 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.2.0
+
+- Adds non-anonymous ```Iterable``` called ```SimpleIterable``` that can be serialized and de-serialized.
+
 ### 1.1.0
 
 - Adds ```GsonFireBuilder.addSerializationExclusionStrategy``` (thanks [@lalpert](https://github.com/lalpert))
@@ -200,7 +204,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
 </dependencies>
 ```
@@ -210,7 +214,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.1.0'
+    compile 'io.gsonfire:gson-fire:1.2.0'
 }
 ```
 
