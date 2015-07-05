@@ -1,7 +1,6 @@
 package io.gsonfire.util;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Created by julio on 6/23/15.
@@ -19,12 +18,49 @@ public final class SimpleIterable<T> implements Iterable<T>{
         return iterable.iterator();
     }
 
+    /**
+     * Copies the iterable into a new collection
+     * @return A new collection with the full content of the iterable
+     */
+    public final Collection<T> toCollection() {
+        List<T> list = new ArrayList<T>();
+        addTo(list);
+        return list;
+    }
+
+    /**
+     * Adds all the elements from the iterable to a collection
+     * @param collection
+     * @return
+     */
+    private final void addTo(Collection<T> collection) {
+        for(T v: this) {
+            collection.add(v);
+        }
+    }
+
+    /**
+     * Creates a {@link SimpleIterable} that iterates through the contents of the iterable passed as argument
+     * @param iterable
+     * @param <T>
+     * @return
+     */
     public static <T> SimpleIterable<T> of(Iterable<T> iterable) {
         if(iterable == null) {
             throw new NullPointerException("The iterable parameter cannot be null");
         } else {
             return new SimpleIterable<T>(iterable);
         }
+    }
+
+    /**
+     * Creates a {@link SimpleIterable} that iterates through the contents of the array passed as argument
+     * @param array
+     * @param <T>
+     * @return
+     */
+    public static <T> SimpleIterable<T> of(T... array) {
+        return of(Arrays.asList(array));
     }
 
     @Override
@@ -46,10 +82,6 @@ public final class SimpleIterable<T> implements Iterable<T>{
     @Override
     public String toString() {
         return iterable.toString();
-    }
-
-    public static <T> SimpleIterable<T> of(T... array) {
-        return of(Arrays.asList(array));
     }
 
 }
