@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 
 public final class ExclusionByValuePostProcessor implements PostProcessor {
 
-    private FieldInspector fieldInspector;
+    private final FieldInspector fieldInspector;
 
     public ExclusionByValuePostProcessor(FieldInspector fieldInspector) {
         this.fieldInspector = fieldInspector;
