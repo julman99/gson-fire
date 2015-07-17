@@ -2,7 +2,7 @@ package io.gsonfire.postprocessors;
 
 import io.gsonfire.PostProcessor;
 import io.gsonfire.annotations.MergeMap;
-import io.gsonfire.gson.FieldInspector;
+import io.gsonfire.util.FieldInspector;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
