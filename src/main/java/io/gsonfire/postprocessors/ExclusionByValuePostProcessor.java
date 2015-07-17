@@ -1,8 +1,6 @@
 package io.gsonfire.postprocessors;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 import io.gsonfire.PostProcessor;
 import io.gsonfire.annotations.ExcludeByValue;
@@ -51,6 +49,6 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
 
     private String getFieldName(Field f) {
         SerializedName serializedName = f.getAnnotation(SerializedName.class);
-        return serializedName == null ? f.getName() : serializedName.value();
+        return serializedName == null ? FieldNamingPolicy.IDENTITY.translateName(f) : serializedName.value();
     }
 }
