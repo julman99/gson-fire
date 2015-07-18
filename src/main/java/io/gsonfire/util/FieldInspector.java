@@ -1,4 +1,4 @@
-package io.gsonfire.gson;
+package io.gsonfire.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @autor: julio
  */
 public final class FieldInspector {
-    private static final Map<Class, Map<Class<? extends Annotation>, Field[]>> cache = new ConcurrentHashMap<Class, Map<Class<? extends Annotation>, Field[]>>();
+    private final Map<Class, Map<Class<? extends Annotation>, Field[]>> cache = new ConcurrentHashMap<Class, Map<Class<? extends Annotation>, Field[]>>();
 
     public Field[] getAnnotatedFields(Class clazz, Class<? extends Annotation> annotation){
         Field[] fields = getFromCache(clazz, annotation);
