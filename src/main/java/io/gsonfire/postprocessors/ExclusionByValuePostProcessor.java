@@ -13,6 +13,8 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
 
     private final FieldInspector fieldInspector;
 
+    private FieldNamingPolicy fieldNamingPolicy = null;
+
     public ExclusionByValuePostProcessor(FieldInspector fieldInspector) {
         this.fieldInspector = fieldInspector;
     }
@@ -35,7 +37,10 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
                 ExclusionByValueStrategy strategy = exclusionByValueStrategyClass.newInstance();
                 if (strategy.shouldSkipField(f.get(src))) {
                     JsonObject resultJsonObject = result.getAsJsonObject();
-                    resultJsonObject.remove(getFieldName(f));
+                    String fieldName = resolveFieldName(f, resultJsonObject);
+                    if(fieldName != null) {
+                        resultJsonObject.remove(fieldName);
+                    }
                 } else {
                     // continue
                 }
@@ -47,8 +52,31 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
         }
     }
 
-    private String getFieldName(Field f) {
+    private String resolveFieldName(Field f, JsonObject json) {
         SerializedName serializedName = f.getAnnotation(SerializedName.class);
-        return serializedName == null ? FieldNamingPolicy.IDENTITY.translateName(f) : serializedName.value();
+        if(serializedName != null) {
+            return serializedName.value();
+        } else if (fieldNamingPolicy != null) {
+            //Check if the field exists with the cached fieldNamingPolicy
+            String fieldName = fieldNamingPolicy.translateName(f);
+            if(json.has(fieldName)) {
+                return fieldName;
+            }
+        }
+
+        //There has been no match, lets brute force and try to find the field name
+        for(FieldNamingPolicy candidatePolicy: FieldNamingPolicy.values()) {
+            String fieldName = candidatePolicy.translateName(f);
+            if(json.has(fieldName)) {
+                if(fieldNamingPolicy == null) {
+                    fieldNamingPolicy = candidatePolicy;
+                }
+                return fieldName;
+            }
+        }
+
+        return null;
     }
+
+
 }

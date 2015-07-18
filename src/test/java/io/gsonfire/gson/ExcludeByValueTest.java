@@ -1,5 +1,6 @@
 package io.gsonfire.gson;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
@@ -7,9 +8,9 @@ import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.annotations.ExcludeByValue;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.*;
 
 /**
  * @autor: joao
@@ -35,22 +36,29 @@ public class ExcludeByValueTest {
     }
 
     @Test
-    public void testExclusion(){
-        GsonFireBuilder builder = new GsonFireBuilder()
+    public void testExclusion() throws NoSuchFieldException {
+        for(FieldNamingPolicy fieldNamingPolicy: FieldNamingPolicy.values()) {
+            GsonFireBuilder builder = new GsonFireBuilder()
                 .enableExclusionByValue();
 
-        Gson gson = builder.createGson();
+            Gson gson = builder.createGsonBuilder()
+                .setFieldNamingPolicy(fieldNamingPolicy)
+                .create();
 
-        A a = new A();
-        a.a = "";
-        a.b = new B();
-        a.b.str = "";
+            A a = new A();
+            a.a = "";
+            a.b = new B();
+            a.b.str = "";
 
-        JsonObject obj = gson.toJsonTree(a).getAsJsonObject();
+            JsonObject obj = gson.toJsonTree(a).getAsJsonObject();
 
-        assertFalse(obj.has("a"));
-        assertTrue(obj.has("b"));
-        assertFalse(obj.get("b").getAsJsonObject().has("str"));
+            Field fa = A.class.getField("a");
+            Field fb = A.class.getField("b");
+
+            assertFalse(obj.has(fieldNamingPolicy.translateName(fa)));
+            assertTrue(obj.has(fieldNamingPolicy.translateName(fb)));
+            assertFalse(obj.get(fieldNamingPolicy.translateName(fb)).getAsJsonObject().has("str"));
+        }
     }
 
 
