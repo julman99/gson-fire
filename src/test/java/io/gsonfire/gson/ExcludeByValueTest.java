@@ -24,14 +24,16 @@ public class ExcludeByValueTest {
         Gson gson = builder.createGson();
 
         A a = new A();
-        a.a = "a";
+        a.str1 = "str1";
         a.b = new B();
-        a.b.str = "str";
+        a.b.str1 = "str1";
+        a.b.str2 = "str2";
 
         JsonObject obj = gson.toJsonTree(a).getAsJsonObject();
 
-        assertEquals(obj.get("a").getAsString(), "a");
-        assertEquals(obj.get("b").getAsJsonObject().get("str").getAsString(), "str");
+        assertEquals("str1", obj.get("str1").getAsString());
+        assertEquals("str1", obj.get("b").getAsJsonObject().get("str1").getAsString());
+        assertEquals("str2", obj.get("b").getAsJsonObject().get("str2").getAsString());
     }
 
     @Test
@@ -42,15 +44,17 @@ public class ExcludeByValueTest {
         Gson gson = builder.createGson();
 
         A a = new A();
-        a.a = "";
+        a.str1 = "";
         a.b = new B();
-        a.b.str = "";
+        a.b.str1 = "";
+        a.b.str2 = "";
 
         JsonObject obj = gson.toJsonTree(a).getAsJsonObject();
 
-        assertFalse(obj.has("a"));
+        assertFalse(obj.has("str1"));
         assertTrue(obj.has("b"));
-        assertFalse(obj.get("b").getAsJsonObject().has("str"));
+        assertFalse(obj.get("b").getAsJsonObject().has("str1"));
+        assertEquals("", obj.get("b").getAsJsonObject().get("str2").getAsString());
     }
 
 
@@ -58,7 +62,7 @@ public class ExcludeByValueTest {
 
         @Expose
         @ExcludeByValue(ExcludeEmptyStringsStrategy.class)
-        public String a;
+        public String str1;
 
         @Expose
         public B b;
@@ -69,7 +73,10 @@ public class ExcludeByValueTest {
 
         @Expose
         @ExcludeByValue(ExcludeEmptyStringsStrategy.class)
-        public String str;
+        public String str1;
+
+        @Expose
+        public String str2;
 
     }
 
