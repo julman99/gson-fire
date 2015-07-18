@@ -58,6 +58,15 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
         }
     }
 
+    /**
+     * Will try to resolve the name of the field in the {@link JsonObject} using different strategies. First it will
+     * look into the {@link SerializedName} annotation, if it cannot find it, it will try all naming policies. Once a
+     * match has been found, the naming policy will be cached (it is assumed Gson has only one policy). A cache is
+     * maintained also for all missing fields to avoid trying to resolve them again.
+     * @param f
+     * @param json
+     * @return
+     */
     private String resolveFieldName(Field f, JsonObject json) {
 
         if(this.fieldNameCache.containsKey(f)) {
