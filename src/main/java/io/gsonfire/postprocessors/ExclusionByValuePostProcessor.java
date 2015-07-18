@@ -97,6 +97,7 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
             }
         }
 
+        this.fieldNameCache.put(field, null);
         return null;
     }
 
