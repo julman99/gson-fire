@@ -56,7 +56,16 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
 
     private String getFieldName(Field f, Gson gson) {
         SerializedName serializedName = f.getAnnotation(SerializedName.class);
-        return serializedName == null ? getFieldNamingStrategy(gson).translateName(f) : serializedName.value();
+        if (serializedName == null) {
+            FieldNamingStrategy namingStrategy = getFieldNamingStrategy(gson);
+            if (namingStrategy != null) {
+                return namingStrategy.translateName(f);
+            } else {
+                return null;
+            }
+        } else {
+            return serializedName.value();
+        }
     }
 
     private FieldNamingStrategy getFieldNamingStrategy(Gson gson) {
