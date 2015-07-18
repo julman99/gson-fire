@@ -1,6 +1,9 @@
 package io.gsonfire.postprocessors;
 
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import io.gsonfire.PostProcessor;
 import io.gsonfire.annotations.ExcludeByValue;
@@ -8,10 +11,13 @@ import io.gsonfire.gson.ExclusionByValueStrategy;
 import io.gsonfire.util.FieldInspector;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ExclusionByValuePostProcessor implements PostProcessor {
 
     private final FieldInspector fieldInspector;
+    private final Map<Field, String> fieldNameCache = new HashMap<Field,String>();
 
     private FieldNamingPolicy fieldNamingPolicy = null;
 
@@ -53,6 +59,11 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
     }
 
     private String resolveFieldName(Field f, JsonObject json) {
+
+        if(this.fieldNameCache.containsKey(f)) {
+            return this.fieldNameCache.get(f);
+        }
+
         SerializedName serializedName = f.getAnnotation(SerializedName.class);
         if(serializedName != null) {
             return serializedName.value();
@@ -60,6 +71,7 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
             //Check if the field exists with the cached fieldNamingPolicy
             String fieldName = fieldNamingPolicy.translateName(f);
             if(json.has(fieldName)) {
+                this.fieldNameCache.put(f, fieldName);
                 return fieldName;
             }
         }
@@ -71,6 +83,7 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
                 if(fieldNamingPolicy == null) {
                     fieldNamingPolicy = candidatePolicy;
                 }
+                this.fieldNameCache.put(f, fieldName);
                 return fieldName;
             }
         }
