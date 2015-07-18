@@ -63,36 +63,36 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
      * look into the {@link SerializedName} annotation, if it cannot find it, it will try all naming policies. Once a
      * match has been found, the naming policy will be cached (it is assumed Gson has only one policy). A cache is
      * maintained also for all missing fields to avoid trying to resolve them again.
-     * @param f
+     * @param field
      * @param json
      * @return
      */
-    private String resolveFieldName(Field f, JsonObject json) {
+    private String resolveFieldName(Field field, JsonObject json) {
 
-        if(this.fieldNameCache.containsKey(f)) {
-            return this.fieldNameCache.get(f);
+        if(this.fieldNameCache.containsKey(field)) {
+            return this.fieldNameCache.get(field);
         }
 
-        SerializedName serializedName = f.getAnnotation(SerializedName.class);
+        SerializedName serializedName = field.getAnnotation(SerializedName.class);
         if(serializedName != null) {
             return serializedName.value();
         } else if (fieldNamingPolicy != null) {
             //Check if the field exists with the cached fieldNamingPolicy
-            String fieldName = fieldNamingPolicy.translateName(f);
+            String fieldName = fieldNamingPolicy.translateName(field);
             if(json.has(fieldName)) {
-                this.fieldNameCache.put(f, fieldName);
+                this.fieldNameCache.put(field, fieldName);
                 return fieldName;
             }
         }
 
         //There has been no match, lets brute force and try to find the field name
         for(FieldNamingPolicy candidatePolicy: FieldNamingPolicy.values()) {
-            String fieldName = candidatePolicy.translateName(f);
+            String fieldName = candidatePolicy.translateName(field);
             if(json.has(fieldName)) {
                 if(fieldNamingPolicy == null) {
                     fieldNamingPolicy = candidatePolicy;
                 }
-                this.fieldNameCache.put(f, fieldName);
+                this.fieldNameCache.put(field, fieldName);
                 return fieldName;
             }
         }
