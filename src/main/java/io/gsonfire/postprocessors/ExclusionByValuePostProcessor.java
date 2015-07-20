@@ -91,6 +91,10 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
             }
         }
 
+        if (this.fieldNamingStrategy == null) {
+            throw new RuntimeException("Could not get field naming strategy");
+        }
+
         return this.fieldNamingStrategy;
     }
 }
