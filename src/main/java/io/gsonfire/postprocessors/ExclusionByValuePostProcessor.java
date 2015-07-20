@@ -1,24 +1,22 @@
 package io.gsonfire.postprocessors;
 
 import com.google.gson.*;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import io.gsonfire.PostProcessor;
 import io.gsonfire.annotations.ExcludeByValue;
 import io.gsonfire.gson.ExclusionByValueStrategy;
 import io.gsonfire.util.FieldInspector;
+import io.gsonfire.util.FieldNameResolver;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 public final class ExclusionByValuePostProcessor implements PostProcessor {
 
     private final FieldInspector fieldInspector;
-    private FieldNamingStrategy fieldNamingStrategy;
+    private final FieldNameResolver fieldNameResolver;
 
-    public ExclusionByValuePostProcessor(FieldInspector fieldInspector) {
+    public ExclusionByValuePostProcessor(FieldInspector fieldInspector, FieldNameResolver fieldNameResolver) {
         this.fieldInspector = fieldInspector;
-        this.fieldNamingStrategy = null;
+        this.fieldNameResolver = fieldNameResolver;
     }
 
     @Override
@@ -39,7 +37,7 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
                 ExclusionByValueStrategy strategy = exclusionByValueStrategyClass.newInstance();
                 if (strategy.shouldSkipField(f.get(src))) {
                     JsonObject resultJsonObject = result.getAsJsonObject();
-                    String fieldName = getFieldName(f, gson);
+                    String fieldName = fieldNameResolver.getFieldName(f, gson);
                     if (fieldName != null) {
                         resultJsonObject.remove(fieldName);
                     }
@@ -54,47 +52,4 @@ public final class ExclusionByValuePostProcessor implements PostProcessor {
         }
     }
 
-    private String getFieldName(Field f, Gson gson) {
-        SerializedName serializedName = f.getAnnotation(SerializedName.class);
-        if (serializedName == null) {
-            FieldNamingStrategy namingStrategy = getFieldNamingStrategy(gson);
-            if (namingStrategy != null) {
-                return namingStrategy.translateName(f);
-            } else {
-                return null;
-            }
-        } else {
-            return serializedName.value();
-        }
-    }
-
-    private FieldNamingStrategy getFieldNamingStrategy(Gson gson) {
-        if (this.fieldNamingStrategy == null) {
-            try {
-                Field factoriesField = gson.getClass().getDeclaredField("factories");
-                factoriesField.setAccessible(true);
-                List<TypeAdapterFactory> factories = (List<TypeAdapterFactory>) factoriesField.get(gson);
-
-                for (TypeAdapterFactory factory : factories) {
-                    if (factory instanceof ReflectiveTypeAdapterFactory) {
-                        Field fieldNamingPolicyField = factory.getClass().getDeclaredField("fieldNamingPolicy");
-                        fieldNamingPolicyField.setAccessible(true);
-                        this.fieldNamingStrategy = (FieldNamingStrategy) fieldNamingPolicyField.get(factory);
-
-                        break;
-                    }
-                }
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        if (this.fieldNamingStrategy == null) {
-            throw new RuntimeException("Could not get field naming strategy");
-        }
-
-        return this.fieldNamingStrategy;
-    }
 }
