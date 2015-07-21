@@ -57,15 +57,12 @@ public final class FieldNameResolver {
                         break;
                     }
                 }
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
+                if (fieldNamingStrategy == null) {
+                    throw new NullPointerException("fieldNamingStrategy cannot be resolved");
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Could not get field naming strategy, the version of Gson currently in use might not be supported.", e);
             }
-        }
-
-        if (fieldNamingStrategy == null) {
-            throw new RuntimeException("Could not get field naming strategy");
         }
 
         return fieldNamingStrategy;
