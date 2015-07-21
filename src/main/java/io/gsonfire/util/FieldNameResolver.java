@@ -22,20 +22,16 @@ public final class FieldNameResolver {
             return fieldName;
         }
 
-        synchronized (cache){
-            fieldName = cache.get(field);
-            if(fieldName == null){
-                SerializedName serializedName = field.getAnnotation(SerializedName.class);
-                if (serializedName == null) {
-                    fieldName = getFieldNamingStrategy(gson).translateName(field);
-                } else {
-                    fieldName = serializedName.value();
-                }
-
-                if(!cache.containsKey(field)){
-                    cache.put(field, fieldName);
-                }
+        //We dont care if multiple threads hit this part of the code
+        fieldName = cache.get(field);
+        if(fieldName == null){
+            SerializedName serializedName = field.getAnnotation(SerializedName.class);
+            if (serializedName == null) {
+                fieldName = getFieldNamingStrategy(gson).translateName(field);
+            } else {
+                fieldName = serializedName.value();
             }
+            cache.put(field, fieldName);
         }
 
         return fieldName;
