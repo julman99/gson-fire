@@ -10,12 +10,12 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public final class FieldNameResolver {
 
-    private final Map<Gson,FieldNamingStrategy> fieldNamingStrategies = new WeakHashMap<Gson, FieldNamingStrategy>();
-    private final Map<FieldNamingStrategy,Map<Field,String>> fieldNamingStrategiesFieldsCache = new WeakHashMap<FieldNamingStrategy,Map<Field,String>>();
+    private final ConcurrentMap<Gson,FieldNamingStrategy> fieldNamingStrategies = new ConcurrentWeakHashMap<Gson, FieldNamingStrategy>();
+    private final ConcurrentMap<FieldNamingStrategy,Map<Field,String>> fieldNamingStrategiesFieldsCache = new ConcurrentWeakHashMap<FieldNamingStrategy,Map<Field,String>>();
 
     public String getFieldName(final Field field, final Gson gson) {
         FieldNamingStrategy fieldNamingStrategy = getFieldNamingStrategy(gson);
@@ -39,33 +39,31 @@ public final class FieldNameResolver {
 
     private FieldNamingStrategy getFieldNamingStrategy(Gson gson) {
         FieldNamingStrategy fieldNamingStrategy = this.fieldNamingStrategies.get(gson);
-
-        if (fieldNamingStrategy == null) {
-            try {
-                Field factoriesField = gson.getClass().getDeclaredField("factories");
-                factoriesField.setAccessible(true);
-                List<TypeAdapterFactory> factories = (List<TypeAdapterFactory>) factoriesField.get(gson);
-
-                for (TypeAdapterFactory factory : factories) {
-                    if (factory instanceof ReflectiveTypeAdapterFactory) {
-                        Field fieldNamingPolicyField = factory.getClass().getDeclaredField("fieldNamingPolicy");
-                        fieldNamingPolicyField.setAccessible(true);
-
-                        fieldNamingStrategy = (FieldNamingStrategy) fieldNamingPolicyField.get(factory);
-                        this.fieldNamingStrategies.put(gson, fieldNamingStrategy);
-
-                        break;
-                    }
-                }
-                if (fieldNamingStrategy == null) {
-                    throw new NullPointerException("fieldNamingStrategy cannot be resolved");
-                }
-            } catch (Exception e) {
-                throw new RuntimeException("Could not get field naming strategy, the version of Gson currently in use might not be supported.", e);
-            }
+        if (fieldNamingStrategy != null) {
+            return fieldNamingStrategy;
         }
 
-        return fieldNamingStrategy;
+        try {
+            Field factoriesField = gson.getClass().getDeclaredField("factories");
+            factoriesField.setAccessible(true);
+            List<TypeAdapterFactory> factories = (List<TypeAdapterFactory>) factoriesField.get(gson);
+
+            for (TypeAdapterFactory factory : factories) {
+                if (factory instanceof ReflectiveTypeAdapterFactory) {
+                    Field fieldNamingPolicyField = factory.getClass().getDeclaredField("fieldNamingPolicy");
+                    fieldNamingPolicyField.setAccessible(true);
+
+                    // due to concurrency it is possible that the gson is already there while it wasn't before
+                    this.fieldNamingStrategies.putIfAbsent(gson, (FieldNamingStrategy) fieldNamingPolicyField.get(factory));
+
+                    return this.fieldNamingStrategies.get(gson);
+                }
+            }
+            // if we got here, we could not resolve the fieldNamingStrategy, otherwise we would have returned it
+            throw new RuntimeException("Could not get field naming strategy, the version of Gson currently in use might not be supported.");
+        } catch (Exception e) {
+            throw new RuntimeException("Could not get field naming strategy, the version of Gson currently in use might not be supported.", e);
+        }
     }
 
     private Map<Field,String> getFieldNamingStrategyFieldsCache(FieldNamingStrategy fieldNamingStrategy) {
@@ -74,15 +72,10 @@ public final class FieldNameResolver {
             return fieldsCache;
         }
 
-        synchronized (this.fieldNamingStrategiesFieldsCache) {
-            fieldsCache = this.fieldNamingStrategiesFieldsCache.get(fieldNamingStrategy);
-            if(fieldsCache == null) {
-                fieldsCache = new HashMap<Field, String>();
-                this.fieldNamingStrategiesFieldsCache.put(fieldNamingStrategy, fieldsCache);
-            }
-        }
+        // due to concurrency it is possible that the strategy is already there while it wasn't before
+        this.fieldNamingStrategiesFieldsCache.putIfAbsent(fieldNamingStrategy, new HashMap<Field, String>());
 
-        return fieldsCache;
+        return this.fieldNamingStrategiesFieldsCache.get(fieldNamingStrategy);
     }
 
 }
