@@ -5,8 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.gsonfire.annotations.ExcludeByValue;
-import io.gsonfire.util.FieldInspector;
 import io.gsonfire.util.FieldNameResolver;
+import io.gsonfire.util.reflection.FieldInspector;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -47,7 +47,7 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
         public void write(JsonWriter out, Object src) throws IOException {
             JsonObject postProcessedObject = null; //if we detect there is something we should exclude, this will be !=null
 
-            for(Field f: fieldInspector.getAnnotatedFields(src.getClass(), ExcludeByValue.class)){
+            for(Field f: fieldInspector.getAnnotatedMembers(src.getClass(), ExcludeByValue.class)){
                 try {
                     ExcludeByValue excludeByValue = f.getAnnotation(ExcludeByValue.class);
                     Class<? extends ExclusionByValueStrategy> exclusionByValueStrategyClass = excludeByValue.value();
