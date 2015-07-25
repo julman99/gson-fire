@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.annotations.ExposeMethodResult;
-import io.gsonfire.postprocessors.MappedMethod;
+import io.gsonfire.postprocessors.methodinvoker.MappedMethod;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

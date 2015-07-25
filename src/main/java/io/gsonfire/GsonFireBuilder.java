@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.gsonfire.gson.*;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
-import io.gsonfire.postprocessors.MethodInvokerPostProcessor;
-import io.gsonfire.util.FieldInspector;
+import io.gsonfire.postprocessors.methodinvoker.MethodInvokerPostProcessor;
+import io.gsonfire.util.reflection.FieldInspector;
 
 import java.util.*;
 
@@ -146,7 +146,7 @@ public final class GsonFireBuilder {
      */
     @Deprecated
     public GsonFireBuilder enableMergeMaps(Class clazz){
-        registerPostProcessor(clazz, new MergeMapPostProcessor());
+        registerPostProcessor(clazz, new MergeMapPostProcessor(fieldInspector));
         return this;
     }
 

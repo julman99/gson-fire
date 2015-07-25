@@ -1,11 +1,11 @@
 package io.gsonfire.postprocessors;
 
-import io.gsonfire.PostProcessor;
-import io.gsonfire.annotations.MergeMap;
-import io.gsonfire.util.FieldInspector;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.gsonfire.PostProcessor;
+import io.gsonfire.annotations.MergeMap;
+import io.gsonfire.util.reflection.FieldInspector;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -16,7 +16,11 @@ import java.util.Map;
 @Deprecated
 public final class MergeMapPostProcessor implements PostProcessor {
 
-    private FieldInspector fieldInspector = new FieldInspector();
+    private final FieldInspector fieldInspector;
+
+    public MergeMapPostProcessor(FieldInspector fieldInspector) {
+        this.fieldInspector = fieldInspector;
+    }
 
     @Override
     public void postDeserialize(Object result, JsonElement src, Gson gson) {
@@ -28,7 +32,7 @@ public final class MergeMapPostProcessor implements PostProcessor {
         if(src == null){
             return;
         }
-        for(Field f: fieldInspector.getAnnotatedFields(src.getClass(), MergeMap.class)){
+        for(Field f: fieldInspector.getAnnotatedMembers(src.getClass(), MergeMap.class)){
             try {
                 Map map = (Map)f.get(src);
                 JsonObject resultJsonObject = result.getAsJsonObject();
