@@ -171,6 +171,38 @@ for(Integer i: simpleIterable) {
 
 ```
 
+### Excude fields depending on its value
+
+Gson allows to define custom exclusion strategies for fields. However it is not possible to exclude a field depending
+on the value that it contains. This is the way to do it with Gson on Fire: 
+
+
+```java
+public class SomeClass {
+
+    @ExcludeByValue(ExcludeLogic.class)
+    private String someField;
+
+}
+
+public class ExcludeLogic implements ExclusionByValueStrategy<String> {
+
+    @Override
+    public boolean shouldSkipField(String fieldValue) {
+        //some custom condition
+    }
+
+}
+```
+Then you need to enable exclusion by value on Gson on Fire:
+```java
+Gson builder = new GsonFireBuilder()
+    .enableExclusionByValue();
+
+Gson gson = builder.createGson();
+
+```
+
 ## Using the Gson's GsonBuilder
 
 To access the good old GsonBuilder:
