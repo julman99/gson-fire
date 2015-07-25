@@ -1,4 +1,4 @@
-package io.gsonfire.postprocessors;
+package io.gsonfire.postprocessors.methodinvoker;
 
 import io.gsonfire.annotations.ExposeMethodResult;
 

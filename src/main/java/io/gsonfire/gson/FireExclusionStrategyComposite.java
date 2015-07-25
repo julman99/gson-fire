@@ -1,6 +1,6 @@
 package io.gsonfire.gson;
 
-import io.gsonfire.postprocessors.MappedMethod;
+import io.gsonfire.postprocessors.methodinvoker.MappedMethod;
 
 import java.util.ArrayList;
 import java.util.Arrays;

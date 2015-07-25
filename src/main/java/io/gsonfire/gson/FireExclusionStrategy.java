@@ -1,6 +1,6 @@
 package io.gsonfire.gson;
 
-import io.gsonfire.postprocessors.MappedMethod;
+import io.gsonfire.postprocessors.methodinvoker.MappedMethod;
 
 /**
  * Created by julio on 5/25/15.

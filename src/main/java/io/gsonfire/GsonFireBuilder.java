@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.gsonfire.gson.*;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
-import io.gsonfire.postprocessors.MethodInvokerPostProcessor;
+import io.gsonfire.postprocessors.methodinvoker.MethodInvokerPostProcessor;
 import io.gsonfire.util.reflection.FieldInspector;
 
 import java.util.*;

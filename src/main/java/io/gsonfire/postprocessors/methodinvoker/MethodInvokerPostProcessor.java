@@ -1,4 +1,4 @@
-package io.gsonfire.postprocessors;
+package io.gsonfire.postprocessors.methodinvoker;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -7,10 +7,8 @@ import io.gsonfire.PostProcessor;
 import io.gsonfire.annotations.ExposeMethodResult;
 import io.gsonfire.gson.FireExclusionStrategy;
 import io.gsonfire.gson.FireExclusionStrategyComposite;
-import io.gsonfire.util.reflection.AnnotationInspector;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * @autor: julio
@@ -52,26 +50,6 @@ public final class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
                     }
                 }
             }
-        }
-    }
-
-    private static class MappedMethodInspector extends AnnotationInspector<Method, MappedMethod> {
-
-        @Override
-        protected Method[] getDeclaredMembers(Class clazz) {
-            return clazz.getDeclaredMethods();
-        }
-
-        @Override
-        protected MappedMethod map(Method member) {
-            if(member.getParameterTypes().length > 0){
-                throw new IllegalArgumentException("The methods annotated with ExposeMethodResult should have no arguments");
-            }
-
-            ExposeMethodResult exposeMethodResult = member.getAnnotation(ExposeMethodResult.class);
-
-            MappedMethod mm = new MappedMethod(member, exposeMethodResult.value(), exposeMethodResult.conflictResolution());
-            return mm;
         }
     }
 
