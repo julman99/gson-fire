@@ -23,7 +23,7 @@ public class IterableMapperTest {
     }
 
     @Test
-    public void testLazyMap() throws Exception {
+    public void testMapsWhenIterates() throws Exception {
         Iterable<Integer> integerIterable = SimpleIterable.of(1, 2, 3);
         CountedMapper<Integer, String> counterMapper = new CountedMapper<Integer, String>(new IntegerToStringMapper());
         Iterable<String> iterableMapper = IterableMapper.create(
@@ -31,21 +31,24 @@ public class IterableMapperTest {
             counterMapper
         );
 
-        int count = 0;
+        int mapCount = 0;
+        int itemCount = 0;
+
         Iterator<String> iterator1 = iterableMapper.iterator();
 
         while(iterator1.hasNext()) {
-            assertEquals(count, counterMapper.getMapCount());
+            assertEquals(mapCount, counterMapper.getMapCount());
             iterator1.next();
-            count++;
-            assertEquals(count, counterMapper.getMapCount());
-
+            mapCount++;
+            itemCount++;
+            assertEquals(mapCount, counterMapper.getMapCount());
             Iterator<String> iterator2 = iterableMapper.iterator();
-            for(int i=0; i<count; i++) {
+            for(int i=0; i<itemCount; i++) {
                 iterator2.next();
+                mapCount++;
             }
 
-            assertEquals(count, counterMapper.getMapCount());
+            assertEquals(mapCount, counterMapper.getMapCount());
         }
     }
 

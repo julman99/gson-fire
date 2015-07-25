@@ -1,7 +1,5 @@
 package io.gsonfire.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -10,7 +8,6 @@ import java.util.Iterator;
 public class IterableMapper<F, T> implements Iterable<T> {
 
     private final Iterable<F> source;
-    private final Collection<T> cache = new ArrayList<T>();
     private final Mapper<F,T> mapper;
 
     private IterableMapper(Iterable<F> source, Mapper<F, T> mapper) {
@@ -20,23 +17,17 @@ public class IterableMapper<F, T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        final Iterator<T> cacheIterator = new ArrayList<T>(cache).iterator();
         final Iterator<F> sourceIterator = source.iterator();
         return new Iterator<T>() {
             @Override
             public boolean hasNext() {
-                return cacheIterator.hasNext() || sourceIterator.hasNext();
+                return sourceIterator.hasNext();
             }
 
             @Override
             public T next() {
-                if(cacheIterator.hasNext()) {
-                    return cacheIterator.next();
-                } else {
-                    T mapped = mapper.map(sourceIterator.next());
-                    cache.add(mapped);
-                    return mapped;
-                }
+                T mapped = mapper.map(sourceIterator.next());
+                return mapped;
             }
 
             @Override
