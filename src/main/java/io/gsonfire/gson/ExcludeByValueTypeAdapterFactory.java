@@ -45,32 +45,46 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
 
         @Override
         public void write(JsonWriter out, Object src) throws IOException {
-            JsonElement res = originalTypeAdapter.toJsonTree(src);
-            if(res != null  && res.isJsonObject() && ! res.isJsonNull()) {
-                JsonObject resultJsonObject = res.getAsJsonObject();
-                for(Field f: fieldInspector.getAnnotatedFields(src.getClass(), ExcludeByValue.class)){
-                    try {
-                        ExcludeByValue excludeByValue = f.getAnnotation(ExcludeByValue.class);
-                        Class<? extends ExclusionByValueStrategy> exclusionByValueStrategyClass = excludeByValue.value();
+            JsonObject postProcessedObject = null; //if we detect there is something we should exclude, this will be !=null
 
-                        ExclusionByValueStrategy strategy = exclusionByValueStrategyClass.newInstance();
-                        if (strategy.shouldSkipField(f.get(src))) {
-                            String fieldName = fieldNameResolver.getFieldName(f);
-                            if (fieldName != null) {
-                                resultJsonObject.remove(fieldName);
+            for(Field f: fieldInspector.getAnnotatedFields(src.getClass(), ExcludeByValue.class)){
+                try {
+                    ExcludeByValue excludeByValue = f.getAnnotation(ExcludeByValue.class);
+                    Class<? extends ExclusionByValueStrategy> exclusionByValueStrategyClass = excludeByValue.value();
+
+                    ExclusionByValueStrategy strategy = exclusionByValueStrategyClass.newInstance();
+                    if (strategy.shouldSkipField(f.get(src))) {
+                        String fieldName = fieldNameResolver.getFieldName(f);
+                        if (fieldName != null) {
+                            //Here we know there is a field we should exclude
+                            //Now let's check if the JsonObject is in memory, if not we will get it
+                            //from the originalTypeAdapter
+                            if(postProcessedObject == null) {
+                                JsonElement originalResult = originalTypeAdapter.toJsonTree(src);
+                                if(originalResult == null || originalResult.isJsonNull() || !originalResult.isJsonObject()) {
+                                    break;
+                                }
+                                postProcessedObject = originalTypeAdapter.toJsonTree(src).getAsJsonObject();
                             }
-                        } else {
-                            // continue
+
+                            //Remove the excluded field
+                            postProcessedObject.remove(fieldName);
                         }
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    } catch (InstantiationException e) {
-                        throw new RuntimeException(e);
                     }
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                } catch (InstantiationException e) {
+                    throw new RuntimeException(e);
                 }
             }
 
-            gson.toJson(res, out);
+            if(postProcessedObject != null) {
+                //postProcessedObject is not null, this means that we in fact excluded some fields, we need to rewrite it
+                gson.toJson(postProcessedObject, out);
+            } else {
+                //postProcessedObject was null, this means nothing was excluded, we will just use the original type adapter
+                originalTypeAdapter.write(out, src);
+            }
         }
 
         @Override
