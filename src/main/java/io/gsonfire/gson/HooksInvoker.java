@@ -2,6 +2,7 @@ package io.gsonfire.gson;
 
 import io.gsonfire.annotations.PostDeserialize;
 import io.gsonfire.annotations.PreSerialize;
+import io.gsonfire.util.reflection.MethodInspector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +28,7 @@ public final class HooksInvoker {
     }
 
     private void invokeAll(Object obj, Class<? extends Annotation> annotation){
-        for(Method m: inspector.getAnnotatedMethods(obj.getClass(), annotation)){
+        for(Method m: inspector.getAnnotatedMembers(obj.getClass(), annotation)){
             try {
                 m.invoke(obj);
             } catch (IllegalAccessException e) {
