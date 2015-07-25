@@ -2,12 +2,10 @@ package io.gsonfire;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.gsonfire.gson.SimpleIterableTypeAdapterFactory;
-import io.gsonfire.gson.FireExclusionStrategy;
-import io.gsonfire.gson.FireExclusionStrategyComposite;
-import io.gsonfire.gson.FireTypeAdapterFactory;
+import io.gsonfire.gson.*;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
 import io.gsonfire.postprocessors.MethodInvokerPostProcessor;
+import io.gsonfire.util.FieldInspector;
 
 import java.util.*;
 
@@ -19,10 +17,12 @@ public final class GsonFireBuilder {
     private final Map<Class, ClassConfig> classConfigMap = new HashMap<Class, ClassConfig>();
     private final List<Class> orderedClasses = new ArrayList<Class>();
     private final List<FireExclusionStrategy> serializationExclusions = new ArrayList<FireExclusionStrategy>();
+    private final FieldInspector fieldInspector = new FieldInspector();
 
     private DateSerializationPolicy dateSerializationPolicy;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
     private boolean enableExposeMethodResults = false;
+    private boolean enableExclusionByValueStrategies = false;
 
     private ClassConfig getClassConfig(Class clazz){
         ClassConfig result = classConfigMap.get(clazz);
@@ -116,6 +116,16 @@ public final class GsonFireBuilder {
     }
 
     /**
+     * By enabling this, all exclusion by value strategies specified with the annotation
+     * {@link io.gsonfire.annotations.ExcludeByValue} will be run to remove specific fields from the resulting json
+     * @return
+     */
+    public GsonFireBuilder enableExclusionByValue(){
+        this.enableExclusionByValueStrategies = true;
+        return this;
+    }
+
+    /**
      * By enabling this, all methods with the annotation {@link io.gsonfire.annotations.ExposeMethodResult} will
      * be evaluated and it result will be added to the resulting json
      * @return
@@ -166,6 +176,10 @@ public final class GsonFireBuilder {
         if(enableExposeMethodResults) {
             FireExclusionStrategy compositeExclusionStrategy = new FireExclusionStrategyComposite(serializationExclusions);
             registerPostProcessor(Object.class, new MethodInvokerPostProcessor<Object>(compositeExclusionStrategy));
+        }
+
+        if(enableExclusionByValueStrategies) {
+            builder.registerTypeAdapterFactory(new ExcludeByValueTypeAdapterFactory(fieldInspector));
         }
 
         for(Class clazz: orderedClasses){
