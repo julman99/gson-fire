@@ -11,6 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @autor: julio
  */
 public final class FieldInspector {
+
+    private static final Field[] EMPTY = new Field[0];
+
     private final Map<Class, Map<Class<? extends Annotation>, Field[]>> cache = new ConcurrentHashMap<Class, Map<Class<? extends Annotation>, Field[]>>();
 
     public Field[] getAnnotatedFields(Class clazz, Class<? extends Annotation> annotation){
@@ -44,8 +47,13 @@ public final class FieldInspector {
                     cache.put(clazz, new ConcurrentHashMap<Class<? extends Annotation>, Field[]>());
                 }
 
-                fields = new Field[fieldList.size()];
-                cache.get(clazz).put(annotation, fieldList.toArray(fields));
+                if(fieldList.isEmpty()) {
+                    fields = EMPTY;
+                } else {
+                    fields = new Field[fieldList.size()];
+                    fields = fieldList.toArray(fields);
+                }
+                cache.get(clazz).put(annotation, fields);
             }
         }
 
