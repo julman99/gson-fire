@@ -7,20 +7,23 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public final class FieldNameResolver {
 
-    private final ConcurrentMap<Gson,FieldNamingStrategy> fieldNamingStrategies = new ConcurrentWeakHashMap<Gson, FieldNamingStrategy>();
-    private final ConcurrentMap<FieldNamingStrategy,Map<Field,String>> fieldNamingStrategiesFieldsCache = new ConcurrentWeakHashMap<FieldNamingStrategy,Map<Field,String>>();
+    private final Gson gson;
+    private final ConcurrentMap<Field,String> fieldNameCache = new ConcurrentHashMap<Field, String>();
 
-    public String getFieldName(final Field field, final Gson gson) {
-        FieldNamingStrategy fieldNamingStrategy = getFieldNamingStrategy(gson);
-        Map<Field,String> fieldNamingStrategyFieldsCache = getFieldNamingStrategyFieldsCache(fieldNamingStrategy);
-        String fieldName = fieldNamingStrategyFieldsCache.get(field);
+    private volatile FieldNamingStrategy fieldNamingStrategy = null;
+
+    public FieldNameResolver(Gson gson) {
+        this.gson = gson;
+    }
+
+    public String getFieldName(final Field field) {
+        String fieldName = fieldNameCache.get(field);
         if(fieldName == null){
             SerializedName serializedName = field.getAnnotation(SerializedName.class);
             if (serializedName == null) {
@@ -29,18 +32,16 @@ public final class FieldNameResolver {
                 fieldName = serializedName.value();
             }
 
-            if(!fieldNamingStrategyFieldsCache.containsKey(field)){
-                fieldNamingStrategyFieldsCache.put(field, fieldName);
+            if(!fieldNameCache.containsKey(field)){
+                fieldNameCache.put(field, fieldName);
             }
         }
-
         return fieldName;
     }
 
     private FieldNamingStrategy getFieldNamingStrategy(Gson gson) {
-        FieldNamingStrategy fieldNamingStrategy = this.fieldNamingStrategies.get(gson);
-        if (fieldNamingStrategy != null) {
-            return fieldNamingStrategy;
+        if (this.fieldNamingStrategy != null) {
+            return this.fieldNamingStrategy;
         }
 
         try {
@@ -54,9 +55,8 @@ public final class FieldNameResolver {
                     fieldNamingPolicyField.setAccessible(true);
 
                     // due to concurrency it is possible that the gson is already there while it wasn't before
-                    this.fieldNamingStrategies.putIfAbsent(gson, (FieldNamingStrategy) fieldNamingPolicyField.get(factory));
-
-                    return this.fieldNamingStrategies.get(gson);
+                    this.fieldNamingStrategy = (FieldNamingStrategy) fieldNamingPolicyField.get(factory);
+                    return this.fieldNamingStrategy;
                 }
             }
             // if we got here, we could not resolve the fieldNamingStrategy, otherwise we would have returned it
@@ -64,18 +64,6 @@ public final class FieldNameResolver {
         } catch (Exception e) {
             throw new RuntimeException("Could not get field naming strategy, the version of Gson currently in use might not be supported.", e);
         }
-    }
-
-    private Map<Field,String> getFieldNamingStrategyFieldsCache(FieldNamingStrategy fieldNamingStrategy) {
-        Map<Field,String> fieldsCache = this.fieldNamingStrategiesFieldsCache.get(fieldNamingStrategy);
-        if(fieldsCache != null) {
-            return fieldsCache;
-        }
-
-        // due to concurrency it is possible that the strategy is already there while it wasn't before
-        this.fieldNamingStrategiesFieldsCache.putIfAbsent(fieldNamingStrategy, new HashMap<Field, String>());
-
-        return this.fieldNamingStrategiesFieldsCache.get(fieldNamingStrategy);
     }
 
 }

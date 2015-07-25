@@ -2,15 +2,10 @@ package io.gsonfire;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.gsonfire.gson.SimpleIterableTypeAdapterFactory;
-import io.gsonfire.gson.FireExclusionStrategy;
-import io.gsonfire.gson.FireExclusionStrategyComposite;
-import io.gsonfire.gson.FireTypeAdapterFactory;
-import io.gsonfire.postprocessors.ExclusionByValuePostProcessor;
+import io.gsonfire.gson.*;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
 import io.gsonfire.postprocessors.MethodInvokerPostProcessor;
 import io.gsonfire.util.FieldInspector;
-import io.gsonfire.util.FieldNameResolver;
 
 import java.util.*;
 
@@ -23,7 +18,6 @@ public final class GsonFireBuilder {
     private final List<Class> orderedClasses = new ArrayList<Class>();
     private final List<FireExclusionStrategy> serializationExclusions = new ArrayList<FireExclusionStrategy>();
     private final FieldInspector fieldInspector = new FieldInspector();
-    private final FieldNameResolver fieldNameResolver = new FieldNameResolver();
 
     private DateSerializationPolicy dateSerializationPolicy;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
@@ -185,7 +179,7 @@ public final class GsonFireBuilder {
         }
 
         if(enableExclusionByValueStrategies) {
-            registerPostProcessor(Object.class, new ExclusionByValuePostProcessor(fieldInspector, fieldNameResolver));
+            builder.registerTypeAdapterFactory(new ExcludeByValueTypeAdapterFactory(fieldInspector));
         }
 
         for(Class clazz: orderedClasses){
