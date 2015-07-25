@@ -229,7 +229,7 @@ Gson gson = gsonBuilder.create()
 
 ### 1.3.0
 
-- Adds the ability to exclude fields depending on its value
+- Adds the ability to exclude fields depending on its value (thanks [@joaocpsantos](https://github.com/joaocpsantos))
 - Optimized the way objects are explored with reflection
 
 ### 1.2.0
