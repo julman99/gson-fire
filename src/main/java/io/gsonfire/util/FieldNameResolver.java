@@ -13,13 +13,11 @@ import java.util.concurrent.ConcurrentMap;
 
 public final class FieldNameResolver {
 
-    private final Gson gson;
+    private final FieldNamingStrategy fieldNamingStrategy;
     private final ConcurrentMap<Field,String> fieldNameCache = new ConcurrentHashMap<Field, String>();
 
-    private volatile FieldNamingStrategy fieldNamingStrategy = null;
-
     public FieldNameResolver(Gson gson) {
-        this.gson = gson;
+        this.fieldNamingStrategy = getFieldNamingStrategy(gson);
     }
 
     public String getFieldName(final Field field) {
@@ -27,7 +25,7 @@ public final class FieldNameResolver {
         if(fieldName == null){
             SerializedName serializedName = field.getAnnotation(SerializedName.class);
             if (serializedName == null) {
-                fieldName = getFieldNamingStrategy(gson).translateName(field);
+                fieldName = fieldNamingStrategy.translateName(field);
             } else {
                 fieldName = serializedName.value();
             }
@@ -40,10 +38,6 @@ public final class FieldNameResolver {
     }
 
     private FieldNamingStrategy getFieldNamingStrategy(Gson gson) {
-        if (this.fieldNamingStrategy != null) {
-            return this.fieldNamingStrategy;
-        }
-
         try {
             Field factoriesField = gson.getClass().getDeclaredField("factories");
             factoriesField.setAccessible(true);
@@ -54,9 +48,7 @@ public final class FieldNameResolver {
                     Field fieldNamingPolicyField = factory.getClass().getDeclaredField("fieldNamingPolicy");
                     fieldNamingPolicyField.setAccessible(true);
 
-                    // due to concurrency it is possible that the gson is already there while it wasn't before
-                    this.fieldNamingStrategy = (FieldNamingStrategy) fieldNamingPolicyField.get(factory);
-                    return this.fieldNamingStrategy;
+                    return (FieldNamingStrategy) fieldNamingPolicyField.get(factory);
                 }
             }
             // if we got here, we could not resolve the fieldNamingStrategy, otherwise we would have returned it
