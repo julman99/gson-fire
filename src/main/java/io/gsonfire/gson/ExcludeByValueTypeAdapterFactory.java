@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 /**
  * Created by julio viera and joao santos on 7/25/15.
  */
-public class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactory {
+public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactory {
 
     private final FieldInspector fieldInspector;
 
