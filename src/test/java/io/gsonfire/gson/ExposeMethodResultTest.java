@@ -1,12 +1,10 @@
 package io.gsonfire.gson;
 
-import io.gsonfire.GsonFireBuilder;
-import io.gsonfire.annotations.ExposeMethodResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import io.gsonfire.GsonFireBuilder;
+import io.gsonfire.annotations.ExposeMethodResult;
 import org.junit.Test;
-
-import java.security.InvalidParameterException;
 
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -52,7 +50,7 @@ public class ExposeMethodResultTest {
         try {
             JsonObject obj = gson.toJsonTree(a).getAsJsonObject();
             fail();
-        } catch (InvalidParameterException ex){
+        } catch (IllegalArgumentException ex){
             assertTrue(true);
         }
     }
