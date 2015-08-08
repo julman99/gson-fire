@@ -227,6 +227,10 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.3.1
+
+- Fixed a ```NullPointerException``` that could happen when using the exclude by value feature (thanks [@joaocpsantos](https://github.com/joaocpsantos))
+
 ### 1.3.0
 
 - Adds the ability to exclude fields depending on its value (thanks [@joaocpsantos](https://github.com/joaocpsantos))
@@ -266,7 +270,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.3.0</version>
+      <version>1.3.1</version>
     </dependency>
 </dependencies>
 ```
@@ -276,7 +280,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.3.0'
+    compile 'io.gsonfire:gson-fire:1.3.1'
 }
 ```
 
