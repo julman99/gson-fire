@@ -42,6 +42,13 @@ public class RFC3339DateFormatTest {
     }
 
     @Test
+    public void testParseDateNoTime() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        Date date = format.parse("2013-02-07");
+        assertEquals(1360195200000L, date.getTime()); //Unix timestamp created with http://www.unixtimestamp.com/index.php
+    }
+
+    @Test
     public void testFormatWithoutMillis() throws ParseException {
         RFC3339DateFormat format = new RFC3339DateFormat();
         String formatted = format.format(new Date(1360204148000L));

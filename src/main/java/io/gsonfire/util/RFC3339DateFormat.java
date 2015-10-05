@@ -13,6 +13,7 @@ public final class RFC3339DateFormat extends DateFormat {
 
     private static final Pattern TIMEZONE_PATTERN = Pattern.compile("(.*)([+-][0-9][0-9])\\:?([0-9][0-9])$");
     private static final Pattern MILLISECONDS_PATTERN = Pattern.compile("(.*)\\.([0-9]+)(.*)");
+    private static final Pattern DATE_ONLY_PATTERN = Pattern.compile("^[0-9]{1,4}-[0-1][0-9]-[0-3][0-9]$");
 
     private final SimpleDateFormat rfc3339Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private final SimpleDateFormat rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -61,6 +62,10 @@ public final class RFC3339DateFormat extends DateFormat {
 
     @Override
     public Date parse(String source, ParsePosition pos) {
+        //Check if this is only a date
+        if(DATE_ONLY_PATTERN.matcher(source).matches()) {
+            source += "T00:00:00-0000";
+        }
 
         //Filter milliseconds
         long millis = 0;
