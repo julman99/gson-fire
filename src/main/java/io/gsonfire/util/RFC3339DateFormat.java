@@ -81,6 +81,10 @@ public final class RFC3339DateFormat extends DateFormat {
         //Check if this is only a date
         if(DATE_ONLY_PATTERN.matcher(source).matches()) {
             source += "T00:00:00-0000";
+        } else {
+            if(source.charAt(10) == 't') {
+                source = source.substring(0, 10) + "T" + source.substring(12);
+            }
         }
 
         //Filter milliseconds
@@ -93,7 +97,7 @@ public final class RFC3339DateFormat extends DateFormat {
         }
 
         //Filter ending in Z
-        if(source.endsWith("Z")){
+        if(source.endsWith("Z") || source.endsWith("z")){
             source = source.substring(0, source.length() -1) + "-0000";
         } else {
             //Check if we have timezone information present

@@ -42,6 +42,13 @@ public class RFC3339DateFormatTest {
     }
 
     @Test
+    public void testParseLowerCase() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        Date date = format.parse("2013-02-07t02:29:08.123z");
+        assertEquals(1360204148123L, date.getTime()); //Unix timestamp created with http://www.unixtimestamp.com/index.php
+    }
+
+    @Test
     public void testParseDate_NoTime() throws ParseException {
         RFC3339DateFormat format = new RFC3339DateFormat(false);
         Date date = format.parse("2013-02-07");
