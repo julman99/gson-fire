@@ -185,6 +185,9 @@ public final class GsonFireBuilder {
 
         for(Class clazz: orderedClasses){
             ClassConfig config = classConfigMap.get(clazz);
+            if(config.getTypeSelector() != null) {
+                builder.registerTypeAdapterFactory(new TypeSelectorTypeAdapterFactory(config));
+            }
             builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
         }
 
