@@ -23,6 +23,8 @@ public class TypeSelectorTest {
                         return A.class;
                     } else if(kind.equals("b")) {
                         return B.class;
+                    } else if(kind.equals("aa")) {
+                        return AA.class;
                     } else {
                         return null;
                     }
@@ -39,19 +41,37 @@ public class TypeSelectorTest {
         b.kind = "b";
         b.b = "im b";
 
+        AA aa = new AA();
+        aa.kind = "aa";
+        aa.aa = "im aa";
+        aa.a ="im a(subclass)";
+
+        C c = new C();
+        c.a = aa;
+
         Base base =  new Base();
         base.kind = "im base";
 
         String jsona = gson.toJson(a);
         String jsonb = gson.toJson(b);
+        String jsonc = gson.toJson(c);
         String jsonbase = gson.toJson(base);
 
         Base ba = gson.fromJson(jsona, Base.class);
         Base bb = gson.fromJson(jsonb, Base.class);
+        C cc = gson.fromJson(jsonc, C.class);
         Base bbase = gson.fromJson(jsonbase, Base.class);
 
         Assert.assertTrue(ba instanceof A);
+        Assert.assertEquals("im a", ((A)ba).a);
+
         Assert.assertTrue(bb instanceof B);
+        Assert.assertEquals("im b", ((B)bb).b);
+
+        Assert.assertTrue(cc.a instanceof AA);
+        Assert.assertEquals("im aa", ((AA)c.a).aa);
+        Assert.assertEquals("im a(subclass)", ((AA)c.a).a);
+
         Assert.assertTrue(bbase.getClass() == Base.class);
     }
 
@@ -63,5 +83,11 @@ public class TypeSelectorTest {
     }
     private class B extends Base{
         public String b;
+    }
+    private class AA extends A {
+        public String aa;
+    }
+    private class C {
+        public A a;
     }
 }

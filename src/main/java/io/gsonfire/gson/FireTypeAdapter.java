@@ -1,15 +1,14 @@
 package io.gsonfire.gson;
 
-import io.gsonfire.ClassConfig;
-import io.gsonfire.PostProcessor;
-import io.gsonfire.PreProcessor;
-import io.gsonfire.TypeSelector;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.gsonfire.ClassConfig;
+import io.gsonfire.PostProcessor;
+import io.gsonfire.PreProcessor;
 
 import java.io.IOException;
 
@@ -48,11 +47,12 @@ public final class FireTypeAdapter<T> extends TypeAdapter<T> {
     @Override
     public T read(JsonReader in) throws IOException {
         JsonElement json = new JsonParser().parse(in);
+
         runPreDeserialize(json);
         T result = deserialize(json);
 
         //Run all the post deserializers
-        if(classConfig.isHooksEnabled()){
+        if (classConfig.isHooksEnabled()) {
             hooksInvoker.postDeserialize(result);
         }
         runPostDeserialize(result, json);
@@ -79,21 +79,8 @@ public final class FireTypeAdapter<T> extends TypeAdapter<T> {
     }
 
     private T deserialize(JsonElement json){
-        Class clazzDeserialize = null;
-
-        //We only want to run the type selector is we are deserializing the base class for the type selector.
-        if(clazz == classConfig.getConfiguredClass()){
-            TypeSelector<? super T> selector = classConfig.getTypeSelector();
-            if(selector != null){
-                clazzDeserialize = classConfig.getTypeSelector().getClassForElement(json);
-            }
-        }
-        T result;
-        if(clazzDeserialize == null || clazzDeserialize == classConfig.getConfiguredClass()){
-            result = originalTypeAdapter.fromJsonTree(json);
-        } else {
-            result = (T)gson.fromJson(json, clazzDeserialize);
-        }
+        T result = originalTypeAdapter.fromJsonTree(json);
         return result;
     }
+
 }

@@ -20,6 +20,7 @@ public final class GsonFireBuilder {
     private final FieldInspector fieldInspector = new FieldInspector();
 
     private DateSerializationPolicy dateSerializationPolicy;
+    private boolean dateDeserializationStrict = true;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
     private boolean enableExposeMethodResults = false;
     private boolean enableExclusionByValueStrategies = false;
@@ -184,6 +185,9 @@ public final class GsonFireBuilder {
 
         for(Class clazz: orderedClasses){
             ClassConfig config = classConfigMap.get(clazz);
+            if(config.getTypeSelector() != null) {
+                builder.registerTypeAdapterFactory(new TypeSelectorTypeAdapterFactory(config));
+            }
             builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
         }
 
