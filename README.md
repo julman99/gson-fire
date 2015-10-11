@@ -107,7 +107,9 @@ builder.dateSerializationPolicy(DateSerializationPolicy.unixTimeMillis);
 //or
 builder.dateSerializationPolicy(DateSerializationPolicy.unixTimeSeconds);
 //or
-builder.dateSerializationPolicy(DateSerializationPolicy.rfc3339);
+builder.dateSerializationPolicy(DateSerializationPolicy.rfc3339); //date and time will be serialized
+//or
+builder.dateSerializationPolicy(DateSerializationPolicy.rfc3339Date); //only date portion will be serialized
 
 ```
 
@@ -227,6 +229,12 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.4.0
+
+- Fixed a bug in which pre-processors could run multiple times when used in conjunction with TypeSelectors.
+- Adds support for RFC3339 date (without the time portion). - thanks [@WonderCsabo](https://github.com/WonderCsabo)
+- TypeSelectors will now be invoked also on sub-classes of the class they are registered for. thanks [@iwarapter](https://github.com/iwarapter) 
+
 ### 1.3.1
 
 - Fixed a ```NullPointerException``` that could happen when using the exclude by value feature (thanks [@joaocpsantos](https://github.com/joaocpsantos))
@@ -270,7 +278,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.3.1</version>
+      <version>1.4.0</version>
     </dependency>
 </dependencies>
 ```
@@ -280,7 +288,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.3.1'
+    compile 'io.gsonfire:gson-fire:1.4.0'
 }
 ```
 
