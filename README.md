@@ -232,8 +232,8 @@ Gson gson = gsonBuilder.create()
 ### 1.4.0
 
 - Fixed a bug in which pre-processors could run multiple times when used in conjunction with TypeSelectors.
-- Adds support for RFC3339 date (without the time portion). - thanks [@WonderCsabo](https://github.com/WonderCsabo)
-- TypeSelectors will now be invoked also on sub-classes of the class they are registered for. thanks [@iwarapter](https://github.com/iwarapter) 
+- Adds support for RFC3339 date (without the time portion). Thanks [@WonderCsabo](https://github.com/WonderCsabo)
+- TypeSelectors will now be invoked also on sub-classes of the class they are registered for. Thanks [@iwarapter](https://github.com/iwarapter) 
 
 ### 1.3.1
 
