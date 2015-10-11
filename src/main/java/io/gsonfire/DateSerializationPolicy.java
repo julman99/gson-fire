@@ -64,11 +64,26 @@ public enum DateSerializationPolicy {
         }
     },
 
+    /**
+     * Serializes dates in RFC3339 including the date and time. For example: 1985-04-12T23:20:50.52Z
+     */
     rfc3339 {
         @Override
         TypeAdapter<Date> createTypeAdapter(TimeZone serializeTimezone) {
             return new NullableTypeAdapter<Date>(
-                new DateRFC3339TypeAdapter(serializeTimezone)
+                new DateRFC3339TypeAdapter(serializeTimezone, true)
+            );
+        }
+    },
+
+    /**
+     * Serializes dates in RFC3339 including only date date. For example: 1985-04-12
+     */
+    rfc3339Date {
+        @Override
+        TypeAdapter<Date> createTypeAdapter(TimeZone serializeTimezone) {
+            return new NullableTypeAdapter<Date>(
+                new DateRFC3339TypeAdapter(serializeTimezone, false)
             );
         }
     };

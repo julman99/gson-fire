@@ -20,6 +20,7 @@ public final class GsonFireBuilder {
     private final FieldInspector fieldInspector = new FieldInspector();
 
     private DateSerializationPolicy dateSerializationPolicy;
+    private boolean dateDeserializationStrict = true;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
     private boolean enableExposeMethodResults = false;
     private boolean enableExclusionByValueStrategies = false;

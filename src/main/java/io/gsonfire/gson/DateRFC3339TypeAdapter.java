@@ -20,15 +20,15 @@ public final class DateRFC3339TypeAdapter extends TypeAdapter<Date> {
     /**
      * Creates a RFC3339 type adapter that will serialize dates in UTC
      */
-    public DateRFC3339TypeAdapter() {
-        this.dateFormat = new RFC3339DateFormat();
+    public DateRFC3339TypeAdapter(boolean serializeTime) {
+        this.dateFormat = new RFC3339DateFormat(serializeTime);
     }
 
     /**
      * Creates a RFC3339 type adapter that will serialize dates using the provided timezone
      */
-    public DateRFC3339TypeAdapter(TimeZone serializationTimezone) {
-        this.dateFormat = new RFC3339DateFormat(serializationTimezone);
+    public DateRFC3339TypeAdapter(TimeZone serializationTimezone, boolean serializeTime) {
+        this.dateFormat = new RFC3339DateFormat(serializationTimezone, serializeTime);
     }
 
     @Override
