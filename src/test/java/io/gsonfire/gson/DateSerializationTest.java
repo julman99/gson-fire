@@ -8,7 +8,10 @@ import io.gsonfire.GsonFireBuilder;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.Random;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -199,6 +202,41 @@ public class DateSerializationTest {
             JsonElement jsonElement = gson.toJsonTree(date);
             assertTrue(jsonElement.isJsonNull());
         }
+    }
+
+    @Test
+    public void testRFC3339_raceCondition() throws InterruptedException {
+        TimeZone.setDefault(NY_TIMEZONE);
+        final Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(CCS_TIMEZONE)
+            .createGson();
+
+        final AtomicBoolean active = new AtomicBoolean(true);
+        final Random random = new Random();
+        final AtomicInteger successCount = new AtomicInteger();
+        final int threadCount = 50;
+
+        for(int i=0;i<threadCount;i++) {
+            new Thread(){
+                @Override
+                public void run() {
+                    while (active.get()) {
+                        long timestamp = (long)(random.nextDouble() + Long.MAX_VALUE);
+                        Date dateToSerialize = new Date(timestamp);
+                        String serialized = gson.toJson(dateToSerialize);
+                        Date dateDeserialized = gson.fromJson(serialized, Date.class);
+                        assertEquals(timestamp, dateDeserialized.getTime());
+                    }
+                    successCount.incrementAndGet();
+                }
+            }.start();
+        }
+
+        Thread.sleep(500);
+        active.set(false);
+        Thread.sleep(100);
+        assertEquals(threadCount, successCount.get());
     }
 
 }
