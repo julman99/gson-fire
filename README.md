@@ -229,6 +229,11 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.5.0
+
+- Fixed a bug that caused the RFC3339 date serializing not to be thread safe [#24](https://github.com/julman99/gson-fire/issues/24). Thanks [@npanasenko](https://github.com/npanasenko).
+- Hook methods now can get injected the source ```JsonElement``` and ```Gson``` objects [#23](https://github.com/julman99/gson-fire/issues/23). Thanks [@molexx](https://github.com/molexx).  
+
 ### 1.4.0
 
 - Fixed a bug in which pre-processors could run multiple times when used in conjunction with TypeSelectors.
@@ -278,7 +283,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.4.0</version>
+      <version>1.5.0</version>
     </dependency>
 </dependencies>
 ```
@@ -288,7 +293,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.4.0'
+    compile 'io.gsonfire:gson-fire:1.5.0'
 }
 ```
 
