@@ -5,12 +5,7 @@ import java.lang.reflect.Method;
 /**
  * Created by julio on 7/25/15.
  */
-public class MethodInspector extends AnnotationInspector<Method, Method> {
-
-    @Override
-    protected Method[] getDeclaredMembers(Class clazz) {
-        return clazz.getDeclaredMethods();
-    }
+public class MethodInspector extends AbstractMethodInspector<Method> {
 
     @Override
     protected Method map(Method member) {

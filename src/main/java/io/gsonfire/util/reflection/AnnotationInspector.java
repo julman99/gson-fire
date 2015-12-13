@@ -28,7 +28,7 @@ public abstract class AnnotationInspector<T extends AccessibleObject, M> {
             members = getFromCache(clazz, annotation);
             if (members == null) {
 
-                Set<M> memberList = new HashSet<M>();
+                Set<M> memberList = new LinkedHashSet<M>();
                 //Add methods declared in the class
                 for (T m : getDeclaredMembers(clazz)) {
                     if (m.isAnnotationPresent(annotation)) {
