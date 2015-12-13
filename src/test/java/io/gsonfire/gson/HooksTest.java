@@ -1,5 +1,6 @@
 package io.gsonfire.gson;
 
+import com.google.gson.JsonElement;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.annotations.PostDeserialize;
 import io.gsonfire.annotations.PreSerialize;
@@ -27,11 +28,14 @@ public class HooksTest {
 
         JsonObject json = new JsonObject();
         json.addProperty("count", 10);
+        json.addProperty("nonSerializable", 20);
 
         Gson gson = new GsonFireBuilder().enableHooks(A.class).createGson();
         A a = gson.fromJson(json, A.class);
 
+        assertEquals(20, a.getNonSerializable());
         assertEquals(9, a.get());
+        assertEquals(gson, a.getGson());
     }
 
     @Test
@@ -48,6 +52,8 @@ public class HooksTest {
 
     private class A{
         private int count = 0;
+        private transient int nonSerializable = -1;
+        private Gson gson;
 
         private A(int count) {
             this.count = count;
@@ -63,9 +69,22 @@ public class HooksTest {
             count--;
         }
 
+        @PostDeserialize
+        public void setNonSerializable(Gson gson, JsonElement jsonElement){
+            this.nonSerializable = jsonElement.getAsJsonObject().get("nonSerializable").getAsInt();
+            this.gson = gson;
+        }
+
         public int get(){
             return count;
         }
 
+        public int getNonSerializable() {
+            return nonSerializable;
+        }
+
+        public Gson getGson() {
+            return gson;
+        }
     }
 }

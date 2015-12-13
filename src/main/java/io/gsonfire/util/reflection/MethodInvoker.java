@@ -22,6 +22,8 @@ public class MethodInvoker {
         for (Parameter parameter : this.method.getParameters()) {
             if (supportedInjectionTypes.contains(parameter.getType())) {
                 argsOrder.add(parameter.getType());
+            } else {
+                throw new IllegalArgumentException("Cannot auto inject type: " + parameter.getType());
             }
         }
     }

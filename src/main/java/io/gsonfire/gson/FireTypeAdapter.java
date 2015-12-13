@@ -53,7 +53,7 @@ public final class FireTypeAdapter<T> extends TypeAdapter<T> {
 
         //Run all the post deserializers
         if (classConfig.isHooksEnabled()) {
-            hooksInvoker.postDeserialize(result);
+            hooksInvoker.postDeserialize(result, json, gson);
         }
         runPostDeserialize(result, json);
 
