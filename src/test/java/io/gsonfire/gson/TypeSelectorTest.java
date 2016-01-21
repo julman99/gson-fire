@@ -7,6 +7,8 @@ import io.gsonfire.TypeSelector;
 import junit.framework.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * @autor: julio
  */
@@ -73,6 +75,22 @@ public class TypeSelectorTest {
         Assert.assertEquals("im a(subclass)", ((AA)c.a).a);
 
         Assert.assertTrue(bbase.getClass() == Base.class);
+    }
+
+    @Test
+    public void testNull(){
+        GsonFireBuilder builder = new GsonFireBuilder()
+            .registerTypeSelector(Base.class, new TypeSelector<Base>() {
+                @Override
+                public Class<? extends Base> getClassForElement(JsonElement readElement) {
+                    return AA.class;
+                }
+            });
+
+        Gson gson = builder.createGson();
+
+        JsonElement json = gson.toJsonTree(null, AA.class);
+        assertTrue(json.isJsonNull());
     }
 
     private class Base{

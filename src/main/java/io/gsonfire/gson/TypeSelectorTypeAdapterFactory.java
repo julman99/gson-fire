@@ -24,7 +24,10 @@ public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         if(classConfig.getConfiguredClass().isAssignableFrom(type.getRawType())){
-            TypeSelectorTypeAdapter<T> fireTypeAdapter = new TypeSelectorTypeAdapter<T>(type.getRawType(), classConfig.getTypeSelector(), gson);
+            TypeAdapter<T> fireTypeAdapter =
+                new NullableTypeAdapter<T>(
+                    new TypeSelectorTypeAdapter<T>(type.getRawType(), classConfig.getTypeSelector(), gson)
+                );
             return fireTypeAdapter;
         } else {
             return null;
