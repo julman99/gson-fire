@@ -44,13 +44,15 @@ public final class HooksInvoker {
     }
 
     private void invokeAll(Object obj, Class<? extends Annotation> annotation, JsonElement jsonElement, Gson gson){
-        for(MethodInvoker m: inspector.getAnnotatedMembers(obj.getClass(), annotation)){
-            try {
-                m.invoke(obj, new HooksInvokerValueSupplier(jsonElement, gson));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+        if(obj != null) {
+            for (MethodInvoker m : inspector.getAnnotatedMembers(obj.getClass(), annotation)) {
+                try {
+                    m.invoke(obj, new HooksInvokerValueSupplier(jsonElement, gson));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
