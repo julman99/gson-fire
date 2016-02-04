@@ -231,7 +231,7 @@ Gson gson = gsonBuilder.create()
 
 ### 1.5.1
 
-- Fixed a bug in which NullPointerExceptions were thrown when using hooks. Thanks [@WonderCsabo](https://github.com/WonderCsabo)   
+- Fixed a bug in which NullPointerExceptions were thrown when using hooks. Thanks [@knezmilos13](https://github.com/knezmilos13)   
 
 
 ### 1.5.0
