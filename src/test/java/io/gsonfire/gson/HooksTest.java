@@ -1,14 +1,15 @@
 package io.gsonfire.gson;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.annotations.PostDeserialize;
 import io.gsonfire.annotations.PreSerialize;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @autor: julio
@@ -36,6 +37,13 @@ public class HooksTest {
         assertEquals(20, a.getNonSerializable());
         assertEquals(9, a.get());
         assertEquals(gson, a.getGson());
+    }
+
+    @Test
+    public void testNull(){
+        Gson gson = new GsonFireBuilder().enableHooks(A.class).createGson();
+        JsonElement json = gson.toJsonTree(null, A.class);
+        assertTrue(json.isJsonNull());
     }
 
     @Test
