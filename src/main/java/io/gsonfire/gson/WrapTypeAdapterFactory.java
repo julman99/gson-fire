@@ -15,44 +15,48 @@ public class WrapTypeAdapterFactory implements TypeAdapterFactory {
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-
         final TypeAdapter<T> originalTypeAdapter = gson.getDelegateAdapter(this, type);
-        return new WrapperTypeAdapter(gson, originalTypeAdapter);
+        Wrap wrap = type.getRawType().getAnnotation(Wrap.class);
+        if (wrap == null) {
+            return originalTypeAdapter;
+        } else {
+            return new WrapperTypeAdapter(wrap, gson, originalTypeAdapter);
+        }
     }
 
-    private class WrapperTypeAdapter extends TypeAdapter {
+    private class WrapperTypeAdapter<T> extends TypeAdapter<T> {
 
+        private Wrap wrap;
         private Gson gson;
-        private TypeAdapter originalTypeAdapter;
+        private TypeAdapter<T> originalTypeAdapter;
 
-        public WrapperTypeAdapter(Gson gson, TypeAdapter originalTypeAdapter) {
+        public WrapperTypeAdapter(Wrap wrap, Gson gson, TypeAdapter<T> originalTypeAdapter) {
+            this.wrap = wrap;
             this.gson = gson;
             this.originalTypeAdapter = originalTypeAdapter;
         }
 
         @Override
-        public void write(JsonWriter out, Object src) throws IOException {
+        public void write(JsonWriter out, T src) throws IOException {
             if (src == null) {
                 //if src is null there is nothing for this type adapter to do, delegate it to the original type adapter
                 originalTypeAdapter.write(out, src);
             } else {
-                Wrap wrapper = src.getClass().getAnnotation(Wrap.class);
-                if (wrapper == null) {
-                    // wrapper annotation not present, delegate it to the original type adapter
-                    originalTypeAdapter.write(out, src);
-                } else {
-                    final String value = wrapper.value();
-                    JsonElement unwrappedObj = originalTypeAdapter.toJsonTree(src);
-                    JsonObject wrappedObj = new JsonObject();
-                    wrappedObj.add(value, unwrappedObj);
-                    gson.toJson(wrappedObj, out);
-                }
+                final String value = wrap.value();
+                JsonElement unwrappedObj = originalTypeAdapter.toJsonTree(src);
+                JsonObject wrappedObj = new JsonObject();
+                wrappedObj.add(value, unwrappedObj);
+                gson.toJson(wrappedObj, out);
             }
         }
 
         @Override
-        public Object read(JsonReader in) throws IOException {
-            return originalTypeAdapter.read(in);
+        public T read(JsonReader in) throws IOException {
+            in.beginObject();
+            in.nextName();
+            T unwrappedObj = originalTypeAdapter.read(in);
+            in.endObject();
+            return unwrappedObj;
         }
     }
 }
