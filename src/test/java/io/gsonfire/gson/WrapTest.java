@@ -1,12 +1,11 @@
 package io.gsonfire.gson;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import io.gsonfire.GsonFireBuilder;
-import io.gsonfire.annotations.Wrap;
+import io.gsonfire.util.Mapper;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -19,7 +18,18 @@ public class WrapTest {
     @Test
     public void testWrap() {
         Gson gson = new GsonFireBuilder()
-                .enableWrappedClasses()
+                .wrap(A.class, new Mapper<A, String>() {
+                    @Override
+                    public String map(A from) {
+                        return "aWrap";
+                    }
+                })
+                .wrap(B.class, new Mapper<B, String>() {
+                    @Override
+                    public String map(B from) {
+                        return "bWrap";
+                    }
+                })
                 .createGson();
 
         // Wrap A class
@@ -59,7 +69,18 @@ public class WrapTest {
     @Test
     public void testUnwrap() {
         Gson gson = new GsonFireBuilder()
-                .enableWrappedClasses()
+                .wrap(A.class, new Mapper<A, String>() {
+                    @Override
+                    public String map(A from) {
+                        return "aWrap";
+                    }
+                })
+                .wrap(B.class, new Mapper<B, String>() {
+                    @Override
+                    public String map(B from) {
+                        return "bWrap";
+                    }
+                })
                 .createGson();
 
         // Unwrap A class
@@ -103,13 +124,11 @@ public class WrapTest {
         assertEquals("v2", c.str2);
     }
 
-    @Wrap("aWrap")
     private class A {
         @Expose
         public String str1;
     }
 
-    @Wrap("bWrap")
     private class B {
         @Expose
         public String str2;
