@@ -30,6 +30,7 @@ public class WrapTest {
                         return "bWrap";
                     }
                 })
+                .wrap(D.class, "dWrap")
                 .createGson();
 
         // Wrap A class
@@ -55,7 +56,7 @@ public class WrapTest {
         assertEquals("str1", obj2.get("bWrap").getAsJsonObject().get("a").getAsJsonObject()
                 .get("aWrap").getAsJsonObject().get("str1").getAsString());
 
-        // Wrap C class
+        // Wrap C class (it is not wrapped)
         C c = new C();
         c.str1 = "str1";
         c.str2 = "str2";
@@ -64,6 +65,15 @@ public class WrapTest {
 
         assertEquals("str1", obj3.get("str1").getAsString());
         assertEquals("str2", obj3.get("str2").getAsString());
+
+        // Wrap D class
+        D d = new D();
+        d.str1 = "str1";
+
+        JsonObject obj4 = gson.toJsonTree(d).getAsJsonObject();
+
+        assertNotNull(obj4.get("dWrap"));
+        assertEquals("str1", obj4.get("dWrap").getAsJsonObject().get("str1").getAsString());
     }
 
     @Test
@@ -81,6 +91,7 @@ public class WrapTest {
                         return "bWrap";
                     }
                 })
+                .wrap(D.class, "dWrap")
                 .createGson();
 
         // Unwrap A class
@@ -112,7 +123,7 @@ public class WrapTest {
         assertEquals("v2", b.str2);
         assertEquals("v1", b.a.str1);
 
-        // Unwrap C class
+        // Unwrap C class (it is not unwrapped)
         final JsonObject cJson = jsonParser.parse("{\n" +
                 "  str1: \"v1\",\n" +
                 "  str2: \"v2\"\n" +
@@ -122,6 +133,17 @@ public class WrapTest {
         assertNotNull(c);
         assertEquals("v1", c.str1);
         assertEquals("v2", c.str2);
+
+        // Unwrap D class
+        final JsonObject dJson = jsonParser.parse("{\n" +
+                "  dWrap: {\n" +
+                "    str1: \"v1\"\n" +
+                "  }\n" +
+                "}").getAsJsonObject();
+
+        final D d = gson.fromJson(dJson, D.class);
+        assertNotNull(d);
+        assertEquals("v1", d.str1);
     }
 
     private class A {
@@ -143,5 +165,10 @@ public class WrapTest {
 
         @Expose
         public String str2;
+    }
+
+    private class D {
+        @Expose
+        public String str1;
     }
 }
