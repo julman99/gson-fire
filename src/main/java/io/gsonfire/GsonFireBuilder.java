@@ -2,6 +2,7 @@ package io.gsonfire;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.gsonfire.annotations.Wrap;
 import io.gsonfire.gson.*;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
 import io.gsonfire.postprocessors.methodinvoker.MethodInvokerPostProcessor;
@@ -23,6 +24,7 @@ public final class GsonFireBuilder {
     private boolean dateDeserializationStrict = true;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
     private boolean enableExposeMethodResults = false;
+    private boolean enableWrappedClasses = false;
     private boolean enableExclusionByValueStrategies = false;
 
     private ClassConfig getClassConfig(Class clazz){
@@ -127,6 +129,16 @@ public final class GsonFireBuilder {
     }
 
     /**
+     * By enabling this, all classes with the annotation {@link Wrap}
+     * will be wrapped/unwrapped when serialization/deserialization.
+     * @return
+     */
+    public GsonFireBuilder enableWrappedClasses(){
+        this.enableWrappedClasses = true;
+        return this;
+    }
+
+    /**
      * By enabling this, all methods with the annotation {@link io.gsonfire.annotations.ExposeMethodResult} will
      * be evaluated and it result will be added to the resulting json
      * @return
@@ -181,6 +193,10 @@ public final class GsonFireBuilder {
 
         if(enableExclusionByValueStrategies) {
             builder.registerTypeAdapterFactory(new ExcludeByValueTypeAdapterFactory(fieldInspector));
+        }
+
+        if (enableWrappedClasses) {
+            builder.registerTypeAdapterFactory(new WrapTypeAdapterFactory());
         }
 
         for(Class clazz: orderedClasses){
