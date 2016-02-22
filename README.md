@@ -223,14 +223,12 @@ GsonFireBuilder gsonFireBuilder = new GsonFireBuilder()
         public String map(MyClass myClass) {
             return "myClass";
         }
-    })
-    .enableWrappedClasses();
+    });
 ```
 
 ```java
 GsonFireBuilder gsonFireBuilder = new GsonFireBuilder()
-    .wrap(MyClass.class, "myClass")
-    .enableWrappedClasses();
+    .wrap(MyClass.class, "myClass");
 ```
 
 The previous code will serialize to / deserialize from:
