@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class WrapTypeAdapterFactory<T> implements TypeAdapterFactory {
 
-    private Map<Class<T>, Mapper<T, String>> wrappedClasses;
+    private final Map<Class<T>, Mapper<T, String>> wrappedClasses;
 
     public WrapTypeAdapterFactory(Map<Class<T>, Mapper<T, String>> wrappedClasses) {
         this.wrappedClasses = wrappedClasses;
@@ -23,13 +23,26 @@ public class WrapTypeAdapterFactory<T> implements TypeAdapterFactory {
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         final TypeAdapter<T> originalTypeAdapter = gson.getDelegateAdapter(this, type);
-        final Mapper<T, String> mapper = (Mapper<T, String>) wrappedClasses.get(type.getRawType());
+        final Mapper<T, String> mapper = (Mapper<T, String>) getMostSpecificMapper(type.getRawType());
 
         if (mapper == null) {
             return originalTypeAdapter;
         } else {
             return new WrapperTypeAdapter(mapper, gson, originalTypeAdapter);
         }
+    }
+
+    private Mapper<T, String> getMostSpecificMapper(Class clazz) {
+        Mapper<T, String> mostSpecificMapper = null;
+        Class mostSpecificClass = clazz;
+        while (mostSpecificClass != null) {
+            mostSpecificMapper = wrappedClasses.get(mostSpecificClass);
+            if (mostSpecificMapper != null) {
+                return mostSpecificMapper;
+            }
+            mostSpecificClass = mostSpecificClass.getSuperclass();
+        }
+        return null;
     }
 
     private class WrapperTypeAdapter<T> extends TypeAdapter<T> {
