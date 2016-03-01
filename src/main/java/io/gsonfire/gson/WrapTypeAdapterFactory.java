@@ -34,9 +34,9 @@ public class WrapTypeAdapterFactory<T> implements TypeAdapterFactory {
 
     private class WrapperTypeAdapter<T> extends TypeAdapter<T> {
 
-        private Mapper<T, String> mapper;
-        private Gson gson;
-        private TypeAdapter<T> originalTypeAdapter;
+        private final Mapper<T, String> mapper;
+        private final Gson gson;
+        private final TypeAdapter<T> originalTypeAdapter;
 
         public WrapperTypeAdapter(Mapper<T, String> mapper, Gson gson, TypeAdapter<T> originalTypeAdapter) {
             this.mapper = mapper;
