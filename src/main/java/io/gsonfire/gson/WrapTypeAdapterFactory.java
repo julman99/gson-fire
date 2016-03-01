@@ -28,7 +28,7 @@ public class WrapTypeAdapterFactory<T> implements TypeAdapterFactory {
         if (mapper == null) {
             return originalTypeAdapter;
         } else {
-            return new WrapperTypeAdapter(mapper, gson, originalTypeAdapter);
+            return new NullableTypeAdapter<T>(new WrapperTypeAdapter(mapper, gson, originalTypeAdapter));
         }
     }
 
