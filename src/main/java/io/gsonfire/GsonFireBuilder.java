@@ -230,7 +230,10 @@ public final class GsonFireBuilder {
         }
 
         builder.registerTypeAdapterFactory(new SimpleIterableTypeAdapterFactory());
-        builder.registerTypeAdapterFactory(new WrapTypeAdapterFactory(wrappedClasses));
+
+        for(Map.Entry<Class, Mapper> wrappedEntries: wrappedClasses.entrySet()) {
+            builder.registerTypeAdapterFactory(new WrapTypeAdapterFactory(wrappedEntries.getKey(), wrappedEntries.getValue()));
+        }
 
         return builder;
     }

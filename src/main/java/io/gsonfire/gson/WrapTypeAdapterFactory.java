@@ -7,43 +7,30 @@ import com.google.gson.stream.JsonWriter;
 import io.gsonfire.util.Mapper;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by asanchez on 19/02/16.
  */
 public class WrapTypeAdapterFactory<T> implements TypeAdapterFactory {
 
-    private final Map<Class<T>, Mapper<T, String>> wrappedClasses;
+    private final Class<T> clazz;
+    private final Mapper<T, String> mapper;
 
-    public WrapTypeAdapterFactory(Map<Class<T>, Mapper<T, String>> wrappedClasses) {
-        this.wrappedClasses = wrappedClasses;
+    public WrapTypeAdapterFactory(Class<T> clazz, Mapper<T, String> mapper) {
+        this.clazz = clazz;
+        this.mapper = mapper;
     }
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        final TypeAdapter<T> originalTypeAdapter = gson.getDelegateAdapter(this, type);
-        final Mapper<T, String> mapper = (Mapper<T, String>) getMostSpecificMapper(type.getRawType());
-
-        if (mapper == null) {
-            return originalTypeAdapter;
-        } else {
+        if(clazz.isAssignableFrom(type.getRawType())){
+            final TypeAdapter<T> originalTypeAdapter = gson.getDelegateAdapter(this, type);
             return new NullableTypeAdapter<T>(new WrapperTypeAdapter(mapper, gson, originalTypeAdapter));
+        } else {
+            return null;
         }
     }
 
-    private Mapper<T, String> getMostSpecificMapper(Class clazz) {
-        Mapper<T, String> mostSpecificMapper = null;
-        Class mostSpecificClass = clazz;
-        while (mostSpecificClass != null) {
-            mostSpecificMapper = wrappedClasses.get(mostSpecificClass);
-            if (mostSpecificMapper != null) {
-                return mostSpecificMapper;
-            }
-            mostSpecificClass = mostSpecificClass.getSuperclass();
-        }
-        return null;
-    }
 
     private class WrapperTypeAdapter<T> extends TypeAdapter<T> {
 
