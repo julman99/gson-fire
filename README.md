@@ -204,6 +204,50 @@ Gson builder = new GsonFireBuilder()
 Gson gson = builder.createGson();
 
 ```
+### Wrap/unwrap classes
+Ability to wrap a class with a string after serialization and unwrap that class before deserialization. This is useful when you write JSON objects and need to specify the name of the class to deserialize.
+
+```java
+public class MyClass {
+    @Expose
+    public String field;
+}
+```
+
+It is necessary to specify a Mapper or a String:
+
+```java
+GsonFireBuilder gsonFireBuilder = new GsonFireBuilder()
+    .wrap(MyClass.class, new Mapper<MyClass, String>() {
+        @Override
+        public String map(MyClass myClass) {
+            return "myClass";
+        }
+    });
+```
+
+```java
+GsonFireBuilder gsonFireBuilder = new GsonFireBuilder()
+    .wrap(MyClass.class, "myClass");
+```
+
+The previous code will serialize to / deserialize from:
+
+```
+{
+  myClass: {
+    field: "v1"
+  }
+}
+```
+
+instead of
+
+```
+{
+  field: "v1"
+}
+```
 
 ## Using the Gson's GsonBuilder
 
