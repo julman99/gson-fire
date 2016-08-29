@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by julio on 8/18/16.
  */
-public final class JsonObjectBuilder {
+public final class JsonObjectBuilder implements JsonElementBuilder<JsonObject> {
 
     private final JsonObject object = new JsonObject();
 
@@ -34,6 +34,11 @@ public final class JsonObjectBuilder {
 
     public JsonObjectBuilder set(String property, JsonElement value) {
         object.add(property, value);
+        return this;
+    }
+
+    public JsonObjectBuilder set(String property, JsonElementBuilder builder) {
+        object.add(property, builder.build());
         return this;
     }
 

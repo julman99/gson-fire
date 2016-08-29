@@ -7,7 +7,7 @@ import io.gsonfire.util.JsonUtils;
 /**
  * Created by julio on 8/18/16.
  */
-public final class JsonArrayBuilder {
+public final class JsonArrayBuilder implements JsonElementBuilder<JsonArray> {
 
     private final JsonArray array = new JsonArray();
 
@@ -19,6 +19,12 @@ public final class JsonArrayBuilder {
         array.add(element);
         return this;
     }
+
+    public JsonArrayBuilder add(JsonElementBuilder builder) {
+        array.add(builder.build());
+        return this;
+    }
+
     public JsonArrayBuilder add(Boolean bool) {
         array.add(bool);
         return this;
@@ -44,6 +50,7 @@ public final class JsonArrayBuilder {
         return this;
     }
 
+    @Override
     public JsonArray build() {
         return JsonUtils.deepCopy(array).getAsJsonArray();
     }
