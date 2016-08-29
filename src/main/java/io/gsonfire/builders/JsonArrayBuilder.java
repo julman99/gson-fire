@@ -11,7 +11,7 @@ public class JsonArrayBuilder {
 
     private final JsonArray array = new JsonArray();
 
-    private JsonArrayBuilder() {
+    public JsonArrayBuilder() {
 
     }
 

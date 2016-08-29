@@ -14,7 +14,7 @@ public class JsonObjectBuilder {
 
     private final JsonObject object = new JsonObject();
 
-    private JsonObjectBuilder() {
+    public JsonObjectBuilder() {
 
     }
 
@@ -58,7 +58,4 @@ public class JsonObjectBuilder {
         return JsonUtils.deepCopy(object).getAsJsonObject();
     }
 
-    public static JsonObjectBuilder go() {
-        return new JsonObjectBuilder();
-    }
 }

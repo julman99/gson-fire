@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class JsonObjectBuilderTest {
     @Test
     public void setString() throws Exception {
-        JsonObject built = JsonObjectBuilder.go()
+        JsonObject built = new JsonObjectBuilder()
             .set("a", "aa")
             .set("b", "bb")
             .build();
@@ -27,7 +27,7 @@ public class JsonObjectBuilderTest {
 
     @Test
     public void setNumber() throws Exception {
-        JsonObject built = JsonObjectBuilder.go()
+        JsonObject built = new JsonObjectBuilder()
             .set("a", 1)
             .set("b", 2f)
             .set("c", 3.1f)
@@ -45,7 +45,7 @@ public class JsonObjectBuilderTest {
 
     @Test
     public void setBoolean() throws Exception {
-        JsonObject built = JsonObjectBuilder.go()
+        JsonObject built = new JsonObjectBuilder()
             .set("a", true)
             .set("b", false)
             .build();
@@ -59,8 +59,8 @@ public class JsonObjectBuilderTest {
 
     @Test
     public void setJsonElement() throws Exception {
-        JsonObject built = JsonObjectBuilder.go()
-            .set("a", JsonObjectBuilder.go().set("x", 1).build())
+        JsonObject built = new JsonObjectBuilder()
+            .set("a", new JsonObjectBuilder().set("x", 1).build())
             .set("b", JsonArrayBuilder.start().add("something").build())
             .set("c", new JsonPrimitive(1))
             .build();
@@ -81,7 +81,7 @@ public class JsonObjectBuilderTest {
 
     @Test
     public void setBuildImmutable() throws Exception {
-        JsonObjectBuilder builder = JsonObjectBuilder.go();
+        JsonObjectBuilder builder = new JsonObjectBuilder();
         JsonObject jsonObject1 = builder
             .set("a", 1)
             .build();
@@ -103,7 +103,7 @@ public class JsonObjectBuilderTest {
 
     @Test
     public void setNull() throws Exception {
-        JsonObject built = JsonObjectBuilder.go()
+        JsonObject built = new JsonObjectBuilder()
             .setNull("a")
             .build();
 
@@ -115,10 +115,10 @@ public class JsonObjectBuilderTest {
 
     @Test
     public void merge() throws Exception {
-        JsonObject built = JsonObjectBuilder.go()
+        JsonObject built = new JsonObjectBuilder()
             .set("a", 1)
             .set("b", "b")
-            .merge(JsonObjectBuilder.go()
+            .merge(new JsonObjectBuilder()
                 .set("b", "b2")
                 .set("c", true)
                 .build()
