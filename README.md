@@ -249,6 +249,42 @@ instead of
 }
 ```
 
+### JsonObject and JsonArray builders
+Makes it easy to build json elements without using temporary variables to store them
+
+The following code:
+```java
+JsonObject builtObject = new JsonObjectBuilder()
+    .set("name", "Company, inc")
+    .set("offices", new JsonArrayBuilder()
+        .add(new JsonObjectBuilder()
+            .set("zip", 10001)
+            .set("name", "Manhattan")
+        )
+        .add(new JsonObjectBuilder()
+            .set("zip", 11214)
+            .set("name", "Brooklyn")
+        )
+    ).build();
+```
+
+Produces the following json:
+```json
+{
+	"name": "Company, inc",
+	"offices": [
+	    {
+		    "zip": 10001,
+		    "name": "Manhattan"
+	    },
+	    {
+	    	"zip": 11214,
+	    	"name": "Brooklyn"
+	    }
+	]
+}
+```
+
 ## Using the Gson's GsonBuilder
 
 To access the good old GsonBuilder:
