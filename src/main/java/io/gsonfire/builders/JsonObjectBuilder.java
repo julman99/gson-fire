@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by julio on 8/18/16.
  */
-public class JsonObjectBuilder {
+public final class JsonObjectBuilder {
 
     private final JsonObject object = new JsonObject();
 

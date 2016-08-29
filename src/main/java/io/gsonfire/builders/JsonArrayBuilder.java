@@ -7,7 +7,7 @@ import io.gsonfire.util.JsonUtils;
 /**
  * Created by julio on 8/18/16.
  */
-public class JsonArrayBuilder {
+public final class JsonArrayBuilder {
 
     private final JsonArray array = new JsonArray();
 
