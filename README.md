@@ -309,6 +309,13 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.6.0
+
+- Adds hepers to wrap/unwrap json objects automatically. Thanks [@andressanchez](https://github.com/andressanchez)!
+- Uses Gson 2.7
+- Using the new available Gson.getFieldNamingStrategy method instead of reflection
+- Adds builders for JsonObject and JsonArray
+
 ### 1.5.1
 
 - Fixed a bug in which NullPointerExceptions were thrown when using hooks [#25](https://github.com/julman99/gson-fire/issues/25). Thanks [@knezmilos13](https://github.com/knezmilos13)   
