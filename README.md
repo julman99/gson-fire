@@ -375,7 +375,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.5.1</version>
+      <version>1.6.0</version>
     </dependency>
 </dependencies>
 ```
@@ -385,7 +385,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.5.1'
+    compile 'io.gsonfire:gson-fire:1.6.0'
 }
 ```
 
