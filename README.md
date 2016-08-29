@@ -311,10 +311,10 @@ Gson gson = gsonBuilder.create()
 
 ### 1.6.0
 
-- Adds hepers to wrap/unwrap json objects automatically. Thanks [@andressanchez](https://github.com/andressanchez)!
-- Uses Gson 2.7
+- New feature: wrap/unwrap json objects automatically. Thanks [@andressanchez](https://github.com/andressanchez)!
+- New feature: Adds builders for JsonObject and JsonArray
+- Using Gson 2.7
 - Using the new available Gson.getFieldNamingStrategy method instead of reflection
-- Adds builders for JsonObject and JsonArray
 
 ### 1.5.1
 
