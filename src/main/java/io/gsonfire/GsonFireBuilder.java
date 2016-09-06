@@ -197,6 +197,14 @@ public final class GsonFireBuilder {
         return this;
     }
 
+    /**
+     * Makes Gson not to throw an Exception when an enum cannot be parsed. Instead, it will parse it with
+     * the defaultValue specified as parameter
+     * @param enumClass
+     * @param defaultValue
+     * @param <T>
+     * @return
+     */
     public <T extends Enum> GsonFireBuilder softParseEnum(Class<T> enumClass, T defaultValue) {
         this.enumDefaultValues.put(enumClass, defaultValue);
         return this;
