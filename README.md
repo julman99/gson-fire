@@ -248,6 +248,25 @@ instead of
   field: "v1"
 }
 ```
+### Soft parsing enums
+Allows you to define default values when parsing Enums
+
+Imagine this Enum:
+```java
+public enum MyEnum {
+    one, two, three, other
+}
+```
+
+And this Gson instance:
+```java
+
+Gson gson = new GsonFireBuilder()
+    .softParseEnum(MyEnum.class, MyEnum.other)
+    .createGson();
+```
+
+If you try to parse the string `"four"` as the type `MyEnum`, instead of getting an Exception, it will be parsed as the `MyEnum.other`
 
 ### JsonObject and JsonArray builders
 Makes it easy to build json elements without using temporary variables to store them
@@ -308,6 +327,10 @@ Gson gson = gsonBuilder.create()
 ```
 
 ## Release notes
+
+### 1.7.0
+
+- New feature: Soft parsing of Enums! Thanks [@rubioz](https://github.com/rubioz) for the idea!
 
 ### 1.6.0
 
