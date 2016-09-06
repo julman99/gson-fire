@@ -199,7 +199,7 @@ public final class GsonFireBuilder {
 
     /**
      * Makes Gson not to throw an Exception when an enum cannot be parsed. Instead, it will parse it with
-     * the defaultValue specified as parameter
+     * the <code>defaultValue</code> specified as parameter. The <code>defaultValue</code> can be null.
      * @param enumClass
      * @param defaultValue
      * @param <T>

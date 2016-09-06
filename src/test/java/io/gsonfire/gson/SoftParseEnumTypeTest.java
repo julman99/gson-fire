@@ -25,6 +25,18 @@ public class SoftParseEnumTypeTest {
     }
 
     @Test
+    public void testParseToNull() {
+        Gson gson = new GsonFireBuilder()
+            .softParseEnum(MyEnum.class, null)
+            .createGson();
+
+        assertEquals(MyEnum.one, gson.fromJson(new JsonPrimitive("one"), MyEnum.class));
+        assertEquals(MyEnum.two, gson.fromJson(new JsonPrimitive("two"), MyEnum.class));
+        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("three"), MyEnum.class));
+        assertEquals(null, gson.fromJson(new JsonPrimitive("four"), MyEnum.class));
+    }
+
+    @Test
     public void testSerialize() {
         Gson gsonWithSoftParse = new GsonFireBuilder()
             .softParseEnum(MyEnum.class, MyEnum.other)
