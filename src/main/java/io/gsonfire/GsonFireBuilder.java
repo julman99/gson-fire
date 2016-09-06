@@ -20,6 +20,7 @@ public final class GsonFireBuilder {
     private final List<Class> orderedClasses = new ArrayList<Class>();
     private final List<FireExclusionStrategy> serializationExclusions = new ArrayList<FireExclusionStrategy>();
     private final FieldInspector fieldInspector = new FieldInspector();
+    private final Map<Class, Enum> enumDefaultValues = new HashMap<Class, Enum>();
 
     private DateSerializationPolicy dateSerializationPolicy;
     private boolean dateDeserializationStrict = true;
@@ -196,6 +197,11 @@ public final class GsonFireBuilder {
         return this;
     }
 
+    public <T extends Enum> GsonFireBuilder softParseEnum(Class<T> enumClass, T defaultValue) {
+        this.enumDefaultValues.put(enumClass, defaultValue);
+        return this;
+    }
+
     public GsonFireBuilder addSerializationExclusionStrategy(FireExclusionStrategy exclusionStrategy) {
         this.serializationExclusions.add(exclusionStrategy);
         return this;
@@ -223,6 +229,10 @@ public final class GsonFireBuilder {
                 builder.registerTypeAdapterFactory(new TypeSelectorTypeAdapterFactory(config));
             }
             builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
+        }
+
+        for(Map.Entry<Class, Enum> enumDefault: enumDefaultValues.entrySet()) {
+            builder.registerTypeAdapter(enumDefault.getKey(), new SoftParseEnumTypeAdapter(enumDefault.getKey(), enumDefault.getValue()));
         }
 
         if(dateSerializationPolicy != null){
