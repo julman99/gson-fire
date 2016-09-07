@@ -249,7 +249,7 @@ instead of
 }
 ```
 ### Soft parsing enums
-Allows you to define default values when parsing Enums
+Allows you to define default values when parsing an enum in case the string representation does not map to any of the enum values
 
 Imagine this Enum:
 ```java
@@ -262,11 +262,11 @@ And this Gson instance:
 ```java
 
 Gson gson = new GsonFireBuilder()
-    .softParseEnum(MyEnum.class, MyEnum.other)
+    .softEnum(MyEnum.class, MyEnum.other)
     .createGson();
 ```
 
-If you try to parse the string `"four"` as the type `MyEnum`, instead of getting an Exception, it will be parsed as the `MyEnum.other`
+If you try to parse, for example, the string `"four"` as the type `MyEnum`, instead of getting an Exception, it will be parsed as the `MyEnum.other`
 
 ### JsonObject and JsonArray builders
 Makes it easy to build json elements without using temporary variables to store them
