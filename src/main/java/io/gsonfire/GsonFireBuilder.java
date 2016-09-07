@@ -206,7 +206,7 @@ public final class GsonFireBuilder {
      * @param <T>
      * @return
      */
-    public <T extends Enum> GsonFireBuilder softParseEnum(Class<T> enumClass, T defaultValue) {
+    public <T extends Enum> GsonFireBuilder softEnum(Class<T> enumClass, T defaultValue) {
         this.enumDefaultValues.put(enumClass, defaultValue);
         return this;
     }
