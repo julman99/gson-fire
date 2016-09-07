@@ -241,7 +241,9 @@ public final class GsonFireBuilder {
         }
 
         for(Map.Entry<Class, Enum> enumDefault: enumDefaultValues.entrySet()) {
-            builder.registerTypeAdapter(enumDefault.getKey(), new SoftParseEnumTypeAdapter(enumDefault.getKey(), enumDefault.getValue()));
+            builder.registerTypeAdapter(enumDefault.getKey(),
+                new NullableTypeAdapter(new SoftParseEnumTypeAdapter(enumDefault.getKey(), enumDefault.getValue()))
+            );
         }
 
         if(dateSerializationPolicy != null){

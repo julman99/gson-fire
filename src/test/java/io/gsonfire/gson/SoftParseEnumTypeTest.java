@@ -1,6 +1,7 @@
 package io.gsonfire.gson;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
 import io.gsonfire.GsonFireBuilder;
 import org.junit.Test;
@@ -53,6 +54,15 @@ public class SoftParseEnumTypeTest {
         assertEquals(gsonNonSoftParse.toJson(MyEnum.other), gsonWithSoftParse.toJson(MyEnum.other));
     }
 
+    @Test
+    public void testNull() {
+        Gson gson = new GsonFireBuilder()
+            .softEnum(MyEnum.class, MyEnum.other)
+            .createGson();
+
+        assertEquals(null, gson.fromJson(JsonNull.INSTANCE, MyEnum.class));
+        assertEquals(JsonNull.INSTANCE, gson.toJsonTree(null, MyEnum.class));
+    }
 
     public enum MyEnum {
         one, two, three, other
