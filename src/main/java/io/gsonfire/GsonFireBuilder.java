@@ -198,8 +198,9 @@ public final class GsonFireBuilder {
     }
 
     /**
-     * Makes Gson not to throw an Exception when an enum cannot be parsed. Instead, it will parse it with
-     * the <code>defaultValue</code> specified as parameter. The <code>defaultValue</code> can be null.
+     * Makes Gson not to throw an Exception when an enum cannot be parsed because its String representation does not match
+     * any of the enum values. Instead, the <code>defaultValue</code> specified as parameter will be used.
+     * The <code>defaultValue</code> can be null.
      * @param enumClass
      * @param defaultValue
      * @param <T>
