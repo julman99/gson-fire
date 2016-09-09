@@ -248,7 +248,7 @@ instead of
   field: "v1"
 }
 ```
-### Soft parsing enums
+### Enum default values
 Allows you to define default values when parsing an enum in case the string representation does not map to any of the enum values
 
 Imagine this Enum:
@@ -266,7 +266,7 @@ Gson gson = new GsonFireBuilder()
     .createGson();
 ```
 
-If you try to parse, for example, the string `"four"` as the type `MyEnum`, instead of getting an Exception, it will be parsed as the `MyEnum.other`
+If you try to parse, for example, the string `"four"` as the type `MyEnum`, instead of getting `null`, it will be parsed as the `MyEnum.other`
 
 ### JsonObject and JsonArray builders
 Makes it easy to build json elements without using temporary variables to store them
@@ -327,6 +327,11 @@ Gson gson = gsonBuilder.create()
 ```
 
 ## Release notes
+
+### 1.7.2
+
+- Breaking change: softParse was renamed to enumDefaultValue
+- enumDefaultValue now just decorates Gson's internal enum support
 
 ### 1.7.1
 
