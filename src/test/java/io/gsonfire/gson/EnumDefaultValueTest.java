@@ -3,6 +3,7 @@ package io.gsonfire.gson;
 import com.google.gson.Gson;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.annotations.SerializedName;
 import io.gsonfire.GsonFireBuilder;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by julio on 9/6/16.
  */
-public class SoftParseEnumTypeTest {
+public class EnumDefaultValueTest {
 
     @Test
     public void testParse() {
@@ -21,7 +22,7 @@ public class SoftParseEnumTypeTest {
 
         assertEquals(MyEnum.one, gson.fromJson(new JsonPrimitive("one"), MyEnum.class));
         assertEquals(MyEnum.two, gson.fromJson(new JsonPrimitive("two"), MyEnum.class));
-        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("three"), MyEnum.class));
+        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("3"), MyEnum.class));
         assertEquals(MyEnum.other, gson.fromJson(new JsonPrimitive("four"), MyEnum.class));
     }
 
@@ -33,7 +34,7 @@ public class SoftParseEnumTypeTest {
 
         assertEquals(MyEnum.one, gson.fromJson(new JsonPrimitive("one"), MyEnum.class));
         assertEquals(MyEnum.two, gson.fromJson(new JsonPrimitive("two"), MyEnum.class));
-        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("three"), MyEnum.class));
+        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("3"), MyEnum.class));
         assertEquals(null, gson.fromJson(new JsonPrimitive("four"), MyEnum.class));
     }
 
@@ -45,7 +46,6 @@ public class SoftParseEnumTypeTest {
 
 
         Gson gsonNonSoftParse = new GsonFireBuilder()
-            .softEnum(MyEnum.class, MyEnum.other)
             .createGson();
 
         assertEquals(gsonNonSoftParse.toJson(MyEnum.one), gsonWithSoftParse.toJson(MyEnum.one));
@@ -65,7 +65,7 @@ public class SoftParseEnumTypeTest {
     }
 
     public enum MyEnum {
-        one, two, three, other
+        one, two, @SerializedName("3") three, other
     }
 
 
