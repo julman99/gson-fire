@@ -2,6 +2,7 @@ package io.gsonfire;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import io.gsonfire.gson.*;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
 import io.gsonfire.postprocessors.methodinvoker.MethodInvokerPostProcessor;
@@ -11,6 +12,7 @@ import io.gsonfire.util.reflection.Factory;
 import io.gsonfire.util.reflection.FieldInspector;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @autor: julio
@@ -223,6 +225,7 @@ public final class GsonFireBuilder {
      * @return
      */
     public GsonBuilder createGsonBuilder(){
+        Set<TypeToken> alreadyResolvedTypeTokensRegistry = Collections.newSetFromMap(new ConcurrentHashMap<TypeToken, Boolean>());
         GsonBuilder builder = new GsonBuilder();
 
         if(enableExposeMethodResults) {
@@ -237,7 +240,7 @@ public final class GsonFireBuilder {
         for(Class clazz: orderedClasses){
             ClassConfig config = classConfigMap.get(clazz);
             if(config.getTypeSelector() != null) {
-                builder.registerTypeAdapterFactory(new TypeSelectorTypeAdapterFactory(config));
+                builder.registerTypeAdapterFactory(new TypeSelectorTypeAdapterFactory(config, alreadyResolvedTypeTokensRegistry));
             }
             builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
         }

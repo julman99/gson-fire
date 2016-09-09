@@ -70,7 +70,7 @@ public class TypeSelectorTest {
         Assert.assertTrue(bb instanceof B);
         Assert.assertEquals("im b", ((B)bb).b);
 
-        Assert.assertTrue(cc.a instanceof AA);
+        Assert.assertTrue(cc.a instanceof A);
         Assert.assertEquals("im aa", ((AA)c.a).aa);
         Assert.assertEquals("im a(subclass)", ((AA)c.a).a);
 

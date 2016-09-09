@@ -8,6 +8,7 @@ import io.gsonfire.ClassConfig;
 import io.gsonfire.TypeSelector;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Creates a {@link TypeAdapter} that will run the {@link TypeSelector} and find the {@link TypeAdapter} for the selected
@@ -16,13 +17,18 @@ import java.io.IOException;
 public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
 
     private final ClassConfig<T> classConfig;
+    private final Set<TypeToken> alreadyResolvedTypeTokensRegistry;
 
-    public TypeSelectorTypeAdapterFactory(ClassConfig<T> classConfig) {
+    public TypeSelectorTypeAdapterFactory(ClassConfig<T> classConfig, Set<TypeToken> alreadyResolvedTypeTokensRegistry) {
         this.classConfig = classConfig;
+        this.alreadyResolvedTypeTokensRegistry = alreadyResolvedTypeTokensRegistry;
     }
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+        if(alreadyResolvedTypeTokensRegistry.contains(type)) {
+            return null;
+        }
         if(classConfig.getConfiguredClass().isAssignableFrom(type.getRawType())){
             TypeAdapter<T> fireTypeAdapter =
                 new NullableTypeAdapter<T>(
@@ -59,7 +65,15 @@ public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
             if(deserialize == null) {
                 deserialize = superClass;
             }
-            TypeAdapter otherTypeAdapter = gson.getDelegateAdapter(TypeSelectorTypeAdapterFactory.this, TypeToken.get(deserialize));
+            TypeToken typeToken = TypeToken.get(deserialize);
+            alreadyResolvedTypeTokensRegistry.add(typeToken);
+            TypeAdapter otherTypeAdapter;
+            if(deserialize != superClass) {
+                otherTypeAdapter = gson.getAdapter(typeToken);
+            } else {
+                otherTypeAdapter = gson.getDelegateAdapter(TypeSelectorTypeAdapterFactory.this, typeToken);
+            }
+            alreadyResolvedTypeTokensRegistry.remove(typeToken);
             return (T) otherTypeAdapter.fromJsonTree(json);
         }
     }
