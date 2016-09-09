@@ -198,15 +198,14 @@ public final class GsonFireBuilder {
     }
 
     /**
-     * Makes Gson not to throw an Exception when an enum cannot be parsed because its String representation does not match
-     * any of the enum values. Instead, the <code>defaultValue</code> specified as parameter will be used.
+     * Defines a default value for an enum when its String representation does not match any of the enum values.
      * The <code>defaultValue</code> can be null.
      * @param enumClass
      * @param defaultValue
      * @param <T>
      * @return
      */
-    public <T extends Enum> GsonFireBuilder softEnum(Class<T> enumClass, T defaultValue) {
+    public <T extends Enum> GsonFireBuilder enumDefaultValue(Class<T> enumClass, T defaultValue) {
         this.enumDefaultValues.put(enumClass, defaultValue);
         return this;
     }

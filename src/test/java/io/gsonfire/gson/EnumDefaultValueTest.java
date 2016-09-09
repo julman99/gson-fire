@@ -3,7 +3,6 @@ package io.gsonfire.gson;
 import com.google.gson.Gson;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.annotations.SerializedName;
 import io.gsonfire.GsonFireBuilder;
 import org.junit.Test;
 
@@ -17,31 +16,31 @@ public class EnumDefaultValueTest {
     @Test
     public void testParse() {
         Gson gson = new GsonFireBuilder()
-            .softEnum(MyEnum.class, MyEnum.other)
+            .enumDefaultValue(MyEnum.class, MyEnum.other)
             .createGson();
 
         assertEquals(MyEnum.one, gson.fromJson(new JsonPrimitive("one"), MyEnum.class));
         assertEquals(MyEnum.two, gson.fromJson(new JsonPrimitive("two"), MyEnum.class));
-        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("3"), MyEnum.class));
+        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("three"), MyEnum.class));
         assertEquals(MyEnum.other, gson.fromJson(new JsonPrimitive("four"), MyEnum.class));
     }
 
     @Test
     public void testParseToNull() {
         Gson gson = new GsonFireBuilder()
-            .softEnum(MyEnum.class, null)
+            .enumDefaultValue(MyEnum.class, null)
             .createGson();
 
         assertEquals(MyEnum.one, gson.fromJson(new JsonPrimitive("one"), MyEnum.class));
         assertEquals(MyEnum.two, gson.fromJson(new JsonPrimitive("two"), MyEnum.class));
-        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("3"), MyEnum.class));
+        assertEquals(MyEnum.three, gson.fromJson(new JsonPrimitive("three"), MyEnum.class));
         assertEquals(null, gson.fromJson(new JsonPrimitive("four"), MyEnum.class));
     }
 
     @Test
     public void testSerialize() {
         Gson gsonWithSoftParse = new GsonFireBuilder()
-            .softEnum(MyEnum.class, MyEnum.other)
+            .enumDefaultValue(MyEnum.class, MyEnum.other)
             .createGson();
 
 
@@ -57,7 +56,7 @@ public class EnumDefaultValueTest {
     @Test
     public void testNull() {
         Gson gson = new GsonFireBuilder()
-            .softEnum(MyEnum.class, MyEnum.other)
+            .enumDefaultValue(MyEnum.class, MyEnum.other)
             .createGson();
 
         assertEquals(null, gson.fromJson(JsonNull.INSTANCE, MyEnum.class));
@@ -65,7 +64,7 @@ public class EnumDefaultValueTest {
     }
 
     public enum MyEnum {
-        one, two, @SerializedName("3") three, other
+        one, two, three, other
     }
 
 
