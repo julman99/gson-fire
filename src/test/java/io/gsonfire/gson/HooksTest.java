@@ -40,6 +40,22 @@ public class HooksTest {
     }
 
     @Test
+    public void testRecursion() {
+        B b = new B(0);
+        b.b = new B(10);
+
+        Gson gson = new GsonFireBuilder().enableHooks(B.class).createGson();
+        JsonObject bjson = gson.toJsonTree(b).getAsJsonObject();
+
+        assertEquals(1, bjson.get("count").getAsInt());
+        assertEquals(11, bjson.get("b").getAsJsonObject().get("count").getAsInt());
+
+        B b2 = gson.fromJson(bjson, B.class);
+        assertEquals(0, b2.get());
+        assertEquals(10, b2.b.get());
+    }
+
+    @Test
     public void testNull(){
         Gson gson = new GsonFireBuilder().enableHooks(A.class).createGson();
         JsonElement json = gson.toJsonTree(null, A.class);
@@ -79,7 +95,8 @@ public class HooksTest {
 
         @PostDeserialize
         public void setNonSerializable(Gson gson, JsonElement jsonElement){
-            this.nonSerializable = jsonElement.getAsJsonObject().get("nonSerializable").getAsInt();
+            JsonElement nonSerializable = jsonElement.getAsJsonObject().get("nonSerializable");
+            this.nonSerializable = nonSerializable == null ? -1 : nonSerializable.getAsInt();
             this.gson = gson;
         }
 
@@ -93,6 +110,14 @@ public class HooksTest {
 
         public Gson getGson() {
             return gson;
+        }
+    }
+
+    private class B extends A {
+        public B b;
+
+        private B(int count) {
+            super(count);
         }
     }
 }
