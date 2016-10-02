@@ -6,6 +6,8 @@ import io.gsonfire.gson.*;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
 import io.gsonfire.postprocessors.methodinvoker.MethodInvokerPostProcessor;
 import io.gsonfire.util.Mapper;
+import io.gsonfire.util.reflection.CachedReflectionFactory;
+import io.gsonfire.util.reflection.Factory;
 import io.gsonfire.util.reflection.FieldInspector;
 
 import java.util.*;
@@ -20,6 +22,7 @@ public final class GsonFireBuilder {
     private final List<Class> orderedClasses = new ArrayList<Class>();
     private final List<FireExclusionStrategy> serializationExclusions = new ArrayList<FireExclusionStrategy>();
     private final FieldInspector fieldInspector = new FieldInspector();
+    private final Factory factory = new CachedReflectionFactory();
     private final Map<Class, Enum> enumDefaultValues = new HashMap<Class, Enum>();
 
     private DateSerializationPolicy dateSerializationPolicy;
@@ -228,7 +231,7 @@ public final class GsonFireBuilder {
         }
 
         if(enableExclusionByValueStrategies) {
-            builder.registerTypeAdapterFactory(new ExcludeByValueTypeAdapterFactory(fieldInspector));
+            builder.registerTypeAdapterFactory(new ExcludeByValueTypeAdapterFactory(fieldInspector, factory));
         }
 
         for(Class clazz: orderedClasses){

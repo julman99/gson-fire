@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.gsonfire.annotations.ExcludeByValue;
 import io.gsonfire.util.FieldNameResolver;
+import io.gsonfire.util.reflection.Factory;
 import io.gsonfire.util.reflection.FieldInspector;
 
 import java.io.IOException;
@@ -17,11 +18,13 @@ import java.lang.reflect.Field;
 public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactory {
 
     private final FieldInspector fieldInspector;
+    private final Factory factory;
 
     private FieldNameResolver fieldNameResolver = null;
 
-    public ExcludeByValueTypeAdapterFactory(FieldInspector fieldInspector) {
+    public ExcludeByValueTypeAdapterFactory(FieldInspector fieldInspector, Factory factory) {
         this.fieldInspector = fieldInspector;
+        this.factory = factory;
     }
 
     @Override
@@ -56,7 +59,7 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
                         ExcludeByValue excludeByValue = f.getAnnotation(ExcludeByValue.class);
                         Class<? extends ExclusionByValueStrategy> exclusionByValueStrategyClass = excludeByValue.value();
 
-                        ExclusionByValueStrategy strategy = exclusionByValueStrategyClass.newInstance();
+                        ExclusionByValueStrategy strategy = factory.get(exclusionByValueStrategyClass);
                         if (strategy.shouldSkipField(f.get(src))) {
                             String fieldName = fieldNameResolver.getFieldName(f);
                             if (fieldName != null) {
@@ -76,8 +79,6 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
                             }
                         }
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    } catch (InstantiationException e) {
                         throw new RuntimeException(e);
                     }
                 }
