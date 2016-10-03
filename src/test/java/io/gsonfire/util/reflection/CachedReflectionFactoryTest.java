@@ -17,8 +17,13 @@ public class CachedReflectionFactoryTest {
         Object obj2 = factory.get(Object.class);
         Object obj3 = factory.get(HashMap.class);
 
-        assertTrue(obj1 == obj2); //test cache
+        //Test cache
+        assertTrue(obj1 == obj2);
         assertTrue(obj1 != obj3);
+
+        //Test type of objects
+        assertTrue(obj1.getClass() == Object.class);
+        assertTrue(obj3.getClass() == HashMap.class);
     }
 
 
