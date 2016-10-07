@@ -68,12 +68,15 @@ public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
             TypeToken typeToken = TypeToken.get(deserialize);
             alreadyResolvedTypeTokensRegistry.add(typeToken);
             TypeAdapter otherTypeAdapter;
-            if(deserialize != superClass) {
-                otherTypeAdapter = gson.getAdapter(typeToken);
-            } else {
-                otherTypeAdapter = gson.getDelegateAdapter(TypeSelectorTypeAdapterFactory.this, typeToken);
+            try {
+                if (deserialize != superClass) {
+                    otherTypeAdapter = gson.getAdapter(typeToken);
+                } else {
+                    otherTypeAdapter = gson.getDelegateAdapter(TypeSelectorTypeAdapterFactory.this, typeToken);
+                }
+            } finally {
+                alreadyResolvedTypeTokensRegistry.remove(typeToken);
             }
-            alreadyResolvedTypeTokensRegistry.remove(typeToken);
             return (T) otherTypeAdapter.fromJsonTree(json);
         }
     }
