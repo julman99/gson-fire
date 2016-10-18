@@ -328,6 +328,11 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.8.0
+
+- Reusing the instances of `ExclusionByValueStrategy` instead of creating an instance each time it is used. Thanks [@Frotty](https://github.com/Frotty)
+- Fix The use of a type selector was preventing the GsonFire featues to be executed on the selected type. Thanks [a-a-davydov](https://github.com/a-a-davydov) and [@rubioz](https://github.com/rubioz)
+
 ### 1.7.2
 
 - Breaking change: softParse was renamed to enumDefaultValue
@@ -407,7 +412,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.7.2</version>
+      <version>1.8.0</version>
     </dependency>
 </dependencies>
 ```
@@ -417,7 +422,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.7.2'
+    compile 'io.gsonfire:gson-fire:1.8.0'
 }
 ```
 
