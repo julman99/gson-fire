@@ -32,6 +32,7 @@ public final class GsonFireBuilder {
     private TimeZone serializeTimeZone = TimeZone.getDefault();
     private boolean enableExposeMethodResults = false;
     private boolean enableExclusionByValueStrategies = false;
+    private Gson extendedGson = null;
 
     private ClassConfig getClassConfig(Class clazz){
         ClassConfig result = classConfigMap.get(clazz);
@@ -220,6 +221,11 @@ public final class GsonFireBuilder {
         return this;
     }
 
+    public GsonFireBuilder extendGson(Gson gson) {
+        extendedGson = gson;
+        return this;
+    }
+
     /**
      * Returns a new instance of the good old {@link GsonBuilder}
      * @return
@@ -255,6 +261,10 @@ public final class GsonFireBuilder {
 
         builder.registerTypeAdapterFactory(new SimpleIterableTypeAdapterFactory());
         builder.registerTypeAdapterFactory(new WrapTypeAdapterFactory(wrappedClasses));
+
+        if(extendedGson != null) {
+            builder.registerTypeAdapterFactory(new GsonExtenderTypeAdapterFactory(extendedGson));
+        }
 
         return builder;
     }
