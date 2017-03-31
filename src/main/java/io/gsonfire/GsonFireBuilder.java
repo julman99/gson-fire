@@ -234,6 +234,10 @@ public final class GsonFireBuilder {
         Set<TypeToken> alreadyResolvedTypeTokensRegistry = Collections.newSetFromMap(new ConcurrentHashMap<TypeToken, Boolean>());
         GsonBuilder builder = new GsonBuilder();
 
+        if(extendedGson != null) {
+            builder.registerTypeAdapterFactory(new GsonExtenderTypeAdapterFactory(extendedGson));
+        }
+
         if(enableExposeMethodResults) {
             FireExclusionStrategy compositeExclusionStrategy = new FireExclusionStrategyComposite(serializationExclusions);
             registerPostProcessor(Object.class, new MethodInvokerPostProcessor<Object>(compositeExclusionStrategy));
@@ -261,10 +265,6 @@ public final class GsonFireBuilder {
 
         builder.registerTypeAdapterFactory(new SimpleIterableTypeAdapterFactory());
         builder.registerTypeAdapterFactory(new WrapTypeAdapterFactory(wrappedClasses));
-
-        if(extendedGson != null) {
-            builder.registerTypeAdapterFactory(new GsonExtenderTypeAdapterFactory(extendedGson));
-        }
 
         return builder;
     }
