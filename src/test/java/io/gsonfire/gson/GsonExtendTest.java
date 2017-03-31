@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class GsonExtendTest {
 
     @Test
-    public void test() {
+    public void testValueFallback() {
         Gson gsonDefault = new Gson();
 
         Gson gsonInner = new GsonFireBuilder()
@@ -34,6 +34,28 @@ public class GsonExtendTest {
         Date date = new Date(timestamp);
 
         assertEquals(timestamp / 1000, gsonOuter.toJsonTree(date).getAsLong());
+        assertEquals(timestamp / 1000, gsonInner.toJsonTree(date).getAsLong());
+        assertEquals("Mar 25, 2017 5:57:04 PM", gsonDefault.toJsonTree(date).getAsString());
+    }
+
+    @Test
+    public void testValueOverrideSerialization() {
+        Gson gsonDefault = new Gson();
+
+        Gson gsonInner = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.unixTimeSeconds)
+            .createGson();
+
+
+        Gson gsonOuter = new GsonFireBuilder()
+            .extendGson(gsonInner)
+            .dateSerializationPolicy(DateSerializationPolicy.unixTimeMillis)
+            .createGson();
+
+        long timestamp = 1490479024000L;
+        Date date = new Date(timestamp);
+
+        assertEquals(timestamp, gsonOuter.toJsonTree(date).getAsLong());
         assertEquals(timestamp / 1000, gsonInner.toJsonTree(date).getAsLong());
         assertEquals("Mar 25, 2017 5:57:04 PM", gsonDefault.toJsonTree(date).getAsString());
     }
