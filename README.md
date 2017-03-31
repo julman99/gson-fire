@@ -268,6 +268,18 @@ Gson gson = new GsonFireBuilder()
 
 If you try to parse, for example, the string `"four"` as the type `MyEnum`, instead of getting `null`, it will be parsed as the `MyEnum.other`
 
+### Extend an existing Gson
+How many times you have a pre-configured Gson instance and you want to extend it? Now you can!
+
+```java
+Gson gson = new GsonFireBuilder()
+    .extendGson(otherGson)
+    //add more configurations here
+    .createGson();
+```
+
+The resulting `gson` will extend the `otherGson`
+
 ### JsonObject and JsonArray builders
 Makes it easy to build json elements without using temporary variables to store them
 
