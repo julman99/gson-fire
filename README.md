@@ -427,4 +427,4 @@ dependencies {
 ```
 
 ### Support this project
-**Bitcoin Address:** 1JZAo1rC2B7mkdJtyXfDXBxWpxkr5tXkow
+**Bitcoin Address:** `14LFRrMX3HmyAH9zQsnzYoVKDH6bVWiBu3`
