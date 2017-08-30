@@ -61,7 +61,7 @@ public class GsonExtendTest {
     }
 
     @Test
-    public void testObject() {
+    public void testAClass() {
         Gson gsonDefault = new GsonFireBuilder()
             .registerPostProcessor(AClass.class, new PostProcessor<AClass>() {
                 @Override
@@ -117,6 +117,50 @@ public class GsonExtendTest {
         assertEquals(1, json2WithDefault.get("a").getAsInt());
         assertEquals(1, json2WithOuter.get("a").getAsInt());
 
+    }
+
+    @Test
+    public void testObject() {
+
+        final StringBuilder invocation = new StringBuilder();
+
+        Gson gsonDefault = new GsonFireBuilder()
+            .registerPostProcessor(Object.class, new PostProcessor<Object>() {
+                @Override
+                public void postDeserialize(Object result, JsonElement src, Gson gson) {
+
+                }
+
+                @Override
+                public void postSerialize(JsonElement result, Object src, Gson gson) {
+                    invocation.append("A");
+                }
+            })
+            .createGson();
+
+        Gson gsonOuter = new GsonFireBuilder()
+            .extendGson(gsonDefault)
+            .registerPostProcessor(Object.class, new PostProcessor<Object>() {
+                @Override
+                public void postDeserialize(Object result, JsonElement src, Gson gson) {
+
+                }
+
+                @Override
+                public void postSerialize(JsonElement result, Object src, Gson gson) {
+                    invocation.append("B");
+                }
+            })
+            .createGson();
+
+
+//        gsonOuter.toJsonTree("SOME OBJECT");
+//        assertEquals("AB", invocation.toString());
+
+        invocation.delete(0, invocation.length());
+
+        gsonOuter.toJsonTree(new AClass());
+        assertEquals("AAABBB", invocation.toString());
     }
 
     private static class AClass {
