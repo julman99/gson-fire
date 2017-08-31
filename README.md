@@ -331,7 +331,7 @@ Gson gson = gsonBuilder.create()
 ### 1.8.0
 
 - Reusing the instances of `ExclusionByValueStrategy` instead of creating an instance each time it is used. Thanks [@Frotty](https://github.com/Frotty)
-- Fix The use of a type selector was preventing the GsonFire featues to be executed on the selected type. Thanks [a-a-davydov](https://github.com/a-a-davydov) and [@rubioz](https://github.com/rubioz)
+- Fix the use of a type selector was preventing the GsonFire featues to be executed on the selected type. Thanks [a-a-davydov](https://github.com/a-a-davydov) and [@rubioz](https://github.com/rubioz)
 
 ### 1.7.2
 
