@@ -62,9 +62,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.6</version>
                 <configuration>
-                    <keyname>ED7A3073</keyname>
+                    <keyname>CEEEC86D352AE2382EB7B3C278D3BC71ED7A3073</keyname>
                 </configuration>
                 <executions>
                     <execution>
