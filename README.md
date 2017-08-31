@@ -328,6 +328,11 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.8.1
+
+- Fixes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav ](https://github.com/Groostav)
+
+
 ### 1.8.0
 
 - Reusing the instances of `ExclusionByValueStrategy` instead of creating an instance each time it is used. Thanks [@Frotty](https://github.com/Frotty)
@@ -412,7 +417,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.8.0</version>
+      <version>1.8.1</version>
     </dependency>
 </dependencies>
 ```
@@ -422,7 +427,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.8.0'
+    compile 'io.gsonfire:gson-fire:1.8.1'
 }
 ```
 
