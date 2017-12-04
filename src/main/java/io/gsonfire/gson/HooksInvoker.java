@@ -49,9 +49,9 @@ public final class HooksInvoker {
                 try {
                     m.invoke(obj, new HooksInvokerValueSupplier(jsonElement, gson));
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new HookInvocationException("Exception during hook invocation: " + annotation.getSimpleName(), e);
                 } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                    throw new HookInvocationException("Exception during hook invocation: " + annotation.getSimpleName(), e.getTargetException());
                 }
             }
         }
