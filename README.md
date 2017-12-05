@@ -148,6 +148,8 @@ Gson builder = new GsonFireBuilder()
 Gson gson = builder.createGson();
 ```
 
+Any `Exception` thrown inside the hooks will be wrapped into a `HookInvocationException`
+
 ### Iterable Serialization
 
 By default Gson does not serializes ```Iterable``` implementations. Gson on Fire provides a wrapper class called 
@@ -335,7 +337,8 @@ Gson gson = gsonBuilder.create()
 
 ### 1.8.1
 
-- Fixes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav ](https://github.com/Groostav)
+- Fiooks
+xes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav ](https://github.com/Groostav)
 
 
 ### 1.8.0
