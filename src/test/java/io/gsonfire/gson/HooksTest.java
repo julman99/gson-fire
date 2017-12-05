@@ -4,9 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.gsonfire.GsonFireBuilder;
+import io.gsonfire.PostProcessor;
 import io.gsonfire.annotations.PostDeserialize;
 import io.gsonfire.annotations.PreSerialize;
+import io.gsonfire.builders.JsonObjectBuilder;
 import org.junit.Test;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -72,6 +76,43 @@ public class HooksTest {
 
         A a2 = gson.fromJson(json, A.class);
         assertEquals(0, a.get());
+    }
+
+    @Test
+    public void testPostDeserializeOrder(){
+        final AtomicInteger countWhenDeserialize = new AtomicInteger(0);
+        Gson gson = new GsonFireBuilder()
+            .registerPostProcessor(A.class, new PostProcessor<A>() {
+                @Override
+                public void postDeserialize(A result, JsonElement src, Gson gson) {
+                    countWhenDeserialize.set(result.get());
+                }
+
+                @Override
+                public void postSerialize(JsonElement result, A src, Gson gson) {
+
+                }
+            })
+            .enableHooks(A.class)
+            .registerPostProcessor(A.class, new PostProcessor<A>() {
+                @Override
+                public void postDeserialize(A result, JsonElement src, Gson gson) {
+                    countWhenDeserialize.set(result.get() + countWhenDeserialize.get());
+                }
+
+                @Override
+                public void postSerialize(JsonElement result, A src, Gson gson) {
+
+                }
+            })
+            .createGson();
+
+        JsonObject json = new JsonObjectBuilder()
+            .set("count", 1)
+            .build();
+
+        gson.fromJson(json, A.class);
+        assertEquals(0, countWhenDeserialize.get());
     }
 
     private class A{
