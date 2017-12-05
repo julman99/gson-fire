@@ -328,6 +328,11 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.8.2
+
+- Fixes [#34](https://github.com/julman99/gson-fire/issues/34). Hooks were not correctly bubbling up `Exceptions`, but instead they were printing and swallowing 🍔 them. Thanks [@Xyaren](https://github.com/Xyaren)
+
+
 ### 1.8.1
 
 - Fixes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav ](https://github.com/Groostav)
@@ -417,7 +422,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.8.1</version>
+      <version>1.8.2</version>
     </dependency>
 </dependencies>
 ```
@@ -427,7 +432,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.8.1'
+    compile 'io.gsonfire:gson-fire:1.8.2'
 }
 ```
 
