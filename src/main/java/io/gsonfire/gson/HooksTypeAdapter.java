@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * @autor: julio
  */
-public final class FireTypeAdapter<T> extends TypeAdapter<T> {
+public final class HooksTypeAdapter<T> extends TypeAdapter<T> {
 
     private final Class<T> clazz;
     private final ClassConfig<? super T> classConfig;
@@ -24,7 +24,7 @@ public final class FireTypeAdapter<T> extends TypeAdapter<T> {
     private final TypeAdapter<T> originalTypeAdapter;
     private final HooksInvoker hooksInvoker = new HooksInvoker();
 
-    public FireTypeAdapter(Class<T> classAdapter, ClassConfig<? super T> classConfig, TypeAdapter<T> originalTypeAdapter, Gson gson) {
+    public HooksTypeAdapter(Class<T> classAdapter, ClassConfig<? super T> classConfig, TypeAdapter<T> originalTypeAdapter, Gson gson) {
         this.classConfig = classConfig;
         this.gson = gson;
         this.originalTypeAdapter = originalTypeAdapter;

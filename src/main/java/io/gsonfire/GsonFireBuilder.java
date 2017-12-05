@@ -242,7 +242,7 @@ public final class GsonFireBuilder {
             if(config.getTypeSelector() != null) {
                 builder.registerTypeAdapterFactory(new TypeSelectorTypeAdapterFactory(config, alreadyResolvedTypeTokensRegistry));
             }
-            builder.registerTypeAdapterFactory(new FireTypeAdapterFactory(config));
+            builder.registerTypeAdapterFactory(new HooksTypeAdapterFactory(config));
         }
 
         for(Map.Entry<Class, Enum> enumDefault: enumDefaultValues.entrySet()) {

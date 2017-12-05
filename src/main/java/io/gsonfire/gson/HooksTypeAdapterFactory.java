@@ -9,11 +9,11 @@ import io.gsonfire.ClassConfig;
 /**
  * @autor: julio
  */
-public final class FireTypeAdapterFactory<T> implements TypeAdapterFactory {
+public final class HooksTypeAdapterFactory<T> implements TypeAdapterFactory {
 
     private final ClassConfig<T> classConfig;
 
-    public FireTypeAdapterFactory(ClassConfig<T> classConfig) {
+    public HooksTypeAdapterFactory(ClassConfig<T> classConfig) {
         this.classConfig = classConfig;
     }
 
@@ -21,8 +21,8 @@ public final class FireTypeAdapterFactory<T> implements TypeAdapterFactory {
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         if(classConfig.getConfiguredClass().isAssignableFrom(type.getRawType())){
             TypeAdapter<T> originalTypeAdapter = gson.getDelegateAdapter(this, type);
-            FireTypeAdapter<T> fireTypeAdapter = new FireTypeAdapter<T>((Class<T>)type.getRawType(), (ClassConfig<T>) classConfig, originalTypeAdapter, gson);
-            return fireTypeAdapter;
+            HooksTypeAdapter<T> hooksTypeAdapter = new HooksTypeAdapter<T>((Class<T>)type.getRawType(), (ClassConfig<T>) classConfig, originalTypeAdapter, gson);
+            return hooksTypeAdapter;
         } else {
             return null;
         }
