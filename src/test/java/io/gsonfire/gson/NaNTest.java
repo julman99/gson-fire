@@ -9,32 +9,33 @@ import io.gsonfire.TypeSelector;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NaNTest {
 
-    public static Gson getGson(boolean triggerBug) {
+    public static Gson getGson(boolean allowNan) {
         GsonFireBuilder builder = new GsonFireBuilder();
-        if (triggerBug) {
-            builder.registerPostProcessor(Buggy.class, new PostProcessor<Buggy>() {
-                @Override
-                public void postDeserialize(Buggy result, JsonElement src, Gson gson) {
+        builder.registerPostProcessor(Buggy.class, new PostProcessor<Buggy>() {
+            @Override
+            public void postDeserialize(Buggy result, JsonElement src, Gson gson) {
 
-                }
+            }
 
-                @Override
-                public void postSerialize(JsonElement result, Buggy src, Gson gson) {
+            @Override
+            public void postSerialize(JsonElement result, Buggy src, Gson gson) {
 
-                }
-            });
-            builder.registerTypeSelector(Object.class, new TypeSelector<Object>() {
-                @Override
-                public Class<?> getClassForElement(JsonElement readElement) {
-                    return null;
-                }
-            });
-        }
+            }
+        });
+        builder.registerTypeSelector(Object.class, new TypeSelector<Object>() {
+            @Override
+            public Class<?> getClassForElement(JsonElement readElement) {
+                return null;
+            }
+        });
         GsonBuilder gb = builder.createGsonBuilder();
-        gb.serializeSpecialFloatingPointValues();
+        if(allowNan) {
+            gb.serializeSpecialFloatingPointValues();
+        }
 
         Gson gson = gb.create();
         return gson;
@@ -42,13 +43,20 @@ public class NaNTest {
 
 
     @Test
-    public void testNan() {
+    public void testNanAllow() {
         Buggy fm = new Buggy();
         Gson gson = getGson(true);
         String json = gson.toJson(fm);
         assertEquals("{\"a\":NaN}", json);
         Buggy to = gson.fromJson(json, Buggy.class);
-        assertEquals(fm.a, to.a);
+        assertTrue(Double.compare(fm.a, to.a) == 0);
+    }
+
+    @Test(expected = java.lang.IllegalArgumentException.class)
+    public void testNanDisallowSerializing() {
+        Buggy fm = new Buggy();
+        Gson gson = getGson(false);
+        gson.toJson(fm);
     }
 
     public static class Buggy {

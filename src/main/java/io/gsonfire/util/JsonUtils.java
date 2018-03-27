@@ -1,7 +1,9 @@
 package io.gsonfire.util;
 
 import com.google.gson.*;
+import com.google.gson.internal.bind.JsonTreeReader;
 import com.google.gson.internal.bind.JsonTreeWriter;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
@@ -44,18 +46,19 @@ public class JsonUtils {
         }
     }
 
-    private static JsonTreeWriter createTreeWriter(JsonWriter optionsFrom) {
+    public static JsonElement toJsonTree(TypeAdapter typeAdapter, JsonWriter optionsFrom, Object value) throws IOException {
         JsonTreeWriter jsonTreeWriter = new JsonTreeWriter();
         jsonTreeWriter.setLenient(optionsFrom.isLenient());
         jsonTreeWriter.setHtmlSafe(optionsFrom.isHtmlSafe());
         jsonTreeWriter.setSerializeNulls(optionsFrom.getSerializeNulls());
-        return jsonTreeWriter;
-    }
-
-    public static JsonElement toJsonTree(TypeAdapter typeAdapter, JsonWriter jsonWriter, Object value) throws IOException {
-        JsonTreeWriter jsonTreeWriter = createTreeWriter(jsonWriter);
         typeAdapter.write(jsonTreeWriter, value);
         return jsonTreeWriter.get();
+    }
+
+    public static <T> T fromJsonTree(TypeAdapter<T> typeAdapter, JsonReader originalReader, JsonElement element) throws IOException {
+        JsonTreeReader jsonTreeReader = new JsonTreeReader(element);
+        jsonTreeReader.setLenient(originalReader.isLenient());
+        return typeAdapter.read(jsonTreeReader);
     }
 
 }

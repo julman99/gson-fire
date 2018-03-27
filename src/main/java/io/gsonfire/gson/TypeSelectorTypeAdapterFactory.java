@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.gsonfire.ClassConfig;
 import io.gsonfire.TypeSelector;
+import io.gsonfire.util.JsonUtils;
 
 import java.io.IOException;
 import java.util.Set;
@@ -65,9 +66,10 @@ public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
             if(deserialize == null) {
                 deserialize = superClass;
             }
+
             TypeToken typeToken = TypeToken.get(deserialize);
             alreadyResolvedTypeTokensRegistry.add(typeToken);
-            TypeAdapter otherTypeAdapter;
+            TypeAdapter<T> otherTypeAdapter;
             try {
                 if (deserialize != superClass) {
                     otherTypeAdapter = gson.getAdapter(typeToken);
@@ -77,7 +79,7 @@ public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
             } finally {
                 alreadyResolvedTypeTokensRegistry.remove(typeToken);
             }
-            return (T) otherTypeAdapter.fromJsonTree(json);
+            return JsonUtils.fromJsonTree(otherTypeAdapter, in, json);
         }
     }
 
