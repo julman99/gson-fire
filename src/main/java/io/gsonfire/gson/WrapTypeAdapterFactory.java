@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.gsonfire.util.JsonUtils;
 import io.gsonfire.util.Mapper;
 
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class WrapTypeAdapterFactory<T> implements TypeAdapterFactory {
                 originalTypeAdapter.write(out, src);
             } else {
                 final String value = mapper.map(src);
-                JsonElement unwrappedObj = originalTypeAdapter.toJsonTree(src);
+                JsonElement unwrappedObj = JsonUtils.toJsonTree(originalTypeAdapter, out, src);
                 JsonObject wrappedObj = new JsonObject();
                 wrappedObj.add(value, unwrappedObj);
                 gson.toJson(wrappedObj, out);

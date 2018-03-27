@@ -1,10 +1,10 @@
 package io.gsonfire.util;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
+import com.google.gson.internal.bind.JsonTreeWriter;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -42,6 +42,20 @@ public class JsonUtils {
         } else {
             return JsonNull.INSTANCE;
         }
+    }
+
+    private static JsonTreeWriter createTreeWriter(JsonWriter optionsFrom) {
+        JsonTreeWriter jsonTreeWriter = new JsonTreeWriter();
+        jsonTreeWriter.setLenient(optionsFrom.isLenient());
+        jsonTreeWriter.setHtmlSafe(optionsFrom.isHtmlSafe());
+        jsonTreeWriter.setSerializeNulls(optionsFrom.getSerializeNulls());
+        return jsonTreeWriter;
+    }
+
+    public static JsonElement toJsonTree(TypeAdapter typeAdapter, JsonWriter jsonWriter, Object value) throws IOException {
+        JsonTreeWriter jsonTreeWriter = createTreeWriter(jsonWriter);
+        typeAdapter.write(jsonTreeWriter, value);
+        return jsonTreeWriter.get();
     }
 
 }

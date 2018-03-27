@@ -55,7 +55,7 @@ public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
         @Override
         public void write(JsonWriter out, T value) throws IOException {
             TypeAdapter otherTypeAdapter = gson.getDelegateAdapter(TypeSelectorTypeAdapterFactory.this, TypeToken.get(value.getClass()));
-            gson.toJson(otherTypeAdapter.toJsonTree(value), out);
+            otherTypeAdapter.write(out, value);
         }
 
         @Override

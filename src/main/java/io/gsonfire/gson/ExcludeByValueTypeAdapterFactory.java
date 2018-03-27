@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.gsonfire.annotations.ExcludeByValue;
 import io.gsonfire.util.FieldNameResolver;
+import io.gsonfire.util.JsonUtils;
 import io.gsonfire.util.reflection.Factory;
 import io.gsonfire.util.reflection.FieldInspector;
 
@@ -67,11 +68,11 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
                                 //Now let's check if the JsonObject is in memory, if not we will get it
                                 //from the originalTypeAdapter
                                 if(postProcessedObject == null) {
-                                    JsonElement originalResult = originalTypeAdapter.toJsonTree(src);
+                                    JsonElement originalResult = JsonUtils.toJsonTree(originalTypeAdapter, out, src);
                                     if(originalResult == null || originalResult.isJsonNull() || !originalResult.isJsonObject()) {
                                         break;
                                     }
-                                    postProcessedObject = originalTypeAdapter.toJsonTree(src).getAsJsonObject();
+                                    postProcessedObject = originalResult.getAsJsonObject();
                                 }
 
                                 //Remove the excluded field

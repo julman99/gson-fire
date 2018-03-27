@@ -10,6 +10,7 @@ import com.google.gson.stream.JsonWriter;
 import io.gsonfire.ClassConfig;
 import io.gsonfire.PostProcessor;
 import io.gsonfire.PreProcessor;
+import io.gsonfire.util.JsonUtils;
 
 import java.io.IOException;
 
@@ -37,7 +38,7 @@ public final class HooksTypeAdapter<T> extends TypeAdapter<T> {
             hooksInvoker.preSerialize(value);
         }
 
-        JsonElement res = originalTypeAdapter.toJsonTree(value);
+        JsonElement res = JsonUtils.toJsonTree(originalTypeAdapter, out, value);
 
         //Run all the post serializers
         runPostSerialize(res, value);
