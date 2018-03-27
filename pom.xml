@@ -6,7 +6,7 @@
 
     <groupId>io.gsonfire</groupId>
     <artifactId>gson-fire</artifactId>
-    <version>1.8.2</version>
+    <version>1.9.0-alpha1</version>
 
     <name>Gson on Fire!</name>
     <description>
