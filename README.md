@@ -330,6 +330,10 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.8.3
+
+- Fixes [#39](https://github.com/julman99/gson-fire/issues/39). The `JsonTreeReader` and `JsonTreeWriter` used for the Pre/Post processors was not properly set up to mimic the original `JsonReader` or `JsonWriter`. Thanks [@daw3rd](https://github.com/daw3rd)
+
 ### 1.8.2
 
 - Fixes [#34](https://github.com/julman99/gson-fire/issues/34). Hooks were not correctly bubbling up `Exceptions`, but instead they were printing and swallowing 🍔 them. Thanks [@Xyaren](https://github.com/Xyaren)
@@ -424,7 +428,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.8.2</version>
+      <version>1.8.3</version>
     </dependency>
 </dependencies>
 ```
@@ -434,7 +438,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.8.2'
+    compile 'io.gsonfire:gson-fire:1.8.3'
 }
 ```
 
