@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public final class RFC3339DateFormat extends DateFormat {
 
     private static final Pattern TIMEZONE_PATTERN = Pattern.compile("(.*)([+-][0-9][0-9])\\:?([0-9][0-9])$");
-    private static final Pattern MILLISECONDS_PATTERN = Pattern.compile("(.*)\\.([0-9]+)(.*)");
+    private static final Pattern MILLISECONDS_PATTERN = Pattern.compile("(.*)\\.([0-9]{1,3})([0-9])*(.*)");
     private static final Pattern DATE_ONLY_PATTERN = Pattern.compile("^[0-9]{1,4}-[0-1][0-9]-[0-3][0-9]$");
 
     private final SimpleDateFormat rfc3339Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -65,7 +65,7 @@ public final class RFC3339DateFormat extends DateFormat {
             //Add milliseconds
             long time = date.getTime();
             if (time % 1000L != 0) {
-                String fraction = Long.toString((time % 1000L));
+                String fraction = String.format("%03d", time % 1000L);
                 formatted.append("." + fraction);
             }
 
@@ -93,7 +93,7 @@ public final class RFC3339DateFormat extends DateFormat {
             Matcher matcher = MILLISECONDS_PATTERN.matcher(source);
             String millisStr = matcher.replaceAll("$2");
             millis = Long.parseLong(millisStr);
-            source = matcher.replaceAll("$1") + matcher.replaceAll("$3");
+            source = matcher.replaceAll("$1") + matcher.replaceAll("$4");
         }
 
         //Filter ending in Z

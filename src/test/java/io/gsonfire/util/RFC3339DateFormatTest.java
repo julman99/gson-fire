@@ -42,6 +42,25 @@ public class RFC3339DateFormatTest {
     }
 
     @Test
+    public void testLeadingZeroFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.052Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);;
+        assertEquals(original, formatted);
+    }
+
+    @Test
+    public void testLongFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2017-01-01T01:01:01.123456789Z";
+        String expected = "2017-01-01T01:01:01.123Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(expected, formatted); 
+    }
+
+    @Test
     public void testParseLowerCase() throws ParseException {
         RFC3339DateFormat format = new RFC3339DateFormat();
         Date date = format.parse("2013-02-07t02:29:08.123z");
