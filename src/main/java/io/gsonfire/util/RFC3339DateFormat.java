@@ -67,7 +67,7 @@ public final class RFC3339DateFormat extends DateFormat {
             long millis = time % 1000L;
             if(millis > 0){
                 String fraction = String.format("%03d", millis);
-                formatted.append(".").append(fraction);
+                formatted.append("." + fraction);
             }
 
             //Timezone
