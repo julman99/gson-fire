@@ -95,12 +95,12 @@ public final class RFC3339DateFormat extends DateFormat {
             String millisStr = matcher.replaceAll("$2");
             int millisSize = millisStr.length();
 
-            long timeToMultiply = 1;
+            millis = Long.parseLong(millisStr);
+
             if (millisSize - 3 < 0) {
-                timeToMultiply = (long) Math.pow(10, 3 - millisSize);
+                millis = (long) (millis * Math.pow(10, 3 - millisSize));
             }
 
-            millis = Long.parseLong(millisStr) * timeToMultiply;
             source = matcher.replaceAll("$1") + matcher.replaceAll("$4");
         }
 
