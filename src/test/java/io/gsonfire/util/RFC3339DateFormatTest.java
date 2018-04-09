@@ -46,7 +46,7 @@ public class RFC3339DateFormatTest {
         RFC3339DateFormat format = new RFC3339DateFormat();
         String original = "2013-02-07T02:29:08.052Z";
         Date date = format.parse(original);
-        String formatted = format.format(date);;
+        String formatted = format.format(date);
         assertEquals(original, formatted);
     }
 
