@@ -6,9 +6,6 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @autor: julio
- */
 public final class RFC3339DateFormat extends DateFormat {
 
     private static final Pattern TIMEZONE_PATTERN = Pattern.compile("(.*)([+-][0-9][0-9])\\:?([0-9][0-9])$");
@@ -64,9 +61,10 @@ public final class RFC3339DateFormat extends DateFormat {
         if(this.serializeTime) {
             //Add milliseconds
             long time = date.getTime();
-            if (time % 1000L != 0) {
-                String fraction = String.format("%03d", time % 1000L);
-                formatted.append("." + fraction);
+            long millis = time % 1000L;
+            if(millis > 0){
+                String fraction = String.format("%03d", millis);
+                formatted.append(".").append(fraction);
             }
 
             //Timezone
@@ -92,7 +90,14 @@ public final class RFC3339DateFormat extends DateFormat {
         if(source.contains(".")){
             Matcher matcher = MILLISECONDS_PATTERN.matcher(source);
             String millisStr = matcher.replaceAll("$2");
-            millis = Long.parseLong(millisStr);
+            int millisSize = millisStr.length();
+
+            long timeToMultiply = 1;
+            if (millisSize - 3 < 0) {
+                timeToMultiply = (long) Math.pow(10, 3 - millisSize);
+            }
+
+            millis = Long.parseLong(millisStr) * timeToMultiply;
             source = matcher.replaceAll("$1") + matcher.replaceAll("$4");
         }
 
