@@ -64,8 +64,9 @@ public final class RFC3339DateFormat extends DateFormat {
         if(this.serializeTime) {
             //Add milliseconds
             long time = date.getTime();
-            if (time % 1000L != 0) {
-                String fraction = String.format("%03d", time % 1000L);
+            long millis = time % 1000L;
+            if(millis > 0){
+                String fraction = String.format("%03d", millis);
                 formatted.append("." + fraction);
             }
 
@@ -92,7 +93,14 @@ public final class RFC3339DateFormat extends DateFormat {
         if(source.contains(".")){
             Matcher matcher = MILLISECONDS_PATTERN.matcher(source);
             String millisStr = matcher.replaceAll("$2");
+            int millisSize = millisStr.length();
+
             millis = Long.parseLong(millisStr);
+
+            if (millisSize - 3 < 0) {
+                millis = (long) (millis * Math.pow(10, 3 - millisSize));
+            }
+
             source = matcher.replaceAll("$1") + matcher.replaceAll("$4");
         }
 

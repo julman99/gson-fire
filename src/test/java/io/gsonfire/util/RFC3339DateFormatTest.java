@@ -61,6 +61,72 @@ public class RFC3339DateFormatTest {
     }
 
     @Test
+    public void test2millisFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.2Z";
+        String expected = "2013-02-07T02:29:08.200Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(expected, formatted);
+    }
+
+    @Test
+    public void test22millisFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.22Z";
+        String expected = "2013-02-07T02:29:08.220Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(expected, formatted);
+    }
+
+    @Test
+    public void test002millisFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.002Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(original, formatted);
+    }
+
+    @Test
+    public void test022millisFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.022Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(original, formatted);
+    }
+
+    @Test
+    public void test020millisFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.020Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(original, formatted);
+    }
+
+    @Test
+    public void test222millisFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.222Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(original, formatted);
+    }
+
+    @Test
+    public void test202millisFraction() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String original = "2013-02-07T02:29:08.202Z";
+        Date date = format.parse(original);
+        String formatted = format.format(date);
+        assertEquals(original, formatted);
+    }
+
+
+    @Test
     public void testParseLowerCase() throws ParseException {
         RFC3339DateFormat format = new RFC3339DateFormat();
         Date date = format.parse("2013-02-07t02:29:08.123z");
