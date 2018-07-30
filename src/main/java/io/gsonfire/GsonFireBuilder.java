@@ -235,6 +235,7 @@ public final class GsonFireBuilder {
 
         if(enableExclusionByValueStrategies) {
             builder.registerTypeAdapterFactory(new ExcludeByValueTypeAdapterFactory(fieldInspector, factory));
+            builder.addSerializationExclusionStrategy(new ExcludeByValueTypeAdapterFactory.SerializationExclusionStrategy());
         }
 
         for(Class clazz: orderedClasses){

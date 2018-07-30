@@ -33,8 +33,13 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
         if(this.fieldNameResolver == null) {
             this.fieldNameResolver = new FieldNameResolver(gson);
         }
-        final TypeAdapter<T> originalTypeAdapter = gson.getDelegateAdapter(this, type);
-        return new ExcludeByValueTypeAdapter(gson, originalTypeAdapter);
+        boolean needsDecorating = fieldInspector.getAnnotatedMembers(type.getRawType(), ExcludeByValue.class).size() > 0;
+        if(needsDecorating) {
+            final TypeAdapter<T> originalTypeAdapter = gson.getDelegateAdapter(this, type);
+            return new ExcludeByValueTypeAdapter(gson, originalTypeAdapter);
+        } else {
+            return null;
+        }
     }
 
     private class ExcludeByValueTypeAdapter extends TypeAdapter {
@@ -53,7 +58,7 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
                 //if src is null there is nothing for this type adapter to do, delegate it to the original type adapter
                 originalTypeAdapter.write(out, src);
             } else {
-                JsonObject postProcessedObject = null; //if we detect there is something we should exclude, this will be !=null
+                JsonElement postProcessedObject = JsonUtils.toJsonTree(originalTypeAdapter, out, src);
 
                 for(Field f: fieldInspector.getAnnotatedMembers(src.getClass(), ExcludeByValue.class)){
                     try {
@@ -61,22 +66,12 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
                         Class<? extends ExclusionByValueStrategy> exclusionByValueStrategyClass = excludeByValue.value();
 
                         ExclusionByValueStrategy strategy = factory.get(exclusionByValueStrategyClass);
-                        if (strategy.shouldSkipField(f.get(src))) {
+                        Object fieldValue = f.get(src);
+                        if (!strategy.shouldSkipField(fieldValue)) {
                             String fieldName = fieldNameResolver.getFieldName(f);
                             if (fieldName != null) {
-                                //Here we know there is a field we should exclude
-                                //Now let's check if the JsonObject is in memory, if not we will get it
-                                //from the originalTypeAdapter
-                                if(postProcessedObject == null) {
-                                    JsonElement originalResult = JsonUtils.toJsonTree(originalTypeAdapter, out, src);
-                                    if(originalResult == null || originalResult.isJsonNull() || !originalResult.isJsonObject()) {
-                                        break;
-                                    }
-                                    postProcessedObject = originalResult.getAsJsonObject();
-                                }
-
-                                //Remove the excluded field
-                                postProcessedObject.remove(fieldName);
+                                JsonElement serializedFieldValue = gson.toJsonTree(fieldValue);
+                                postProcessedObject.getAsJsonObject().add(fieldName, serializedFieldValue);
                             }
                         }
                     } catch (IllegalAccessException e) {
@@ -97,6 +92,19 @@ public final class ExcludeByValueTypeAdapterFactory implements TypeAdapterFactor
         @Override
         public Object read(JsonReader in) throws IOException {
             return originalTypeAdapter.read(in);
+        }
+    }
+
+    public static class SerializationExclusionStrategy implements ExclusionStrategy {
+
+        @Override
+        public boolean shouldSkipField(FieldAttributes f) {
+            return f.getAnnotation(ExcludeByValue.class) != null;
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz) {
+            return false;
         }
     }
 
