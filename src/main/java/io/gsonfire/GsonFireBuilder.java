@@ -30,6 +30,7 @@ public final class GsonFireBuilder {
     private DateSerializationPolicy dateSerializationPolicy;
     private boolean dateDeserializationStrict = true;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
+    private boolean enableFieldTypeAdapters = false;
     private boolean enableExposeMethodResults = false;
     private boolean enableExclusionByValueStrategies = false;
 
@@ -147,6 +148,16 @@ public final class GsonFireBuilder {
     }
 
     /**
+     * By enabling this, GsonFire will allow annotating fields with {@link io.gsonfire.annotations.FieldTypeAdapter} to
+     * override the {@link com.google.gson.TypeAdapter} to be used when Serializing/Deserializing
+     * @return
+     */
+    public GsonFireBuilder enableFieldTypeAdapters(){
+        this.enableFieldTypeAdapters = true;
+        return this;
+    }
+
+    /**
      * By enabling this, all methods with the annotation {@link io.gsonfire.annotations.ExposeMethodResult} will
      * be evaluated and it result will be added to the resulting json
      * @return
@@ -227,6 +238,11 @@ public final class GsonFireBuilder {
     public GsonBuilder createGsonBuilder(){
         Set<TypeToken> alreadyResolvedTypeTokensRegistry = Collections.newSetFromMap(new ConcurrentHashMap<TypeToken, Boolean>());
         GsonBuilder builder = new GsonBuilder();
+
+        if(enableFieldTypeAdapters) {
+            builder.registerTypeAdapterFactory(new FieldTypeAdapterAdapterFactory(fieldInspector, factory));
+            builder.addSerializationExclusionStrategy(new FieldTypeAdapterAdapterFactory.SerializationExclusionStrategy());
+        }
 
         if(enableExposeMethodResults) {
             FireExclusionStrategy compositeExclusionStrategy = new FireExclusionStrategyComposite(serializationExclusions);
