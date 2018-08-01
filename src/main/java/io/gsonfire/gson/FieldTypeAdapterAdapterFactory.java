@@ -65,7 +65,10 @@ public class FieldTypeAdapterAdapterFactory implements TypeAdapterFactory {
                         Class<? extends TypeAdapter> adapterClass = f.getAnnotation(io.gsonfire.annotations.FieldTypeAdapter.class).value();
                         TypeAdapter adapter = factory.get(adapterClass);
                         JsonElement serializedValue = JsonUtils.toJsonTree(adapter, out, f.get(value));
-                        resultTree.getAsJsonObject().add(fieldNameResolver.getFieldName(f), serializedValue);
+                        String fieldName = fieldNameResolver.getFieldName(f);
+                        if(fieldName != null) {
+                            resultTree.getAsJsonObject().add(fieldNameResolver.getFieldName(f), serializedValue);
+                        }
                     } catch (IllegalAccessException ex) {
                         throw new RuntimeException(ex);
                     }
