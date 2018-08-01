@@ -78,14 +78,17 @@ public class FieldTypeAdapterAdapterFactory implements TypeAdapterFactory {
         @Override
         public Object read(JsonReader in) throws IOException {
             JsonObject srcTree = new JsonParser().parse(in).getAsJsonObject();
-            Object result = originalAdapter.read(in);
+            Object result = originalAdapter.fromJsonTree(srcTree);
             if(result != null) {
                 for (Field f : fieldInspector.getAnnotatedMembers(result.getClass(), io.gsonfire.annotations.FieldTypeAdapter.class)) {
                     try {
                         Class<? extends TypeAdapter> adapterClass = f.getAnnotation(io.gsonfire.annotations.FieldTypeAdapter.class).value();
                         TypeAdapter adapter = factory.get(adapterClass);
-                        Object fieldValue = adapter.fromJsonTree(srcTree.get(fieldNameResolver.getFieldName(f)));
-                        f.set(result, fieldValue);
+                        String fieldName = fieldNameResolver.getFieldName(f);
+                        if(fieldName != null && srcTree.has(fieldName)) {
+                            Object fieldValue = adapter.fromJsonTree(srcTree.get(fieldName));
+                            f.set(result, fieldValue);
+                        }
                     } catch (IllegalAccessException ex) {
                         throw new RuntimeException(ex);
                     }

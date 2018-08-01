@@ -242,6 +242,7 @@ public final class GsonFireBuilder {
         if(enableFieldTypeAdapters) {
             builder.registerTypeAdapterFactory(new FieldTypeAdapterAdapterFactory(fieldInspector, factory));
             builder.addSerializationExclusionStrategy(new FieldTypeAdapterAdapterFactory.SerializationExclusionStrategy());
+            builder.addDeserializationExclusionStrategy(new FieldTypeAdapterAdapterFactory.SerializationExclusionStrategy());
         }
 
         if(enableExposeMethodResults) {

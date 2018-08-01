@@ -44,7 +44,46 @@ public class FieldTypeAdapterTest {
         Assert.assertEquals(person.house.owner.id, tree.get("house").getAsJsonObject().get("owner2").getAsInt());
     }
 
-    private class Person {
+    @Test
+    public void testDeserialization(){
+        GsonFireBuilder builder = new GsonFireBuilder()
+            .enableFieldTypeAdapters();
+
+        Gson gson = builder.createGson();
+
+        String json = "{\"id\":1,\"name\":\"john\",\"house\":{\"address\":\"1 main st\",\"owner\":1,\"owner2\":2}}";
+
+        Person person = gson.fromJson(json, Person.class);
+
+        Assert.assertEquals(1, person.id);
+        Assert.assertEquals("john", person.name);
+        Assert.assertEquals("1 main st", person.house.address);
+        Assert.assertEquals(1, person.house.owner.id);
+        Assert.assertEquals(null, person.house.owner.name);
+        Assert.assertEquals(2, person.house.ownerSecondary.id);
+        Assert.assertEquals(null, person.house.ownerSecondary.name);
+    }
+
+    @Test
+    public void testDeserializationMissingFields(){
+        GsonFireBuilder builder = new GsonFireBuilder()
+            .enableFieldTypeAdapters();
+
+        Gson gson = builder.createGson();
+
+        String json = "{\"id\":1,\"name\":\"john\",\"house\":{\"address\":\"1 main st\"}}";
+
+        Person person = gson.fromJson(json, Person.class);
+
+        Assert.assertEquals(1, person.id);
+        Assert.assertEquals("john", person.name);
+        Assert.assertEquals("1 main st", person.house.address);
+        Assert.assertEquals(null, person.house.owner);
+        Assert.assertEquals(null, person.house.ownerSecondary);
+    }
+
+
+    private static class Person {
 
         private int id;
 
@@ -53,7 +92,7 @@ public class FieldTypeAdapterTest {
         private House house;
     }
 
-    private class House {
+    private static class House {
 
         private String address;
 
@@ -75,7 +114,10 @@ public class FieldTypeAdapterTest {
 
         @Override
         public Person read(JsonReader in) throws IOException {
-            return null;
+            int id = in.nextInt();
+            Person person = new Person();
+            person.id = id;
+            return person;
         }
     }
 
