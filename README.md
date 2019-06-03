@@ -148,7 +148,25 @@ Gson builder = new GsonFireBuilder()
 Gson gson = builder.createGson();
 ```
 
-Any `Exception` thrown inside the hooks will be wrapped into a `HookInvocationException`
+Any `Exception` thrown inside the hooks will be wrapped into a `HookInvocationException`.
+
+The hook method can also be written as `preSerializeLogic(JsonElement src, Gson gson)`. As an example,
+using this, you can serialize `byte[]` fields to Base64 strings:
+
+```java
+@Exclude
+byte[] data;
+
+@PreSerialize
+private void preSerialize(JsonElement src, Gson gson) {
+	src.getAsJsonObject().addProperty("data", Base64.getEncoder().encodeToString(data));
+}
+
+@PostDeserialize
+private void postDeserialize(JsonElement src, Gson gson) {
+	data = Base64.getDecoder().decode(src.getAsJsonObject().getAsJsonPrimitive("data").getAsString());
+}
+```
 
 ### Iterable Serialization
 
@@ -174,6 +192,14 @@ for(Integer i: simpleIterable) {
 }
 
 ```
+
+### Exclude fields
+
+Gson has an `Expose` annotation if you only want to serialize single fields. If you want to exclude single fields,
+you can make them `transient` and ignore them with `gsonBuilder.excludeFieldsWithModifiers(Modifier.TRANSIENT)`.
+This will have other implications on other Java serialization tools too. If you want to ignore specific fields, but
+only in Gson, annotate them with `Exclude`, `ExcludeSerialize` and `ExcludeDeserialize`. Enable this feature
+using `fireBuilder.enableExcludeByAnnotation()`.
 
 ### Excude fields depending on its value
 
