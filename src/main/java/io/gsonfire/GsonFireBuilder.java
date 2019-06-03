@@ -1,18 +1,36 @@
 package io.gsonfire;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import io.gsonfire.gson.*;
+
+import io.gsonfire.annotations.Exclude;
+import io.gsonfire.annotations.ExcludeDeserialize;
+import io.gsonfire.annotations.ExcludeSerialize;
+import io.gsonfire.gson.EnumDefaultValueTypeAdapterFactory;
+import io.gsonfire.gson.ExcludeByValueTypeAdapterFactory;
+import io.gsonfire.gson.FireExclusionStrategy;
+import io.gsonfire.gson.FireExclusionStrategyComposite;
+import io.gsonfire.gson.HooksTypeAdapterFactory;
+import io.gsonfire.gson.SimpleIterableTypeAdapterFactory;
+import io.gsonfire.gson.TypeSelectorTypeAdapterFactory;
+import io.gsonfire.gson.WrapTypeAdapterFactory;
 import io.gsonfire.postprocessors.MergeMapPostProcessor;
 import io.gsonfire.postprocessors.methodinvoker.MethodInvokerPostProcessor;
 import io.gsonfire.util.Mapper;
 import io.gsonfire.util.reflection.CachedReflectionFactory;
 import io.gsonfire.util.reflection.Factory;
 import io.gsonfire.util.reflection.FieldInspector;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @autor: julio
@@ -31,6 +49,7 @@ public final class GsonFireBuilder {
     private boolean dateDeserializationStrict = true;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
     private boolean enableExposeMethodResults = false;
+    private boolean enableExcludeByAnnotation = false;
     private boolean enableExclusionByValueStrategies = false;
 
     private ClassConfig getClassConfig(Class clazz){
@@ -157,6 +176,26 @@ public final class GsonFireBuilder {
     }
 
     /**
+	 * By enabling this, all fields with the annotation {@link io.gsonfire.annotations.Exclude},
+	 * {@link io.gsonfire.annotations.ExcludeSerialize} and {@link io.gsonfire.annotations.ExcludeDeserialize} will be evaluated and it result
+	 * will be excluded from serialization, deserialization and/or both.
+	 * <p/>
+	 * This is equivalent to calling
+	 * 
+	 * <pre>
+	 * builder.setExclusionStrategies(new AnnotationExclusionStrategy<Exclude>(Exclude.class));
+	 * builder.addSerializationExclusionStrategy(new AnnotationExclusionStrategy<ExcludeSerialize>(ExcludeSerialize.class));
+	 * builder.addDeserializationExclusionStrategy(new AnnotationExclusionStrategy<ExcludeDeserialize>(ExcludeDeserialize.class));
+	 * </pre>
+	 * 
+	 * @return
+	 */
+    public GsonFireBuilder enableExcludeByAnnotation(){
+        this.enableExcludeByAnnotation = true;
+        return this;
+    }
+
+    /**
      * By enabling this, all exclusion by value strategies specified with the annotation
      * {@link io.gsonfire.annotations.ExcludeByValue} will be run to remove specific fields from the resulting json
      * @return
@@ -236,6 +275,12 @@ public final class GsonFireBuilder {
         if(enableExclusionByValueStrategies) {
             builder.registerTypeAdapterFactory(new ExcludeByValueTypeAdapterFactory(fieldInspector, factory));
         }
+
+		if (enableExcludeByAnnotation) {
+			builder.setExclusionStrategies(new AnnotationExclusionStrategy<Exclude>(Exclude.class));
+			builder.addSerializationExclusionStrategy(new AnnotationExclusionStrategy<ExcludeSerialize>(ExcludeSerialize.class));
+			builder.addDeserializationExclusionStrategy(new AnnotationExclusionStrategy<ExcludeDeserialize>(ExcludeDeserialize.class));
+		}
 
         for(Class clazz: orderedClasses){
             ClassConfig config = classConfigMap.get(clazz);
