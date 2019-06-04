@@ -148,6 +148,13 @@ public void SomeClass{
         //this method will get invoked just before
         //the class is serialized to gson
     }
+    
+    @PostSerialize
+    public void postSerializeLogic() {
+        //this method will get invoked after the class
+        //has been serialized to json, before all the hooks
+        //are run.
+    }
 
     @PostDeserialize
     public void postDeserializeLogic(){
@@ -176,8 +183,8 @@ using this, you can serialize `byte[]` fields to Base64 strings:
 @Exclude
 byte[] data;
 
-@PreSerialize
-private void preSerialize(JsonElement src, Gson gson) {
+@PostSerialize
+private void postSerialize(JsonElement src, Gson gson) {
 	src.getAsJsonObject().addProperty("data", Base64.getEncoder().encodeToString(data));
 }
 

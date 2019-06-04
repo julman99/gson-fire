@@ -1,18 +1,20 @@
 package io.gsonfire.gson;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import io.gsonfire.annotations.PostDeserialize;
-import io.gsonfire.annotations.PreSerialize;
-import io.gsonfire.util.reflection.AbstractMethodInspector;
-import io.gsonfire.util.reflection.MethodInvoker;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
+import io.gsonfire.annotations.PostDeserialize;
+import io.gsonfire.annotations.PostSerialize;
+import io.gsonfire.annotations.PreSerialize;
+import io.gsonfire.util.reflection.AbstractMethodInspector;
+import io.gsonfire.util.reflection.MethodInvoker;
 
 /**
  * @autor: julio
@@ -38,6 +40,10 @@ public final class HooksInvoker {
     public void preSerialize(Object obj){
         invokeAll(obj, PreSerialize.class, null, null);
     }
+
+	public void postSerialize(Object obj, JsonElement jsonElement, Gson gson) {
+		invokeAll(obj, PostSerialize.class, jsonElement, gson);
+	}
 
     public void postDeserialize(Object obj, JsonElement jsonElement, Gson gson){
         invokeAll(obj, PostDeserialize.class, jsonElement, gson);
