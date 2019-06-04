@@ -1,13 +1,15 @@
 package io.gsonfire.gson;
 
-import io.gsonfire.util.reflection.AnnotationInspector;
-import io.gsonfire.util.reflection.MethodInspector;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+import io.gsonfire.annotations.ExposeMethodResult;
+import io.gsonfire.util.reflection.AnnotationInspector;
+import io.gsonfire.util.reflection.MethodInspector;
 
 
 /**
@@ -19,7 +21,7 @@ public class AnnotationInspectorTest {
     public void testGetAnnotatedMethods() throws Exception {
         AnnotationInspector inspector = new MethodInspector();
 
-        Collection<Method> methods = inspector.getAnnotatedMembers(A.class, Deprecated.class);
+		Collection<Method> methods = inspector.getAnnotatedMembers(A.class, ExposeMethodResult.class);
 
         assertEquals(1, methods.size());
         assertEquals(A.class.getMethod("b"), methods.iterator().next());
@@ -32,7 +34,7 @@ public class AnnotationInspectorTest {
 
         }
 
-        @Deprecated
+		@ExposeMethodResult("b")
         public void b(){
 
         }
