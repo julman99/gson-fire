@@ -72,7 +72,7 @@ Gson gson = builder.createGson();
 
 ### Expose your methods
 
-You can annotate methods to be automatically evaluated and serialized
+You can annotate methods to be automatically evaluated and serialized:
 
 ```java
 
@@ -92,8 +92,27 @@ GsonFireBuilder builder = new GsonFireBuilder()
 
 ```
 
+This works for deserialization as well:
+
+```java
+
+public void SomeClass{
+
+    @ExposeMethodParam("name")
+    public void setName(String name){
+        // Obviously, this is only useful on more complicated methods
+        this.name = name;
+    }
+}
+
+//Then
+GsonFireBuilder builder = new GsonFireBuilder()
+    .enableExposeMethodParam(); //This will make Gson to call all methods
+                                 //annotated with @ExposeMethodParam
+
+```
 You can use ```GsonFireBuilder.addSerializationExclusionStrategy``` if you want to add custom exclusion strategies for
-some methods.
+some methods. You can also specify a `ConflictResolutionStrategy` if a method exposes a value with the same name as a field.
 
 ### Date format
 

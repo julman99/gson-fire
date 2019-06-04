@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * Created by julio on 7/25/15.
  */
-final class MappedMethodInspector extends AnnotationInspector<Method, MappedMethod> {
+final class MappedMethodResultInspector extends AnnotationInspector<Method, MappedMethod> {
 
     @Override
     protected Method[] getDeclaredMembers(Class clazz) {

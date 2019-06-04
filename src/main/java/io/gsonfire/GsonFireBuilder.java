@@ -49,6 +49,7 @@ public final class GsonFireBuilder {
     private boolean dateDeserializationStrict = true;
     private TimeZone serializeTimeZone = TimeZone.getDefault();
     private boolean enableExposeMethodResults = false;
+	private boolean								enableExposeMethodParams			= false;
     private boolean enableExcludeByAnnotation = false;
     private boolean enableExclusionByValueStrategies = false;
 
@@ -176,6 +177,17 @@ public final class GsonFireBuilder {
     }
 
     /**
+	 * By enabling this, all methods with the annotation {@link io.gsonfire.annotations.ExposeMethodParam} will be called with appropriate data
+	 * parsed from the json tree.
+	 * 
+	 * @return
+	 */
+	public GsonFireBuilder enableExposeMethodParam() {
+		this.enableExposeMethodParams = true;
+		return this;
+	}
+
+	/**
 	 * By enabling this, all fields with the annotation {@link io.gsonfire.annotations.Exclude},
 	 * {@link io.gsonfire.annotations.ExcludeSerialize} and {@link io.gsonfire.annotations.ExcludeDeserialize} will be evaluated and it result
 	 * will be excluded from serialization, deserialization and/or both.
@@ -267,9 +279,10 @@ public final class GsonFireBuilder {
         Set<TypeToken> alreadyResolvedTypeTokensRegistry = Collections.newSetFromMap(new ConcurrentHashMap<TypeToken, Boolean>());
         GsonBuilder builder = new GsonBuilder();
 
-        if(enableExposeMethodResults) {
-            FireExclusionStrategy compositeExclusionStrategy = new FireExclusionStrategyComposite(serializationExclusions);
-            registerPostProcessor(Object.class, new MethodInvokerPostProcessor<Object>(compositeExclusionStrategy));
+		if (enableExposeMethodParams || enableExposeMethodResults) {
+			FireExclusionStrategy compositeExclusionStrategy = new FireExclusionStrategyComposite(serializationExclusions);
+			registerPostProcessor(Object.class, new MethodInvokerPostProcessor<Object>(compositeExclusionStrategy, enableExposeMethodParams,
+					enableExposeMethodResults));
         }
 
         if(enableExclusionByValueStrategies) {
