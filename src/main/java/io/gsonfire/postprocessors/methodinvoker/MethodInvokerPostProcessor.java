@@ -49,7 +49,7 @@ public final class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
     public void postDeserialize(T result, JsonElement src, Gson gson) {
 		if (enableMethodParam && src.isJsonObject()) {
 			JsonObject jsonObject = src.getAsJsonObject();
-			for (MappedMethod m : methodParamInspector.getAnnotatedMembers(src.getClass(), ExposeMethodParam.class)) {
+			for (MappedMethod m : methodParamInspector.getAnnotatedMembers(result.getClass(), ExposeMethodParam.class)) {
 				if (!serializationExclusionStrategy.shouldSkipMethod(m)) {
 					try {
 						if (m.getConflictResolutionStrategy() == ExposeMethodResult.ConflictResolutionStrategy.OVERWRITE
@@ -58,7 +58,7 @@ public final class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
 							Method method = m.getMethod();
 							Parameter param = method.getParameters()[0];
 							Object value = gson.fromJson(jsonObject.get(m.getSerializedName()), param.getType());
-							method.invoke(src, value);
+							method.invoke(result, value);
 						}
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();
