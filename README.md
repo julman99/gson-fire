@@ -72,7 +72,7 @@ Gson gson = builder.createGson();
 
 ### Expose your methods
 
-You can annotate methods to be automatically evaluated and serialized
+You can annotate methods to be automatically evaluated and serialized:
 
 ```java
 
@@ -92,8 +92,27 @@ GsonFireBuilder builder = new GsonFireBuilder()
 
 ```
 
+This works for deserialization as well:
+
+```java
+
+public void SomeClass{
+
+    @ExposeMethodParam("name")
+    public void setName(String name){
+        // Obviously, this is only useful on more complicated methods
+        this.name = name;
+    }
+}
+
+//Then
+GsonFireBuilder builder = new GsonFireBuilder()
+    .enableExposeMethodParam(); //This will make Gson to call all methods
+                                 //annotated with @ExposeMethodParam
+
+```
 You can use ```GsonFireBuilder.addSerializationExclusionStrategy``` if you want to add custom exclusion strategies for
-some methods.
+some methods. You can also specify a `ConflictResolutionStrategy` if a method exposes a value with the same name as a field.
 
 ### Date format
 
@@ -129,6 +148,13 @@ public void SomeClass{
         //this method will get invoked just before
         //the class is serialized to gson
     }
+    
+    @PostSerialize
+    public void postSerializeLogic() {
+        //this method will get invoked after the class
+        //has been serialized to json, before all the hooks
+        //are run.
+    }
 
     @PostDeserialize
     public void postDeserializeLogic(){
@@ -148,7 +174,25 @@ Gson builder = new GsonFireBuilder()
 Gson gson = builder.createGson();
 ```
 
-Any `Exception` thrown inside the hooks will be wrapped into a `HookInvocationException`
+Any `Exception` thrown inside the hooks will be wrapped into a `HookInvocationException`.
+
+The hook method can also be written as `preSerializeLogic(JsonElement src, Gson gson)`. As an example,
+using this, you can serialize `byte[]` fields to Base64 strings:
+
+```java
+@Exclude
+byte[] data;
+
+@PostSerialize
+private void postSerialize(JsonElement src, Gson gson) {
+	src.getAsJsonObject().addProperty("data", Base64.getEncoder().encodeToString(data));
+}
+
+@PostDeserialize
+private void postDeserialize(JsonElement src, Gson gson) {
+	data = Base64.getDecoder().decode(src.getAsJsonObject().getAsJsonPrimitive("data").getAsString());
+}
+```
 
 ### Iterable Serialization
 
@@ -174,6 +218,14 @@ for(Integer i: simpleIterable) {
 }
 
 ```
+
+### Exclude fields
+
+Gson has an `Expose` annotation if you only want to serialize single fields. If you want to exclude single fields,
+you can make them `transient` and ignore them with `gsonBuilder.excludeFieldsWithModifiers(Modifier.TRANSIENT)`.
+This will have other implications on other Java serialization tools too. If you want to ignore specific fields, but
+only in Gson, annotate them with `Exclude`, `ExcludeSerialize` and `ExcludeDeserialize`. Enable this feature
+using `fireBuilder.enableExcludeByAnnotation()`.
 
 ### Excude fields depending on its value
 

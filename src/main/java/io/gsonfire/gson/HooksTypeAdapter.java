@@ -1,5 +1,7 @@
 package io.gsonfire.gson;
 
+import java.io.IOException;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -7,12 +9,11 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.internal.bind.JsonTreeReader;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+
 import io.gsonfire.ClassConfig;
 import io.gsonfire.PostProcessor;
 import io.gsonfire.PreProcessor;
 import io.gsonfire.util.JsonUtils;
-
-import java.io.IOException;
 
 /**
  * @autor: julio
@@ -39,6 +40,10 @@ public final class HooksTypeAdapter<T> extends TypeAdapter<T> {
         }
 
         JsonElement res = JsonUtils.toJsonTree(originalTypeAdapter, out, value);
+
+		if (classConfig.isHooksEnabled()) {
+			hooksInvoker.postSerialize(value, res, gson);
+		}
 
         //Run all the post serializers
         runPostSerialize(res, value);
