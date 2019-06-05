@@ -3,6 +3,7 @@ package io.gsonfire.gson;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -100,6 +101,30 @@ public class ExposeMethodParamTest {
 			} else if (!map.equals(other.map))
 				return false;
 			return true;
+		}
+	}
+
+	@Test
+	public void testGeneric() {
+		Gson gson = new GsonFireBuilder()
+				.enableExposeMethodParam()
+				.enableExcludeByAnnotation()
+				.createGson();
+		List<Integer> list = Arrays.asList(1, 5, 4, 3, 10, 50, 20, 1, 3, 4);
+		String data = gson.toJson(list);
+		C c = gson.fromJson("{map:" + data + "}", C.class);
+		assertEquals(101, c.sum);
+	}
+
+	private static class C {
+		@Exclude
+		int sum;
+
+		@ExposeMethodParam("map")
+		public void sum(Collection<Byte> data) {
+			sum = 0;
+			for (int i : data)
+				sum += i;
 		}
 	}
 }

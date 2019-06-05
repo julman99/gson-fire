@@ -57,7 +57,7 @@ public final class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
 										&& !jsonObject.has(m.getSerializedName()))) {
 							Method method = m.getMethod();
 							Parameter param = method.getParameters()[0];
-							Object value = gson.fromJson(jsonObject.get(m.getSerializedName()), param.getType());
+							Object value = gson.fromJson(jsonObject.get(m.getSerializedName()), param.getParameterizedType());
 							method.invoke(result, value);
 						}
 					} catch (IllegalAccessException e) {
