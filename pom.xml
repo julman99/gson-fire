@@ -16,8 +16,8 @@
 
     <licenses>
         <license>
-            <name>The MIT License</name>
-            <url>http://opensource.org/licenses/MIT</url>
+            <name>Apache-2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
