@@ -4,6 +4,8 @@ import io.gsonfire.util.reflection.AnnotationInspector;
 import io.gsonfire.util.reflection.MethodInspector;
 import org.junit.Test;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -19,7 +21,7 @@ public class AnnotationInspectorTest {
     public void testGetAnnotatedMethods() throws Exception {
         AnnotationInspector inspector = new MethodInspector();
 
-        Collection<Method> methods = inspector.getAnnotatedMembers(A.class, Deprecated.class);
+        Collection<Method> methods = inspector.getAnnotatedMembers(A.class, SomeAnnotation.class);
 
         assertEquals(1, methods.size());
         assertEquals(A.class.getMethod("b"), methods.iterator().next());
@@ -32,10 +34,15 @@ public class AnnotationInspectorTest {
 
         }
 
-        @Deprecated
+        @SomeAnnotation
         public void b(){
 
         }
+
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    private @interface SomeAnnotation {
 
     }
 }
