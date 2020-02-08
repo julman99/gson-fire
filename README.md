@@ -330,6 +330,10 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.9.0
+
+- Fixes [#40](https://github.com/julman99/gson-fire/issues/40). Fraction of second incorrect parsing. Thanks [@crystalin](https://github.com/crystalin)
+
 ### 1.8.3
 
 - Fixes [#39](https://github.com/julman99/gson-fire/issues/39). The `JsonTreeReader` and `JsonTreeWriter` used for the Pre/Post processors was not properly set up to mimic the original `JsonReader` or `JsonWriter`. Thanks [@daw3rd](https://github.com/daw3rd)
