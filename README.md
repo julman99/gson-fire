@@ -270,6 +270,31 @@ Gson gson = new GsonFireBuilder()
 
 If you try to parse, for example, the string `"four"` as the type `MyEnum`, instead of getting `null`, it will be parsed as the `MyEnum.other`
 
+### Map key serialization
+
+Java allows complex objects to be used as key on maps. Unfortunately Gson serializes them as string, or as "complex maps". GsonFire allows to add custom serialization to the map keys
+
+```java
+Gson gson = new GsonFireBuilder()
+    .registerMapKeySerializer(SomeClass.class, new StringSerializer<SomeClass>(){
+        @Override
+        public String toString(SomeClass from) {
+            return /* logic to serialize */
+        }
+
+        @Override
+        public SomeClass fromString(String s) {
+            return /* logic to deserialize */
+        }
+    })
+    .createGsonBuilder()
+    .create();
+```
+
+After doing that, Gson will now use the custom serializer for the keys on any map that conforms to: `Map<SomeClass, ?>`.
+
+See [#42](https://github.com/julman99/gson-fire/issues/42) for more details
+
 ### JsonObject and JsonArray builders
 Makes it easy to build json elements without using temporary variables to store them
 
