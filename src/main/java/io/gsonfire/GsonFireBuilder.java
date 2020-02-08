@@ -26,6 +26,7 @@ public final class GsonFireBuilder {
     private final FieldInspector fieldInspector = new FieldInspector();
     private final Factory factory = new CachedReflectionFactory();
     private final Map<Class, Enum> enumDefaultValues = new HashMap<Class, Enum>();
+    private final Map<Class, StringSerializer> mapKeySerializers = new LinkedHashMap<Class, StringSerializer>();
 
     private DateSerializationPolicy dateSerializationPolicy;
     private boolean dateDeserializationStrict = true;
@@ -101,6 +102,19 @@ public final class GsonFireBuilder {
     public <T> GsonFireBuilder registerPreProcessor(Class<T> clazz, PreProcessor<? super T> preProcessor){
         ClassConfig config = getClassConfig(clazz);
         config.getPreProcessors().add(preProcessor);
+        return this;
+    }
+
+    /**
+     * Register a {@link StringSerializer} for the Class specified.
+     * The {@link StringSerializer} will be used on any {@link Map} instance in which the key is of type T
+     * @param clazz
+     * @param serializer
+     * @param <T>
+     * @return
+     */
+    public <T> GsonFireBuilder registerMapKeySerializer(Class<T> clazz, StringSerializer<T> serializer) {
+        this.mapKeySerializers.put(clazz, serializer);
         return this;
     }
 
@@ -255,6 +269,10 @@ public final class GsonFireBuilder {
 
         builder.registerTypeAdapterFactory(new SimpleIterableTypeAdapterFactory());
         builder.registerTypeAdapterFactory(new WrapTypeAdapterFactory(wrappedClasses));
+
+        if(!mapKeySerializers.isEmpty()) {
+            builder.registerTypeAdapterFactory(new MapKeySerializerTypeAdapterFactory(mapKeySerializers));
+        }
 
         return builder;
     }
