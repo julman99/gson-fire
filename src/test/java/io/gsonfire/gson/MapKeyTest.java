@@ -1,74 +1,131 @@
 package io.gsonfire.gson;
 
 import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.StringSerializer;
+import io.gsonfire.builders.JsonObjectBuilder;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class MapKeyTest {
 
     @Test
-    public void test() {
-        Map<Class, StringSerializer> serializerMap = new HashMap<Class, StringSerializer>();
-        serializerMap.put(A.class, new StringSerializer<A>() {
-            @Override
-            public String toString(A from) {
-                return ((A)from).key;
-            }
-
-            @Override
-            public A fromString(String s) {
-                return new A(s);
-            }
-        });
-
+    public void testTypedMap() {
         Map<A, String> map = new HashMap<A, String>();
-        Map<Object, String> map2 = new HashMap<Object, String>();
 
         Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
             .createGsonBuilder()
-            .registerTypeAdapterFactory(new MapKeySerializerTypeAdapterFactory(serializerMap))
-            .registerTypeAdapter(A.class, new TypeAdapter<A>() {
-                @Override
-                public void write(JsonWriter jsonWriter, A a) throws IOException {
-                    jsonWriter.value(a.key);
-                }
-
-                @Override
-                public A read(JsonReader jsonReader) throws IOException {
-                    return new A(jsonReader.nextString());
-                }
-            })
             .create();
         
-        map.put(new A("a"), "val");
-        map2.put(new AA("a"), "val");
-        map2.put(new AA("b"), "val");
+        map.put(new A("key"), "val");
 
-        String res = gson.toJson(map);
-        String res2 = gson.toJson(map2);
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals("val", res.getAsJsonObject().get("key").getAsString());
+    }
 
+    @Test
+    public void testUntypedMap() {
+        Map<Object, Object> map = new HashMap<Object, Object>();
+
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .create();
+
+        map.put(new A("key"), "val");
+
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals("val", res.getAsJsonObject().get("key").getAsString());
+    }
+
+    @Test
+    public void testSubClass() {
+        Map<A, String> map = new HashMap<A, String>();
+
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .create();
+
+        map.put(new AA("key"), "val");
+
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals("val", res.getAsJsonObject().get("key").getAsString());
+    }
+
+    @Test
+    public void testNoRegisteredMapKeySerializer() {
+        Map<A, String> map = new HashMap<A, String>();
+
+        Gson gson = new GsonFireBuilder()
+            //.registerMapKeySerializer(A.class, new MapKeyTest.ASerializer()) *** TESTING THIS ON PURPOSE ***
+            .createGsonBuilder()
+            .create();
+
+        AA aa = new AA("key");
+        map.put(aa, "val");
+
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals("val", res.getAsJsonObject().get(aa.toString()).getAsString());
+    }
+
+    @Test
+    public void testValueSameAsKey() {
+        Map<A, A> map = new HashMap<A, A>();
+
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .create();
+
+        A aa = new A("key");
+        A aav = new A("value");
+        map.put(aa, aav);
+
+        JsonObject expected = new JsonObjectBuilder()
+            .set("key", gson.toJsonTree(aav))
+            .build();
+
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals(expected, res);
     }
 
 
     public static class A {
-        String key;
+        String a;
 
-        public A(String key) {
-            this.key = key;
+        public A(String a) {
+            this.a = a;
         }
     }
 
     public static class AA extends A {
         public AA(String key) {
             super(key);
+        }
+    }
+
+    public static class ASerializer extends StringSerializer<A> {
+        @Override
+        public String toString(A from) {
+            return from.a;
+        }
+
+        @Override
+        public A fromString(String s) {
+            return new A(s);
         }
     }
 }
