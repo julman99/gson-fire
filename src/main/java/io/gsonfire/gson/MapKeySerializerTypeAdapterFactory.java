@@ -9,29 +9,18 @@ import com.google.gson.stream.JsonWriter;
 import io.gsonfire.StringSerializer;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
 
-    private static final StringSerializer NO_OP = new StringSerializer() {
-        @Override
-        public String toString(Object o) {
-            return o.toString();
-        }
-
-        @Override
-        public Object fromString(String s) {
-            return s;
-        }
-    };
+    private static final StringSerializer NO_OP = new NoOpStringSerializer();
 
     private final Map<Class, StringSerializer> serializerMap;
 
     public MapKeySerializerTypeAdapterFactory(Map<Class, StringSerializer> serializerMap) {
-        this.serializerMap = serializerMap;
+        this.serializerMap = new LinkedHashMap<Class, StringSerializer>(serializerMap);
     }
 
     @Override
@@ -51,7 +40,7 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
 
         public MapKeySerializer(Map<Class, StringSerializer> serializerMap, Gson gson, MapKeySerializerTypeAdapterFactory parentFactory) {
             this.gson = gson;
-            this.serializerMap = new HashMap<Class, StringSerializer>(serializerMap);
+            this.serializerMap = serializerMap;
             this.parentFactory = parentFactory;
         }
 
@@ -89,5 +78,17 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
             return result;
         }
 
+    }
+
+    private static final class NoOpStringSerializer extends StringSerializer {
+        @Override
+        public String toString(Object o) {
+            return o.toString();
+        }
+
+        @Override
+        public Object fromString(String s) {
+            return s;
+        }
     }
 }
