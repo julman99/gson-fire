@@ -88,11 +88,11 @@ public final class RFC3339DateFormat extends DateFormat {
         }
 
         //Filter milliseconds
-        long millis = 0;
+        int millis = 0;
         if(source.contains(".")){
             Matcher matcher = MILLISECONDS_PATTERN.matcher(source);
             String millisStr = matcher.replaceAll("$2");
-            millis = Long.parseLong(millisStr);
+            millis = (int) Math.round(Double.parseDouble("0." + millisStr) * 1000);
             source = matcher.replaceAll("$1") + matcher.replaceAll("$3");
         }
 
