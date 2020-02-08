@@ -345,7 +345,7 @@ Gson gson = gsonBuilder.create()
 
 ### 1.8.1
 
-- Fixes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav ](https://github.com/Groostav)
+- Fixes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav](https://github.com/Groostav)
 
 
 ### 1.8.0
