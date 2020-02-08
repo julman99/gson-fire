@@ -3,12 +3,14 @@ package io.gsonfire.gson;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
+import com.google.gson.internal.$Gson$Types;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.gsonfire.StringSerializer;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +30,7 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
         if(!Map.class.isAssignableFrom(typeToken.getRawType())) {
             return gson.getDelegateAdapter( this, typeToken);
         } else {
-            return (TypeAdapter<T>) new MapKeySerializer(serializerMap, gson, this);
+            return (TypeAdapter<T>) new MapKeySerializer(serializerMap, gson, this, typeToken);
         }
     }
 
@@ -37,11 +39,13 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
         private final Map<Class, StringSerializer> serializerMap;
         private final Gson gson;
         private final MapKeySerializerTypeAdapterFactory parentFactory;
+        private final TypeToken typeToken;
 
-        public MapKeySerializer(Map<Class, StringSerializer> serializerMap, Gson gson, MapKeySerializerTypeAdapterFactory parentFactory) {
+        public MapKeySerializer(Map<Class, StringSerializer> serializerMap, Gson gson, MapKeySerializerTypeAdapterFactory parentFactory, TypeToken typeToken) {
             this.gson = gson;
             this.serializerMap = serializerMap;
             this.parentFactory = parentFactory;
+            this.typeToken = typeToken;
         }
 
         @Override
@@ -51,13 +55,9 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
             for (Map.Entry entry : (Set<Map.Entry>)map.entrySet()) {
                 StringSerializer serializer = NO_OP;
                 if(entry.getKey() != null) {
-                    serializer = serializerMap.get(entry.getKey().getClass());
-                    if (serializer == null) {
-                        //try to find the proper serializer
-                        serializer = findSerializer(entry.getKey().getClass());
-                    }
+                    serializer = findSerializer(entry.getKey().getClass());
                 }
-                 stringKeyMap.put(serializer.toString(entry.getKey()), entry.getValue());
+                stringKeyMap.put(serializer.toString(entry.getKey()), entry.getValue());
             }
 
             TypeAdapter delegateTypeAdapter = gson.getDelegateAdapter(this.parentFactory, TypeToken.get(map.getClass()));
@@ -66,18 +66,33 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
 
         @Override
         public Map read(JsonReader jsonReader) throws IOException {
-            return null;
+            Type[] types = $Gson$Types.getMapKeyAndValueTypes(this.typeToken.getType(), this.typeToken.getRawType());
+            TypeToken intermediateTypeToken = TypeToken.getParameterized(Map.class, String.class, types[1]);
+            TypeAdapter<Map> delegateTypeAdapter = gson.getDelegateAdapter(this.parentFactory, intermediateTypeToken);
+            Map<String, Object> intermediateMap = delegateTypeAdapter.read(jsonReader);
+            Map finalMap = new LinkedHashMap();
+            for(Map.Entry<String, Object> entry: intermediateMap.entrySet()) {
+                StringSerializer serializer = findSerializer(TypeToken.get(types[0]).getRawType());
+                Object deserializedKey = serializer.fromString(entry.getKey());
+                finalMap.put(deserializedKey, entry.getValue());
+            }
+            return finalMap;
         }
 
         private StringSerializer findSerializer(Class clazz) {
             StringSerializer result = NO_OP;
-            for(Map.Entry<Class, StringSerializer> entry: serializerMap.entrySet()) {
-                if(entry.getKey().isAssignableFrom(clazz)) {
-                    result = entry.getValue();
-                    break;
+
+            //check cache
+            result = serializerMap.get(clazz);
+            if(result == null) {
+                for (Map.Entry<Class, StringSerializer> entry : serializerMap.entrySet()) {
+                    if (entry.getKey().isAssignableFrom(clazz)) {
+                        result = entry.getValue();
+                        break;
+                    }
                 }
+                serializerMap.put(clazz, result);
             }
-            serializerMap.put(clazz, result);
             return result;
         }
 

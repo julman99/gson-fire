@@ -2,7 +2,9 @@ package io.gsonfire.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.StringSerializer;
 import io.gsonfire.builders.JsonObjectBuilder;
@@ -151,6 +153,61 @@ public class MapKeyTest {
         assertEquals(1, res.getAsJsonObject().size());
         assertEquals("value", res.getAsJsonObject().get("null").getAsString());
     }
+
+    @Test
+    public void testDeserialize() {
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .create();
+
+        JsonObject input = new JsonObjectBuilder()
+            .set("key", new JsonObjectBuilder().set("a", "value"))
+            .build();
+
+        Map<A, A> map = gson.fromJson(input, new TypeToken<Map<A,A>>(){}.getType());
+
+        assertEquals(1, map.size());
+        assertEquals("key", map.keySet().iterator().next().a);
+        assertEquals("value", map.values().iterator().next().a);
+    }
+
+    @Test
+    public void testDeserializeNullKey() {
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .create();
+
+        JsonObject input = new JsonObjectBuilder()
+            .set("null", new JsonObjectBuilder().set("a", "value"))
+            .build();
+
+        Map<A, A> map = gson.fromJson(input, new TypeToken<Map<A,A>>(){}.getType());
+
+        assertEquals(1, map.size());
+        assertEquals("null", map.keySet().iterator().next().a);
+        assertEquals("value", map.values().iterator().next().a);
+    }
+
+    @Test
+    public void testDeserializeNullValue() {
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .create();
+
+        JsonObject input = new JsonObjectBuilder()
+            .set("key", JsonNull.INSTANCE)
+            .build();
+
+        Map<A, A> map = gson.fromJson(input, new TypeToken<Map<A,A>>(){}.getType());
+
+        assertEquals(1, map.size());
+        assertEquals("key", map.keySet().iterator().next().a);
+        assertEquals(null, map.values().iterator().next());
+    }
+
 
     public static class A {
         String a;
