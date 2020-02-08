@@ -49,11 +49,14 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
             //Create a new map with String keys
             Map<String, Object> stringKeyMap = new LinkedHashMap<String, Object>(map.size());
             for (Map.Entry entry : (Set<Map.Entry>)map.entrySet()) {
-                 StringSerializer serializer = serializerMap.get(entry.getKey().getClass());
-                 if(serializer == null) {
-                     //try to find the proper serializer
-                     serializer = findSerializer(entry.getKey().getClass());
-                 }
+                StringSerializer serializer = NO_OP;
+                if(entry.getKey() != null) {
+                    serializer = serializerMap.get(entry.getKey().getClass());
+                    if (serializer == null) {
+                        //try to find the proper serializer
+                        serializer = findSerializer(entry.getKey().getClass());
+                    }
+                }
                  stringKeyMap.put(serializer.toString(entry.getKey()), entry.getValue());
             }
 
@@ -83,7 +86,7 @@ public class MapKeySerializerTypeAdapterFactory implements TypeAdapterFactory {
     private static final class NoOpStringSerializer extends StringSerializer {
         @Override
         public String toString(Object o) {
-            return o.toString();
+            return o != null ? o.toString() : "null"; //Gson also returns "null" in this scenario
         }
 
         @Override

@@ -102,6 +102,55 @@ public class MapKeyTest {
         assertEquals(expected, res);
     }
 
+    @Test
+    public void testNullValue() {
+        Map<A, String> map = new HashMap<A, String>();
+
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .serializeNulls()
+            .create();
+
+        map.put(new A("key"), null);
+
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals(true, res.getAsJsonObject().get("key").isJsonNull());
+    }
+
+    @Test
+    public void testNullKey() {
+        Map<A, String> map = new HashMap<A, String>();
+
+        Gson gson = new GsonFireBuilder()
+            .registerMapKeySerializer(A.class, new MapKeyTest.ASerializer())
+            .createGsonBuilder()
+            .serializeNulls()
+            .create();
+
+        map.put(null, "value");
+
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals("value", res.getAsJsonObject().get("null").getAsString());
+    }
+
+    @Test
+    public void testNullKeyOnUnmodifiedGson() {
+        Map<A, String> map = new HashMap<A, String>();
+
+        Gson gson = new GsonFireBuilder()
+            .createGsonBuilder()
+            .serializeNulls()
+            .create();
+
+        map.put(null, "value");
+
+        JsonElement res = gson.toJsonTree(map);
+        assertEquals(1, res.getAsJsonObject().size());
+        assertEquals("value", res.getAsJsonObject().get("null").getAsString());
+    }
 
     public static class A {
         String a;
