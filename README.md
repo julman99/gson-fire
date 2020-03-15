@@ -330,6 +330,11 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.8.4
+
+- Fixes [#40](https://github.com/julman99/gson-fire/issues/40). Fraction of second incorrect parsing. Thanks [@crystalin](https://github.com/crystalin)
+- Adds OSGi support [#44](https://github.com/julman99/gson-fire/issues/44). Thanks [@abangerl](https://github.com/abangerl)
+
 ### 1.8.3
 
 - Fixes [#39](https://github.com/julman99/gson-fire/issues/39). The `JsonTreeReader` and `JsonTreeWriter` used for the Pre/Post processors was not properly set up to mimic the original `JsonReader` or `JsonWriter`. Thanks [@daw3rd](https://github.com/daw3rd)
@@ -341,7 +346,7 @@ Gson gson = gsonBuilder.create()
 
 ### 1.8.1
 
-- Fixes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav ](https://github.com/Groostav)
+- Fixes a bug in which GsonFire was not honoring the "lenient" flag from the `GsonBuilder`. Thanks [@Groostav](https://github.com/Groostav)
 
 
 ### 1.8.0

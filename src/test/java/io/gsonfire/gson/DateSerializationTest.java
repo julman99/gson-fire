@@ -180,6 +180,63 @@ public class DateSerializationTest {
     }
 
     @Test
+    public void testRFC3339_deserialize_CSS_dot1(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(CCS_TIMEZONE)
+            .createGson();
+
+        JsonElement element = new JsonPrimitive("2013-02-06T21:59:08.1-04:30");
+        Date parsedDate = gson.fromJson(element, Date.class);
+
+        final Date expected = new Date(1360204148100L);
+        assertEquals(expected.getTime(), parsedDate.getTime());
+    }
+
+    @Test
+    public void testRFC3339_deserialize_CSS_dot10(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(CCS_TIMEZONE)
+            .createGson();
+
+        JsonElement element = new JsonPrimitive("2013-02-06T21:59:08.10-04:30");
+        Date parsedDate = gson.fromJson(element, Date.class);
+
+        final Date expected = new Date(1360204148100L);
+        assertEquals(expected.getTime(), parsedDate.getTime());
+    }
+
+    @Test
+    public void testRFC3339_deserialize_CSS_round_under_5(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(CCS_TIMEZONE)
+            .createGson();
+
+        JsonElement element = new JsonPrimitive("2013-02-06T21:59:08.0001-04:30");
+        Date parsedDate = gson.fromJson(element, Date.class);
+
+        final Date expected = new Date(1360204148000L);
+        assertEquals(expected.getTime(), parsedDate.getTime());
+    }
+
+    @Test
+    public void testRFC3339_deserialize_CSS_round_over_5(){
+        Gson gson = new GsonFireBuilder()
+            .dateSerializationPolicy(DateSerializationPolicy.rfc3339)
+            .serializeTimeZone(CCS_TIMEZONE)
+            .createGson();
+
+        JsonElement element = new JsonPrimitive("2013-02-06T21:59:08.0005-04:30");
+        Date parsedDate = gson.fromJson(element, Date.class);
+
+        final Date expected = new Date(1360204148001L);
+        assertEquals(expected.getTime(), parsedDate.getTime());
+    }
+
+
+    @Test
     public void test_nullDeserialize(){
         for(DateSerializationPolicy policy: DateSerializationPolicy.values()){
             Gson gson = new GsonFireBuilder()

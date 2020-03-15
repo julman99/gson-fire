@@ -6,7 +6,7 @@
 
     <groupId>io.gsonfire</groupId>
     <artifactId>gson-fire</artifactId>
-    <version>1.8.3</version>
+    <version>1.8.4</version>
 
     <name>Gson on Fire!</name>
     <description>
@@ -51,6 +51,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.2</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -110,6 +115,17 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>bnd-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>bnd-process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -117,7 +133,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.7</version>
+            <version>2.8.6</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
