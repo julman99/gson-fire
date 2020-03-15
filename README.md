@@ -330,7 +330,7 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
-### 1.9.0
+### 1.8.4
 
 - Fixes [#40](https://github.com/julman99/gson-fire/issues/40). Fraction of second incorrect parsing. Thanks [@crystalin](https://github.com/crystalin)
 - Adds OSGi support [#44](https://github.com/julman99/gson-fire/issues/44). Thanks [@abangerl](https://github.com/abangerl)
