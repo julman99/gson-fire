@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class RFC3339DateFormat extends DateFormat {
 
@@ -18,23 +18,33 @@ public final class RFC3339DateFormat extends DateFormat {
     private final SimpleDateFormat rfc3339Parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private final SimpleDateFormat rfc3339Formatter;
     private final boolean serializeTime;
-
-    public RFC3339DateFormat(TimeZone serializationTimezone, boolean serializeTime) {
+    private final boolean threeDigitMillis;
+    
+    public RFC3339DateFormat(TimeZone serializationTimezone, boolean serializeTime, boolean threeDigitMillis) {
         if(serializeTime) {
             this.rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         } else {
             this.rfc3339Formatter = new SimpleDateFormat("yyyy-MM-dd");
         }
         this.serializeTime = serializeTime;
+        this.threeDigitMillis = threeDigitMillis;
         this.rfc3339Formatter.setTimeZone(serializationTimezone);
+    }
+    
+    public RFC3339DateFormat(TimeZone serializationTimezone, boolean serializeTime) {
+        this(serializationTimezone, serializeTime, false);
     }
 
     public RFC3339DateFormat(TimeZone serializationTimezone) {
-        this(serializationTimezone, true);
+        this(serializationTimezone, true, false);
+    }
+    
+    public RFC3339DateFormat(boolean serializeTime, boolean threeDigitMillis) {
+        this(TimeZone.getTimeZone("UTC"), serializeTime, threeDigitMillis);
     }
 
     public RFC3339DateFormat(boolean serializeTime) {
-        this(TimeZone.getTimeZone("UTC"), serializeTime);
+        this(serializeTime, false);
     }
 
     public RFC3339DateFormat() {
@@ -64,8 +74,13 @@ public final class RFC3339DateFormat extends DateFormat {
         if(this.serializeTime) {
             //Add milliseconds
             long time = date.getTime();
-            if (time % 1000L != 0) {
-                String fraction = Long.toString((time % 1000L));
+            long millis = time % 1000L;
+            if (millis > 0) {
+                String fraction = String.format("%03d", millis);
+                
+                if (!threeDigitMillis) {
+                    fraction = fraction.replaceAll("0*$", "");
+                }
                 formatted.append("." + fraction);
             }
 
