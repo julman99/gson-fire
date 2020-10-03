@@ -145,4 +145,18 @@ public class RFC3339DateFormatTest {
         String formatted = format.format(new Date(1601630729730L));
         assertEquals("2020-10-02T09:25:29.730Z", formatted);
     }
+    
+    @Test
+    public void testFormatWithZeroMillisVisible(){
+        RFC3339DateFormat format = new RFC3339DateFormat(true, true);
+        String formatted = format.format(new Date(1601630729000L));
+        assertEquals("2020-10-02T09:25:29.000Z", formatted);
+    }
+    
+    @Test
+    public void testFormatWithZeroMillisNotVisible(){
+        RFC3339DateFormat format = new RFC3339DateFormat(true, false);
+        String formatted = format.format(new Date(1601630729000L));
+        assertEquals("2020-10-02T09:25:29Z", formatted);
+    }
 }

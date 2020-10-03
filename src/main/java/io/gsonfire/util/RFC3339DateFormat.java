@@ -75,12 +75,14 @@ public final class RFC3339DateFormat extends DateFormat {
             //Add milliseconds
             long time = date.getTime();
             long millis = time % 1000L;
-            if (millis > 0) {
-                String fraction = String.format("%03d", millis);
-                
-                if (!threeDigitMillis) {
-                    fraction = fraction.replaceAll("0*$", "");
-                }
+            
+            String fraction = String.format("%03d", millis);
+            
+            if (!threeDigitMillis) {
+                fraction = fraction.replaceAll("0*$", "");
+            }
+            
+            if (!fraction.isEmpty()) {
                 formatted.append("." + fraction);
             }
 
