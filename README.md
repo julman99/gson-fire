@@ -330,6 +330,10 @@ Gson gson = gsonBuilder.create()
 
 ## Release notes
 
+### 1.8.5
+
+- Fixes [#49](https://github.com/julman99/gson-fire/pull/49). Fraction of second incorrect writing. Thanks [jpedrofigueiredo](https://github.com/jpedrofigueiredo) for the contribution!
+
 ### 1.8.4
 
 - Fixes [#40](https://github.com/julman99/gson-fire/issues/40). Fraction of second incorrect parsing. Thanks [@crystalin](https://github.com/crystalin)
@@ -433,7 +437,7 @@ Add to your ```pom.xml```
     <dependency>
       <groupId>io.gsonfire</groupId>
       <artifactId>gson-fire</artifactId>
-      <version>1.8.4</version>
+      <version>1.8.5</version>
     </dependency>
 </dependencies>
 ```
@@ -443,7 +447,7 @@ Add to your ```build.gradle```
 
 ```groovy
 dependencies {
-    compile 'io.gsonfire:gson-fire:1.8.4'
+    compile 'io.gsonfire:gson-fire:1.8.5'
 }
 ```
 
