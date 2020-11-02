@@ -9,7 +9,7 @@ import java.util.TimeZone;
 import static org.junit.Assert.assertEquals;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public class RFC3339DateFormatTest {
 
@@ -103,5 +103,60 @@ public class RFC3339DateFormatTest {
         String formatted = format.format(new Date(1360204148123L));
         assertEquals("2013-02-07", formatted);
     }
-
+    
+    @Test
+    public void testParseWithMillisAndLeadingZero() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        Date date = format.parse("2020-10-02T09:25:29.073Z");
+        assertEquals(1601630729073L, date.getTime());
+    }
+    
+    @Test
+    public void testFormatWithMillisWithLeadingZero(){
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String formatted = format.format(new Date(1601630729073L));
+        assertEquals("2020-10-02T09:25:29.073Z", formatted);
+    }
+    
+    @Test
+    public void testParseWithMillisAndTailingZero() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        Date date = format.parse("2020-10-02T09:25:29.730Z");
+        assertEquals(1601630729730L, date.getTime());
+    }
+    
+    @Test
+    public void testParseWithMillisAndWithoutTailingZero() throws ParseException {
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        Date date = format.parse("2020-10-02T09:25:29.73Z");
+        assertEquals(1601630729730L, date.getTime());
+    }
+    
+    @Test
+    public void testFormatWithMillisWithInvisibleTailingZero(){
+        RFC3339DateFormat format = new RFC3339DateFormat();
+        String formatted = format.format(new Date(1601630729730L));
+        assertEquals("2020-10-02T09:25:29.73Z", formatted);
+    }
+    
+    @Test
+    public void testFormatWithMillisWithVisibleTailingZero(){
+        RFC3339DateFormat format = new RFC3339DateFormat(true, true);
+        String formatted = format.format(new Date(1601630729730L));
+        assertEquals("2020-10-02T09:25:29.730Z", formatted);
+    }
+    
+    @Test
+    public void testFormatWithZeroMillisVisible(){
+        RFC3339DateFormat format = new RFC3339DateFormat(true, true);
+        String formatted = format.format(new Date(1601630729000L));
+        assertEquals("2020-10-02T09:25:29.000Z", formatted);
+    }
+    
+    @Test
+    public void testFormatWithZeroMillisNotVisible(){
+        RFC3339DateFormat format = new RFC3339DateFormat(true, false);
+        String formatted = format.format(new Date(1601630729000L));
+        assertEquals("2020-10-02T09:25:29Z", formatted);
+    }
 }
