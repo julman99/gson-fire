@@ -2,13 +2,15 @@ Bundle-SymbolicName: io.gsonfire
 Bundle-Name: ${project.name}
 Bundle-Description: ${project.description}
 Bundle-Vendor: julman99
-Bundle-ContactAddress: ${project.parent.url}
+Bundle-ContactAddress: ${project.url}
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6, JavaSE-1.7, JavaSE-1.8
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"
 
 -removeheaders: Private-Package
 
--exportcontents:\
-    io.gsonfire
-    io.gsonfire.annotations
+Export-Package:\
+    io.gsonfire,\
+    io.gsonfire.annotations,\
     io.gsonfire.builders
+
+Import-Package: !com.google.gson.internal.bind, *

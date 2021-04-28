@@ -6,7 +6,7 @@
 
     <groupId>io.gsonfire</groupId>
     <artifactId>gson-fire</artifactId>
-    <version>1.8.5</version>
+    <version>1.8.6</version>
 
     <name>Gson on Fire!</name>
     <description>
@@ -24,6 +24,7 @@
 
     <developers>
         <developer>
+            <id>julman99</id>
             <name>Julio Viera</name>
             <email>julio.viera@gmail.com</email>
             <organizationUrl>https://github.com/julman99</organizationUrl>
@@ -118,6 +119,7 @@
             <plugin>
                 <groupId>biz.aQute.bnd</groupId>
                 <artifactId>bnd-maven-plugin</artifactId>
+                <version>5.3.0</version>
                 <executions>
                     <execution>
                         <goals>
