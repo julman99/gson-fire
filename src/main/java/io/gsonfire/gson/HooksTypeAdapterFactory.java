@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import io.gsonfire.ClassConfig;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class HooksTypeAdapterFactory<T> implements TypeAdapterFactory {
 

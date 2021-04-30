@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
  * The returned members can be mapped to a different type.
  *
  * The result after mapping will be cached for performance reasons
- * @autor: julio
+ * @author julio
  */
 public abstract class AnnotationInspector<T extends AccessibleObject, M> {
 

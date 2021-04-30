@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class ClassConfig<T> {
 

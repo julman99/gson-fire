@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * @autor: julio
+ * @author julio
  */
 public class AnnotationInspectorTest {
 

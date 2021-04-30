@@ -11,7 +11,7 @@ import io.gsonfire.gson.FireExclusionStrategyComposite;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class MethodInvokerPostProcessor<T> implements PostProcessor<T> {
 

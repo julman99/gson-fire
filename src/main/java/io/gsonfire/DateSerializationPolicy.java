@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public enum DateSerializationPolicy {
 

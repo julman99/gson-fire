@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 
 
 /**
- * @autor: julio
+ * @author julio
  */
 public class MergeMapTest {
 

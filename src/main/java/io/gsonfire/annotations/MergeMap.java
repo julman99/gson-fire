@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Causes the Map to be merged with the object that contains it
  *
  * This class has been deprecated and a {@link io.gsonfire.PostProcessor} should be used instead
- * @autor: julio
+ * @author julio
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

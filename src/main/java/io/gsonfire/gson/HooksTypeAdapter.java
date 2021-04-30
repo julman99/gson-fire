@@ -15,7 +15,7 @@ import io.gsonfire.util.JsonUtils;
 import java.io.IOException;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class HooksTypeAdapter<T> extends TypeAdapter<T> {
 
