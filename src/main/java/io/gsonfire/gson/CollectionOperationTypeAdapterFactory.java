@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.Collection;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class CollectionOperationTypeAdapterFactory implements TypeAdapterFactory {
 

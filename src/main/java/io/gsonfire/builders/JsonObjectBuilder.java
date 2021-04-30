@@ -49,8 +49,8 @@ public final class JsonObjectBuilder implements JsonElementBuilder<JsonObject> {
 
     /**
      * Copies all the property/values from #jsonObject into the json object being built by this builder
-     * @param jsonObject
-     * @return
+     * @param jsonObject jsonObject to get property/values from.
+     * @return JsonObjectBuilder
      */
     public JsonObjectBuilder merge(JsonObject jsonObject) {
         for(Map.Entry<String, JsonElement> entry: JsonUtils.deepCopy(jsonObject).getAsJsonObject().entrySet()) {

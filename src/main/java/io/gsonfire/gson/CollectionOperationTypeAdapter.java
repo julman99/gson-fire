@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
-* @autor: julio
+* @author julio
 */
 final class CollectionOperationTypeAdapter extends TypeAdapter<Collection> {
 

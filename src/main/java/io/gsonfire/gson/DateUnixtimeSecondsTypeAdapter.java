@@ -3,7 +3,7 @@ package io.gsonfire.gson;
 import java.util.Date;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class DateUnixtimeSecondsTypeAdapter extends DateUnixtimeTypeAdapter {
 
