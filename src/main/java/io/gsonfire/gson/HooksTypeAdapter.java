@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
-import com.google.gson.internal.bind.JsonTreeReader;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.gsonfire.ClassConfig;
@@ -51,7 +50,7 @@ public final class HooksTypeAdapter<T> extends TypeAdapter<T> {
         JsonElement json = new JsonParser().parse(in);
 
         runPreDeserialize(json);
-        T result = deserialize(json, in.isLenient());
+        T result = JsonUtils.fromJsonTree(originalTypeAdapter, in, json);
 
         //Run all the post deserializers
         if (classConfig.isHooksEnabled()) {
@@ -78,13 +77,6 @@ public final class HooksTypeAdapter<T> extends TypeAdapter<T> {
         for(PreProcessor<? super T> preProcessor: classConfig.getPreProcessors()){
             preProcessor.preDeserialize(clazz, json, gson);
         }
-    }
-
-    private T deserialize(JsonElement json, boolean lenient) throws IOException{
-        JsonReader jsonReader = new JsonTreeReader(json);
-        jsonReader.setLenient(lenient);
-        T deserialized = originalTypeAdapter.read(jsonReader);
-        return deserialized;
     }
 
 }

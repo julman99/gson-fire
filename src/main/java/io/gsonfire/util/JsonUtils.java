@@ -1,8 +1,6 @@
 package io.gsonfire.util;
 
 import com.google.gson.*;
-import com.google.gson.internal.bind.JsonTreeReader;
-import com.google.gson.internal.bind.JsonTreeWriter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
@@ -46,19 +44,64 @@ public class JsonUtils {
         }
     }
 
-    public static JsonElement toJsonTree(TypeAdapter typeAdapter, JsonWriter optionsFrom, Object value) throws IOException {
-        JsonTreeWriter jsonTreeWriter = new JsonTreeWriter();
-        jsonTreeWriter.setLenient(optionsFrom.isLenient());
-        jsonTreeWriter.setHtmlSafe(optionsFrom.isHtmlSafe());
-        jsonTreeWriter.setSerializeNulls(optionsFrom.getSerializeNulls());
-        typeAdapter.write(jsonTreeWriter, value);
-        return jsonTreeWriter.get();
+    public static JsonElement toJsonTree(TypeAdapter typeAdapter, final JsonWriter optionsFrom, Object value) throws IOException {
+        return new ConfigurableTypeAdapter<Object>(
+                typeAdapter,
+                null,
+                new Configurable<JsonWriter>() {
+                    @Override
+                    public void configure(JsonWriter jsonReader) {
+                        jsonReader.setLenient(optionsFrom.isLenient());
+                        jsonReader.setHtmlSafe(optionsFrom.isHtmlSafe());
+                        jsonReader.setSerializeNulls(optionsFrom.getSerializeNulls());
+                    }
+                }
+        ).toJsonTree(value);
     }
 
-    public static <T> T fromJsonTree(TypeAdapter<T> typeAdapter, JsonReader originalReader, JsonElement element) throws IOException {
-        JsonTreeReader jsonTreeReader = new JsonTreeReader(element);
-        jsonTreeReader.setLenient(originalReader.isLenient());
-        return typeAdapter.read(jsonTreeReader);
+    public static <T> T fromJsonTree(TypeAdapter<T> typeAdapter, final JsonReader originalReader, JsonElement element) throws IOException {
+        return new ConfigurableTypeAdapter<T>(
+                typeAdapter,
+                new Configurable<JsonReader>() {
+                    @Override
+                    public void configure(JsonReader jsonReader) {
+                        jsonReader.setLenient(originalReader.isLenient());
+                    }
+                },
+                null
+        ).fromJsonTree(element);
+    }
+
+    private static class ConfigurableTypeAdapter<T> extends TypeAdapter<T> {
+        private final TypeAdapter<T> originalTypeAdapter;
+        private final Configurable<JsonReader> jsonReaderConfigurable;
+        private final Configurable<JsonWriter> jsonWriterConfigurable;
+
+        public ConfigurableTypeAdapter(TypeAdapter<T> originalTypeAdapter, Configurable<JsonReader> jsonReaderConfigurable, Configurable<JsonWriter> jsonWriterConfigurable) {
+            this. originalTypeAdapter= originalTypeAdapter;
+            this.jsonReaderConfigurable = jsonReaderConfigurable;
+            this.jsonWriterConfigurable = jsonWriterConfigurable;
+        }
+
+        @Override
+        public void write(JsonWriter out, T value) throws IOException {
+            if (jsonWriterConfigurable != null) {
+                jsonWriterConfigurable.configure(out);
+            }
+            this.originalTypeAdapter.write(out, value);
+        }
+
+        @Override
+        public T read(JsonReader in) throws IOException {
+            if (jsonReaderConfigurable != null) {
+                jsonReaderConfigurable.configure(in);
+            }
+            return this.originalTypeAdapter.read(in);
+        }
+    }
+
+    private interface Configurable<T> {
+        void configure(T configurable);
     }
 
 }
