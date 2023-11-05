@@ -78,7 +78,7 @@ public class JsonUtils {
         private final Configurable<JsonWriter> jsonWriterConfigurable;
 
         public ConfigurableTypeAdapter(TypeAdapter<T> originalTypeAdapter, Configurable<JsonReader> jsonReaderConfigurable, Configurable<JsonWriter> jsonWriterConfigurable) {
-            this. originalTypeAdapter= originalTypeAdapter;
+            this.originalTypeAdapter= originalTypeAdapter;
             this.jsonReaderConfigurable = jsonReaderConfigurable;
             this.jsonWriterConfigurable = jsonWriterConfigurable;
         }
