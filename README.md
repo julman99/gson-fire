@@ -329,6 +329,11 @@ Gson gson = gsonBuilder.create()
 ```
 
 ## Release notes
+                   
+### 1.9.0
+
+- Updates Gson to 2.10.1
+- Fixes [#60](https://github.com/julman99/gson-fire/pull/60). Remove uses of internal gson classes. Thanks [Sineaggi](https://github.com/Sineaggi)!
 
 ### 1.8.5
 
