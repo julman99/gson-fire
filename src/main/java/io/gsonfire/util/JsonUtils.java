@@ -50,10 +50,10 @@ public class JsonUtils {
                 null,
                 new Configurable<JsonWriter>() {
                     @Override
-                    public void configure(JsonWriter jsonReader) {
-                        jsonReader.setLenient(optionsFrom.isLenient());
-                        jsonReader.setHtmlSafe(optionsFrom.isHtmlSafe());
-                        jsonReader.setSerializeNulls(optionsFrom.getSerializeNulls());
+                    public void configure(JsonWriter jsonWriter) {
+                        jsonWriter.setLenient(optionsFrom.isLenient());
+                        jsonWriter.setHtmlSafe(optionsFrom.isHtmlSafe());
+                        jsonWriter.setSerializeNulls(optionsFrom.getSerializeNulls());
                     }
                 }
         ).toJsonTree(value);
