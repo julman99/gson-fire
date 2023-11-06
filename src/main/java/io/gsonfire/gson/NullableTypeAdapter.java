@@ -8,7 +8,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class NullableTypeAdapter<T> extends TypeAdapter<T> {
 

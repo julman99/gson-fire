@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public class HooksExceptionTest {
 

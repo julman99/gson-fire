@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public interface PreProcessor<T> {
 

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @autor: joao
+ * @author joao
  */
 public class ExcludeByValueTest {
 

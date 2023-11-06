@@ -30,8 +30,7 @@ public final class SimpleIterable<T> implements Iterable<T>{
 
     /**
      * Adds all the elements from the iterable to a collection
-     * @param collection
-     * @return
+     * @param collection collection
      */
     private final void addTo(Collection<T> collection) {
         for(T v: this) {
@@ -41,9 +40,9 @@ public final class SimpleIterable<T> implements Iterable<T>{
 
     /**
      * Creates a {@link SimpleIterable} that iterates through the contents of the iterable passed as argument
-     * @param iterable
-     * @param <T>
-     * @return
+     * @param iterable iterable
+     * @param <T> type
+     * @return {@link SimpleIterable}
      */
     public static <T> SimpleIterable<T> of(Iterable<T> iterable) {
         if(iterable == null) {
@@ -55,9 +54,9 @@ public final class SimpleIterable<T> implements Iterable<T>{
 
     /**
      * Creates a {@link SimpleIterable} that iterates through the contents of the array passed as argument
-     * @param array
-     * @param <T>
-     * @return
+     * @param array array
+     * @param <T> type
+     * @return {@link SimpleIterable}
      */
     public static <T> SimpleIterable<T> of(T... array) {
         return of(Arrays.asList(array));

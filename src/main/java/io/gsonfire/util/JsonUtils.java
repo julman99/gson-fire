@@ -19,8 +19,8 @@ public class JsonUtils {
     /**
      * Copies all the property values from the supplied {@link JsonElement}. This method is similar to
      * {@link JsonElement#deepCopy()}. We are not using {@link JsonElement#deepCopy()} because it is not public
-     * @param from
-     * @return
+     * @param from from
+     * @return JsonElement
      */
     public static JsonElement deepCopy(JsonElement from) {
         if(from.isJsonObject()) {

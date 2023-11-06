@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public final class DateRFC3339TypeAdapter extends TypeAdapter<Date> {
 
