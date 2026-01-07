@@ -3,7 +3,7 @@ package io.gsonfire;
 import com.google.gson.JsonElement;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public interface TypeSelector<T> {
 

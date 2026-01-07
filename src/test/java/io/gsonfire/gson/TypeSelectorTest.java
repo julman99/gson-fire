@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @autor: julio
+ * @author julio
  */
 public class TypeSelectorTest {
 
