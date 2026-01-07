@@ -115,10 +115,10 @@ public class HooksTest {
         assertEquals(0, countWhenDeserialize.get());
     }
 
-    private class A{
+    private static class A{
         private int count = 0;
         private transient int nonSerializable = -1;
-        private Gson gson;
+        private transient Gson gson;
 
         private A(int count) {
             this.count = count;
@@ -154,7 +154,7 @@ public class HooksTest {
         }
     }
 
-    private class B extends A {
+    private static class B extends A {
         public B b;
 
         private B(int count) {
