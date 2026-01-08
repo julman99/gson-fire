@@ -30,9 +30,13 @@ public class IterableMapper<F, T> implements Iterable<T> {
                 return mapped;
             }
 
+            /**
+             * Removal is not supported by this iterator.
+             * @throws UnsupportedOperationException always
+             */
             @Override
             public void remove() {
-
+                throw new UnsupportedOperationException("remove() is not supported");
             }
         };
     }

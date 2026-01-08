@@ -29,10 +29,10 @@ public final class SimpleIterable<T> implements Iterable<T>{
     }
 
     /**
-     * Adds all the elements from the iterable to a collection
-     * @param collection collection
+     * Adds all elements from this iterable to the specified collection.
+     * @param collection The collection to add elements to
      */
-    private final void addTo(Collection<T> collection) {
+    private void addTo(Collection<T> collection) {
         for(T v: this) {
             collection.add(v);
         }

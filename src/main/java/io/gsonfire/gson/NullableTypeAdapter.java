@@ -8,6 +8,10 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
+ * A wrapper TypeAdapter that handles null values, delegating to the wrapped adapter
+ * only for non-null values. Writes null as JSON null and reads JSON null as Java null.
+ *
+ * @param <T> The type handled by this adapter
  * @author julio
  */
 public final class NullableTypeAdapter<T> extends TypeAdapter<T> {

@@ -5,7 +5,10 @@ import com.google.gson.JsonElement;
 import io.gsonfire.util.JsonUtils;
 
 /**
- * Created by julio on 8/18/16.
+ * A fluent builder for creating {@link JsonArray} instances.
+ * All values are deep-copied when building to ensure immutability.
+ *
+ * @author julio
  */
 public final class JsonArrayBuilder implements JsonElementBuilder<JsonArray> {
 

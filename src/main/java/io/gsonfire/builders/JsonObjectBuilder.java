@@ -8,7 +8,10 @@ import io.gsonfire.util.JsonUtils;
 import java.util.Map;
 
 /**
- * Created by julio on 8/18/16.
+ * A fluent builder for creating {@link JsonObject} instances.
+ * All values are deep-copied when building to ensure immutability.
+ *
+ * @author julio
  */
 public final class JsonObjectBuilder implements JsonElementBuilder<JsonObject> {
 

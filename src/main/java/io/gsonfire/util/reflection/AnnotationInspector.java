@@ -57,7 +57,18 @@ public abstract class AnnotationInspector<T extends AccessibleObject, M> {
         return Collections.emptyList();
     }
 
+    /**
+     * Returns the declared members of the given class that should be inspected.
+     * @param clazz The class to inspect
+     * @return Array of members (fields, methods, etc.)
+     */
     protected abstract T[] getDeclaredMembers(Class clazz);
+
+    /**
+     * Maps a member to the desired output type.
+     * @param member The member to map
+     * @return The mapped representation of the member
+     */
     protected abstract M map(T member);
 
     private Collection<M> getFromCache(Class clazz, Class<? extends Annotation> annotation) {
