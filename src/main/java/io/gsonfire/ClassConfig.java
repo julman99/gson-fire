@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * Configuration holder for a specific class type, storing type selectors,
+ * pre/post processors, and hook settings for use during serialization/deserialization.
+ *
+ * @param <T> The type this configuration applies to
  * @author julio
  */
 public final class ClassConfig<T> {

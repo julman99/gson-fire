@@ -6,6 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Marks a method to be invoked before the object is serialized to JSON.
+ * This allows preparation or modification of the object's state before serialization.
+ *
+ * Requires enabling hooks via {@link io.gsonfire.GsonFireBuilder#enableHooks(Class)}.
+ *
  * @author julio
  */
 @Retention(RetentionPolicy.RUNTIME)
