@@ -20,7 +20,7 @@ Ability to alter a JsonElement before it is converted into an object.
  GsonFireBuilder builder = new GsonFireBuilder()
     .registerPreProcessor(SomeClass.class, new PreProcessor<SomeClass>() {
         @Override
-        public void preDeserialize(Class<? extends A> clazz, JsonElement src, Gson gson) {
+        public void preDeserialize(Class<? extends SomeClass> clazz, JsonElement src, Gson gson) {
             //Here you can add logic to change the src object before it gets converted into the Class clazz
         }
     });
@@ -76,7 +76,7 @@ You can annotate methods to be automatically evaluated and serialized
 
 ```java
 
-public void SomeClass{
+public class SomeClass{
 
     @ExposeMethodResult("name")
     public String getName(){
@@ -122,7 +122,7 @@ and after deserializing
 
 ```java
 
-public void SomeClass{
+public class SomeClass{
 
     @PreSerialize
     public void preSerializeLogic(){
@@ -142,7 +142,7 @@ public void SomeClass{
 
 //Later
 
-Gson builder = new GsonFireBuilder()
+GsonFireBuilder builder = new GsonFireBuilder()
     .enableHooks(SomeClass.class);
 
 Gson gson = builder.createGson();
@@ -153,7 +153,7 @@ Any `Exception` thrown inside the hooks will be wrapped into a `HookInvocationEx
 ### Iterable Serialization
 
 By default Gson does not serializes ```Iterable``` implementations. Gson on Fire provides a wrapper class called 
-```SimpleIterable``` that allows full serialization an deserialization of Iterables.
+```SimpleIterable``` that allows full serialization and deserialization of Iterables.
 
 <b>Serialization</b>
 ```java
@@ -175,7 +175,7 @@ for(Integer i: simpleIterable) {
 
 ```
 
-### Excude fields depending on its value
+### Exclude fields depending on its value
 
 Gson allows to define custom exclusion strategies for fields. However it is not possible to exclude a field depending
 on the value that it contains. This is the way to do it with Gson on Fire: 
@@ -200,7 +200,7 @@ public class ExcludeLogic implements ExclusionByValueStrategy<String> {
 ```
 Then you need to enable exclusion by value on Gson on Fire:
 ```java
-Gson builder = new GsonFireBuilder()
+GsonFireBuilder builder = new GsonFireBuilder()
     .enableExclusionByValue();
 
 Gson gson = builder.createGson();
@@ -322,7 +322,7 @@ GsonBuilder gsonBuilder = fireBuilder.createGsonBuilder();
 // Here you can customize the gsonBuilder using the Gson features and 
 // then create a Gson object
 
-Gson gson = gsonBuilder.create()
+Gson gson = gsonBuilder.create();
 
 //The resulting Gson object will have all the GsonFire and Gson features
 
@@ -361,7 +361,7 @@ Gson gson = gsonBuilder.create()
 ### 1.8.0
 
 - Reusing the instances of `ExclusionByValueStrategy` instead of creating an instance each time it is used. Thanks [@Frotty](https://github.com/Frotty)
-- Fix the use of a type selector was preventing the GsonFire featues to be executed on the selected type. Thanks [a-a-davydov](https://github.com/a-a-davydov) and [@rubioz](https://github.com/rubioz)
+- Fix the use of a type selector was preventing the GsonFire features to be executed on the selected type. Thanks [a-a-davydov](https://github.com/a-a-davydov) and [@rubioz](https://github.com/rubioz)
 
 ### 1.7.2
 
