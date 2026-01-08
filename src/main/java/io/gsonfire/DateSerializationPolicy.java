@@ -77,7 +77,7 @@ public enum DateSerializationPolicy {
     },
 
     /**
-     * Serializes dates in RFC3339 including only date date. For example: 1985-04-12
+     * Serializes dates in RFC3339 including only the date. For example: 1985-04-12
      */
     rfc3339Date {
         @Override

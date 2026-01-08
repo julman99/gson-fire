@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * Creates a {@link TypeAdapter} that will run the {@link TypeSelector} and find the {@link TypeAdapter} for the selected
- * type.
+ * A TypeAdapterFactory that creates TypeAdapters which use a {@link TypeSelector} to determine
+ * the concrete class to deserialize into for polymorphic type hierarchies.
+ *
+ * @param <T> The base type handled by this factory
  */
 public class TypeSelectorTypeAdapterFactory<T> implements TypeAdapterFactory{
 

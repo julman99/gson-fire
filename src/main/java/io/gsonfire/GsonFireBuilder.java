@@ -59,14 +59,14 @@ public final class GsonFireBuilder {
      * A type selector is in charge of deciding which sub class to use when converting a json
      * into an object.<br />
      * See <a href="http://goo.gl/qKo7z"> docs and example</a>
-     * @param clazz class
-     * @param factory factory
-     * @param <T> type selector
+     * @param clazz The class for which to register the type selector
+     * @param typeSelector The type selector that will determine the concrete class during deserialization
+     * @param <T> The base type for which the selector is registered
      * @return a GsonFireBuilder
      */
-    public <T> GsonFireBuilder registerTypeSelector(Class<T> clazz, TypeSelector<T> factory){
+    public <T> GsonFireBuilder registerTypeSelector(Class<T> clazz, TypeSelector<T> typeSelector){
         ClassConfig config = getClassConfig(clazz);
-        config.setTypeSelector(factory);
+        config.setTypeSelector(typeSelector);
         return this;
     }
 
@@ -118,8 +118,9 @@ public final class GsonFireBuilder {
      * A given class will be wrapped/unwrapped with a given string
      * during serialization/deserialization.
      *
-     * @param clazz class
-     * @param <T> type
+     * @param clazz The class to wrap
+     * @param name The wrapper property name to use
+     * @param <T> The type of the class being wrapped
      * @return GsonFireBuilder
      */
     public <T> GsonFireBuilder wrap(final Class<T> clazz, final String name) {
@@ -167,8 +168,9 @@ public final class GsonFireBuilder {
     }
 
     /**
-     * By enabling this, all methods with the annotation {@link io.gsonfire.annotations.ExposeMethodResult} will
-     * be evaluated and it result will be added to the resulting json
+     * By enabling this, all methods with the annotations {@link io.gsonfire.annotations.PostDeserialize} and
+     * {@link io.gsonfire.annotations.PreSerialize} will be invoked during deserialization and serialization respectively.
+     * @param clazz The class for which to enable hooks
      * @return GsonFireBuilder
      */
     public GsonFireBuilder enableHooks(Class clazz){

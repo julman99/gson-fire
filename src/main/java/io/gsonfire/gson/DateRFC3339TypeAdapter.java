@@ -21,14 +21,17 @@ public final class DateRFC3339TypeAdapter extends TypeAdapter<Date> {
     private final ThreadLocal<DateFormat> dateFormatThreadLocal = new ThreadLocal<DateFormat>();
 
     /**
-     * Creates a RFC3339 type adapter that will serialize dates in UTC
+     * Creates a RFC3339 type adapter that will serialize dates using the system's default timezone.
+     * @param serializeTime If true, includes time component; if false, only serializes the date portion
      */
     public DateRFC3339TypeAdapter(boolean serializeTime) {
         this(TimeZone.getDefault(), serializeTime);
     }
 
     /**
-     * Creates a RFC3339 type adapter that will serialize dates using the provided timezone
+     * Creates a RFC3339 type adapter that will serialize dates using the provided timezone.
+     * @param serializationTimezone The timezone to use for serialization
+     * @param serializeTime If true, includes time component; if false, only serializes the date portion
      */
     public DateRFC3339TypeAdapter(TimeZone serializationTimezone, boolean serializeTime) {
         this.serializationTimezone = serializationTimezone;
