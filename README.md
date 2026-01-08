@@ -1,4 +1,4 @@
-<img src="https://travis-ci.org/julman99/gson-fire.svg?branch=master">
+[![CI](https://github.com/julman99/gson-fire/actions/workflows/ci.yml/badge.svg)](https://github.com/julman99/gson-fire/actions/workflows/ci.yml)
 
 # Gson on Fire
 
